@@ -1,0 +1,22 @@
+br/com/jadson/snooper/model/release/GitHubReleaseInfo.java
+ br.com.jadson.snooper.model.release.GitHubReleaseInfo
+br/com/jadson/snooper/model/pull/GitHubPullRequestInfo.java
+ br.com.jadson.snooper.model.pull.GitHubPullRequestInfo
+br/com/jadson/snooper/model/release/GitHubReleaseAuthorInfo.java
+ br.com.jadson.snooper.model.release.GitHubReleaseAuthorInfo
+br/com/jadson/snooper/github/PullRequestQuery.java
+ br.com.jadson.snooper.github.PullRequestQuery
+br/com/jadson/snooper/SnooperApplication.java
+ br.com.jadson.snooper.SnooperApplication
+br/com/jadson/snooper/github/GigHubQuery.java
+ br.com.jadson.snooper.github.GigHubQuery
+br/com/jadson/snooper/model/pull/GitHubPullRequestUserInfo.java
+ br.com.jadson.snooper.model.pull.GitHubPullRequestUserInfo
+br/com/jadson/snooper/model/diff/GitHubPullRequestDiffInfo.java
+ br.com.jadson.snooper.model.diff.GitHubPullRequestDiffInfo
+br/com/jadson/snooper/github/ReleaseQuery.java
+ br.com.jadson.snooper.github.ReleaseQuery
+br/com/jadson/snooper/github/PullRequestDiffQuery.java
+ br.com.jadson.snooper.github.PullRequestDiffQuery
+br/com/jadson/snooper/model/diff/GitHubPullRequestDiffUserInfo.java
+ br.com.jadson.snooper.model.diff.GitHubPullRequestDiffUserInfo

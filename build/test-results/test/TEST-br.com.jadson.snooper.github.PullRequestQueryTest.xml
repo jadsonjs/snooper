@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="br.com.jadson.snooper.github.PullRequestQueryTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2020-09-23T20:32:04" hostname="MacBook-Pro-de-Jadson.local" time="1.586">
+  <properties/>
+  <testcase name="testPullRequestPageSizeAndParameters()" classname="br.com.jadson.snooper.github.PullRequestQueryTest" time="1.586"/>
+  <system-out><![CDATA[Getting Next Pull Info: https://api.github.com/repos/webauthn4j/webauthn4j/pulls?nullstate=all&&page=1&per_page=10
+17:32:04.566 [Test worker] DEBUG org.springframework.web.client.RestTemplate - HTTP GET https://api.github.com/repos/webauthn4j/webauthn4j/pulls?nullstate=all&page=1&per_page=10
+17:32:04.575 [Test worker] DEBUG org.springframework.web.client.RestTemplate - Accept=[application/json, application/*+json]
+17:32:05.351 [Test worker] DEBUG org.springframework.web.client.RestTemplate - Response 200 OK
+17:32:05.354 [Test worker] DEBUG org.springframework.web.client.RestTemplate - Reading to [br.com.jadson.snooper.model.pull.GitHubPullRequestInfo[]]
+Getting Next Pull Info: https://api.github.com/repos/webauthn4j/webauthn4j/pulls?nullstate=all&&page=2&per_page=10
+17:32:05.611 [Test worker] DEBUG org.springframework.web.client.RestTemplate - HTTP GET https://api.github.com/repos/webauthn4j/webauthn4j/pulls?nullstate=all&page=2&per_page=10
+17:32:05.612 [Test worker] DEBUG org.springframework.web.client.RestTemplate - Accept=[application/json, application/*+json]
+17:32:05.784 [Test worker] DEBUG org.springframework.web.client.RestTemplate - Response 200 OK
+17:32:05.785 [Test worker] DEBUG org.springframework.web.client.RestTemplate - Reading to [br.com.jadson.snooper.model.pull.GitHubPullRequestInfo[]]
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
