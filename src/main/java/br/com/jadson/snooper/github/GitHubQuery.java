@@ -31,9 +31,9 @@ package br.com.jadson.snooper.github;
  *
  * Jadson Santos - jadsonjs@gmail.com
  */
-abstract class GigHubQuery {
+abstract class GitHubQuery {
 
-    public static final String GIT_HUB_URL = "https://api.github.com";
+    public static final String GIT_HUB_API_URL = "https://api.github.com";
 
     protected String githubToken = "";
 
@@ -42,9 +42,9 @@ abstract class GigHubQuery {
 
     protected String queryParameters;
 
-    public GigHubQuery(){ }
+    public GitHubQuery(){ }
 
-    public GigHubQuery(String githubToken){
+    public GitHubQuery(String githubToken){
         if(githubToken == null || githubToken.trim().equals(""))
             throw new RuntimeException("Invalid GitHub Token: "+githubToken);
 

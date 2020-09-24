@@ -45,7 +45,7 @@ import java.util.List;
  *
  * Jadson Santos - jadsonjs@gmail.com
  */
-public class ReleaseQuery extends GigHubQuery{
+public class ReleaseQuery extends GitHubQuery {
 
     public ReleaseQuery(){ }
 
@@ -78,7 +78,7 @@ public class ReleaseQuery extends GigHubQuery{
             else
                 parameters = "?page="+page+"&per_page="+pageSize;
 
-            String query = GIT_HUB_URL+"/repos/"+repoFullName+"/releases"+parameters;
+            String query = GIT_HUB_API_URL +"/repos/"+repoFullName+"/releases"+parameters;
 
             System.out.println("Getting Next Release: "+query);
 

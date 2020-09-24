@@ -38,7 +38,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -46,7 +45,7 @@ import java.util.List;
  *
  * Jadson Santos - jadsonjs@gmail.com
  */
-public class PullRequestDiffQuery extends GigHubQuery{
+public class PullRequestDiffQuery extends GitHubQuery {
 
     public PullRequestDiffQuery(){ }
 
@@ -71,7 +70,7 @@ public class PullRequestDiffQuery extends GigHubQuery{
 
         ResponseEntity<GitHubPullRequestDiffInfo> result;
 
-        String query = GIT_HUB_URL+"/repos/"+repoFullName+"/pulls/"+pullNumber+".diff";
+        String query = GIT_HUB_API_URL +"/repos/"+repoFullName+"/pulls/"+pullNumber+".diff";
 
         RestTemplate restTemplate = new RestTemplate();
 

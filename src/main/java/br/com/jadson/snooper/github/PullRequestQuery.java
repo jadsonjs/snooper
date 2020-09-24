@@ -41,7 +41,7 @@ import java.util.List;
  *
  * Jadson Santos - jadsonjs@gmail.com
  */
-class PullRequestQuery extends GigHubQuery {
+class PullRequestQuery extends GitHubQuery {
 
     public PullRequestQuery(){ }
 
@@ -73,7 +73,7 @@ class PullRequestQuery extends GigHubQuery {
             else
                 parameters = "?page="+page+"&per_page="+pageSize;
 
-            String query = GIT_HUB_URL+"/repos/"+repoFullName+"/pulls"+parameters;
+            String query = GIT_HUB_API_URL +"/repos/"+repoFullName+"/pulls"+parameters;
 
             System.out.println("Getting Next Pull Info: "+query);
 
