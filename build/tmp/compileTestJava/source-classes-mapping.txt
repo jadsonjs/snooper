@@ -1,8 +1,0 @@
-br/com/jadson/snooper/SnooperApplicationTests.java
- br.com.jadson.snooper.SnooperApplicationTests
-br/com/jadson/snooper/github/PullRequestDiffQueryTest.java
- br.com.jadson.snooper.github.PullRequestDiffQueryTest
-br/com/jadson/snooper/github/ReleaseQueryTest.java
- br.com.jadson.snooper.github.ReleaseQueryTest
-br/com/jadson/snooper/github/PullRequestQueryTest.java
- br.com.jadson.snooper.github.PullRequestQueryTest
