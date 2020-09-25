@@ -40,4 +40,19 @@ class GitHubDownloadTest {
 
     }
 
+
+    /**
+     * Basic download and unzip
+     */
+    @Test
+    void testDownloadAndUnzip(){
+
+        GitHubDownload gitHub = new GitHubDownload();
+
+        String localRepo = gitHub.download("https://github.com/vuejs/vue-cli","/tmp/", true);
+
+        Assertions.assertEquals("/tmp/vue-cli-master.zip", localRepo);
+    }
+
+
 }

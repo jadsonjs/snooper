@@ -29,6 +29,8 @@
  */
 package br.com.jadson.snooper.github;
 
+import net.lingala.zip4j.ZipFile;
+import net.lingala.zip4j.exception.ZipException;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
@@ -38,7 +40,12 @@ import java.net.URL;
 import java.nio.channels.Channels;
 
 /**
- * To make download of the project
+ * To make download of the github repositories.
+ *
+ * Download just download the repository files. But it is not a clone.
+ * You can not commit or pull changes into local code.
+ *
+ * To clone the full repository use: @see {@link GitHubClone}
  *
  * Jadson Santos - jadsonjs@gmail.com
  */
@@ -46,25 +53,41 @@ import java.nio.channels.Channels;
 public class GitHubDownload {
 
     /**
-     * Download the content of a github repository to local machine for analysis
-     *
+     * Download the content of a github repository to local directoty in a zip file
      * @param repoURL
      * @param localPath
      * @return
      */
     public String download(String repoURL, String localPath) {
+        return download(repoURL, localPath, false);
+    }
+
+    /**
+     * Download the content of a github repository to local directoty in a zip file
+     *
+     * @param repoURL
+     * @param localPath
+     * @param unzip if after download the repo content also unzip it.
+     * @return
+     */
+    public String download(String repoURL, String localPath, boolean unzip) {
 
         if(repoURL == null || repoURL.isEmpty())
             throw new IllegalArgumentException("Invalid repo url: "+repoURL);
 
+        if(localPath == null || localPath.isEmpty())
+            throw new IllegalArgumentException("Invalid Local Path: "+repoURL);
+
         if(! localPath.endsWith("/") )
-            throw new IllegalArgumentException("Path has to end with slash '/' ");
+            throw new IllegalArgumentException("Local Path should ends with slash '/' ");
+
+
 
         String downloadURL = repoURL+"/archive/master.zip";
 
-        String projectName = repoURL.substring(repoURL.lastIndexOf("/")+1, repoURL.length());
+        String repoName = repoURL.substring(repoURL.lastIndexOf("/")+1, repoURL.length());
 
-        String localZipProjectName = localPath + projectName + "-master.zip";
+        String localZipProjectName = localPath + repoName + "-master.zip";
 
         if(! new File(localZipProjectName).exists() ) {
 
@@ -77,11 +100,16 @@ public class GitHubDownload {
                 // include a ".zip" in the file name
                 renameFile(localZipProjectName.substring(0, localZipProjectName.lastIndexOf(".")), localZipProjectName);
 
+                if(unzip) {
+                    String localUnZipRepoName = localZipProjectName.substring(0, localZipProjectName.lastIndexOf(".")); // removing  ".zip" extension
+                    unzip(localUnZipRepoName, localZipProjectName, localPath);
+                }
+
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }else{
-            System.out.println("Project "+projectName+" is already saved locally.");
+            System.out.println("Repository "+repoName+" is already saved locally.");
         }
 
 
@@ -94,6 +122,20 @@ public class GitHubDownload {
         File newFile =new File( newName );
         oldFile.renameTo(newFile);
         oldFile.delete();
+    }
+
+    private void unzip(String localUnZipRepoName, String localZipRepoName, String localPath){
+        /*
+         * If yet not extract and zip file length > 0 bytes (it is a valid zip file).
+         */
+        if(! new File(localUnZipRepoName).exists() && new File(localZipRepoName).length() > 0) {
+            try {
+                // extract the zip file to output directory  test-master.zip (File) -> test-master (Directory) into localPath
+                new ZipFile(localZipRepoName).extractAll(localPath);
+            }catch(ZipException zipex){
+                System.out.println("Erro unzip file: "+zipex.getMessage());
+            }
+        }
     }
 
 }
