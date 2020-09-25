@@ -41,7 +41,7 @@ import java.util.List;
  *
  * Jadson Santos - jadsonjs@gmail.com
  */
-class PullRequestQuery extends GitHubQuery {
+public class PullRequestQuery extends GitHubQuery {
 
     public PullRequestQuery(){ }
 
