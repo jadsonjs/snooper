@@ -28,17 +28,17 @@ public class SnooperApplication implements CommandLineRunner {
 
 		// java -jar sonner.jar PullRequestQuery vuejs/vuejs aaaaaaaaaaaaaa
 
-		String queryClass = args[0];
-		String repoName = args[1];
-		String token = args[2];
-
-		if(queryClass.equals("PullRequestQuery")){
-			PullRequestQuery query = new PullRequestQuery(token);
-			List<GitHubPullRequestInfo> info = query.pullRequests(repoName);
-			for (GitHubPullRequestInfo i : info){
-				System.out.println(i);
-			}
-		}
+//		String queryClass = args[0];
+//		String repoName = args[1];
+//		String token = args[2];
+//
+//		if(queryClass.equals("PullRequestQuery")){
+//			PullRequestQuery query = new PullRequestQuery(token);
+//			List<GitHubPullRequestInfo> info = query.pullRequests(repoName);
+//			for (GitHubPullRequestInfo i : info){
+//				System.out.println(i);
+//			}
+//		}
 
 
 	}
