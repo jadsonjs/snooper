@@ -1,4 +1,7 @@
 /*
+ * Federal University of Rio Grande do Norte
+ * Department of Informatics and Applied Mathematics
+ * Collaborative & Automated Software Engineering (CASE) Research Group
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -20,23 +23,19 @@
  *
  *
  * snooper
- * br.com.jadson.snooper.model
- * GitHubUserInfo
- * 22/09/20
+ * br.com.jadson.snooper.sonarcloud.data
+ * SonarPaging
+ * 23/10/20
  */
-package br.com.jadson.snooper.model.pull;
-
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+package br.com.jadson.snooper.sonarcloud.data;
 
 /**
- * Information about user.
- *
+ * Information about pagination
  * Jadson Santos - jadsonjs@gmail.com
  */
-@JsonIgnoreProperties(ignoreUnknown = true)
-public class GitHubPullRequestUserInfo {
+public class SonarPaging {
 
-    public String login;
-
-    public long id;
+    public int pageIndex;
+    public int pageSize;
+    public int total;
 }

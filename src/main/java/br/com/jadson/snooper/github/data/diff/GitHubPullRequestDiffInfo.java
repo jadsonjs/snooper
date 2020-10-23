@@ -1,5 +1,4 @@
 /*
- *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
@@ -20,11 +19,11 @@
  *
  *
  * snooper
- * br.com.jadson.snooper.dtos
- * GitHubPullRequestInfo
- * 22/09/20
+ * br.com.jadson.snooper.github.data.diff
+ * GitHubPullRequestDiffInfo
+ * 23/09/20
  */
-package br.com.jadson.snooper.model.pull;
+package br.com.jadson.snooper.github.data.diff;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -32,24 +31,24 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.util.Date;
 
 /**
- * Information about pull request
+ * Information pull request Diff
  *
  * Jadson Santos - jadsonjs@gmail.com
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class GitHubPullRequestInfo {
+public class GitHubPullRequestDiffInfo {
 
-    public String url;
+    public Long id;
+    public String diff_url;
+    public String patch_url;
+    public String issue_url;
 
-    public String id;
-
-    public GitHubPullRequestUserInfo user;
-
+    public Long number;
+    public String state;
+    public Boolean locked;
     public String title;
 
-    public long number;
-
-    public String state;
+    public GitHubPullRequestDiffUserInfo user;
 
     @JsonFormat(pattern="yyyy-MM-dd'T'HH:mm:ss'Z'")
     public Date created_at;
@@ -63,24 +62,12 @@ public class GitHubPullRequestInfo {
     @JsonFormat(pattern="yyyy-MM-dd'T'HH:mm:ss'Z'")
     public Date merged_at;
 
-    public String merge_commit_sha;
-
-    public String commits_url;
-
-    public String review_comments_url;
-
-    public String review_comment_url;
-
-    public String comments_url;
-
-    public String statuses_url;
-
-    public String author_association;
-
-    @Override
-    public String toString() {
-        return "GitHubPullRequestInfo{" + "id='" + id + '\'' + ", title='" + title + '\'' + ", number=" + number +
-                ", state='" + state + '\'' + ", created_at=" + created_at + ", closed_at=" + closed_at + '}';
-    }
+    public Long comments;
+    public Long review_comments;
+    public Boolean maintainer_can_modify;
+    public Long commits;
+    public Long additions;
+    public Long deletions;
+    public Long changed_files;
 
 }

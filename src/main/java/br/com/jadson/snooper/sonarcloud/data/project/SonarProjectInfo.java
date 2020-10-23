@@ -1,4 +1,8 @@
 /*
+ * Federal University of Rio Grande do Norte
+ * Department of Informatics and Applied Mathematics
+ * Collaborative & Automated Software Engineering (CASE) Research Group
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
@@ -19,55 +23,25 @@
  *
  *
  * snooper
- * br.com.jadson.snooper.model.diff
- * GitHubPullRequestDiffInfo
- * 23/09/20
+ * br.com.jadson.snooper.sonarcloud.data
+ * SonarProjectInfo
+ * 23/10/20
  */
-package br.com.jadson.snooper.model.diff;
+package br.com.jadson.snooper.sonarcloud.data.project;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-import java.util.Date;
-
 /**
- * Information pull request Diff
- *
+ * Information about project in sonar.
  * Jadson Santos - jadsonjs@gmail.com
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class GitHubPullRequestDiffInfo {
+public class SonarProjectInfo {
 
-    public Long id;
-    public String diff_url;
-    public String patch_url;
-    public String issue_url;
-
-    public Long number;
-    public String state;
-    public Boolean locked;
-    public String title;
-
-    public GitHubPullRequestDiffUserInfo user;
-
-    @JsonFormat(pattern="yyyy-MM-dd'T'HH:mm:ss'Z'")
-    public Date created_at;
-
-    @JsonFormat(pattern="yyyy-MM-dd'T'HH:mm:ss'Z'")
-    public Date updated_at;
-
-    @JsonFormat(pattern="yyyy-MM-dd'T'HH:mm:ss'Z'")
-    public Date closed_at;
-
-    @JsonFormat(pattern="yyyy-MM-dd'T'HH:mm:ss'Z'")
-    public Date merged_at;
-
-    public Long comments;
-    public Long review_comments;
-    public Boolean maintainer_can_modify;
-    public Long commits;
-    public Long additions;
-    public Long deletions;
-    public Long changed_files;
-
+    public String organization;
+    public String key;
+    public String qualifier;
+    public String name;
+    public String language;
+    public String project;
 }

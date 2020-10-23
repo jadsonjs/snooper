@@ -27,7 +27,7 @@
  * GitHubClone
  * 24/09/20
  */
-package br.com.jadson.snooper.github;
+package br.com.jadson.snooper.github.operations;
 
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.transport.CredentialsProvider;

@@ -1,8 +1,4 @@
 /*
- * Federal University of Rio Grande do Norte
- * Department of Informatics and Applied Mathematics
- * Collaborative & Automated Software Engineering (CASE) Research Group
- *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
@@ -24,13 +20,12 @@
  *
  * snooper
  * br.com.jadson.snooper.github
- * PullRequestDiffQuery
+ * GitHubPullRequest
  * 23/09/20
  */
-package br.com.jadson.snooper.github;
+package br.com.jadson.snooper.github.operations;
 
-import br.com.jadson.snooper.model.diff.GitHubPullRequestDiffInfo;
-import br.com.jadson.snooper.model.pull.GitHubPullRequestInfo;
+import br.com.jadson.snooper.github.data.pull.GitHubPullRequestInfo;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -38,26 +33,27 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
- * Pull Request Diff Query
+ * Queries about Pull Request
  *
  * Jadson Santos - jadsonjs@gmail.com
  */
-public class PullRequestDiffQuery extends GitHubQuery {
+public class PullRequestQuery extends AbstractGitHubQuery {
 
-    public PullRequestDiffQuery(){ }
+    public PullRequestQuery(){ }
 
-    public PullRequestDiffQuery(String githubToken){
+    public PullRequestQuery(String githubToken){
         super(githubToken);
     }
 
-    public GitHubPullRequestDiffInfo pullRequestsDiff(String repoOwner, String repoName, Long pullNumber) {
-        return pullRequestsDiff(repoOwner+"/"+repoName, pullNumber);
+    public List<GitHubPullRequestInfo> pullRequests(String repoOwner, String repoName) {
+        return pullRequests(repoOwner+"/"+repoName);
     }
 
-    public GitHubPullRequestDiffInfo pullRequestsDiff(String repoFullName, Long pullNumber) {
+    public List<GitHubPullRequestInfo> pullRequests(String repoFullName) {
 
         validateRepoName(repoFullName);
 
@@ -68,22 +64,37 @@ public class PullRequestDiffQuery extends GitHubQuery {
 
         List<GitHubPullRequestInfo> allPull = new ArrayList<>();
 
-        ResponseEntity<GitHubPullRequestDiffInfo> result;
+        ResponseEntity<GitHubPullRequestInfo[]> result;
 
-        String query = GIT_HUB_API_URL +"/repos/"+repoFullName+"/pulls/"+pullNumber+".diff";
+        do {
 
-        RestTemplate restTemplate = new RestTemplate();
+            if(queryParameters != null && ! queryParameters.isEmpty())
+                parameters = "?"+queryParameters+"&page="+page+"&per_page="+pageSize;
+            else
+                parameters = "?page="+page+"&per_page="+pageSize;
 
-        HttpHeaders headers = new HttpHeaders();
-        if(! githubToken.isEmpty())
-            headers.set("Authorization", "token "+githubToken+"");
-        headers.set("Accept", "application/json");
-        HttpEntity entity = new HttpEntity<>(headers);
+            String query = GIT_HUB_API_URL +"/repos/"+repoFullName+"/pulls"+parameters;
 
-        result = restTemplate.exchange( query, HttpMethod.GET, entity, GitHubPullRequestDiffInfo.class);
+            System.out.println("Getting Next Pull Info: "+query);
 
-        return result.getBody();
+            RestTemplate restTemplate = new RestTemplate();
 
+            HttpHeaders headers = new HttpHeaders();
+            if(! githubToken.isEmpty())
+                headers.set("Authorization", "token "+githubToken+"");
+            headers.set("Accept", "application/json");
+            HttpEntity entity = new HttpEntity<>(headers);
+
+            result = restTemplate.exchange( query, HttpMethod.GET, entity, GitHubPullRequestInfo[].class);
+
+            allPull.addAll(  Arrays.asList(result.getBody()) );
+
+            page++;
+
+
+        }while (result != null && result.getBody().length > 0 );
+
+        return allPull;
     }
 
 }

@@ -1,9 +1,8 @@
 package br.com.jadson.snooper.github;
 
+import br.com.jadson.snooper.github.operations.GitHubClone;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class GitHubCloneTest {
 

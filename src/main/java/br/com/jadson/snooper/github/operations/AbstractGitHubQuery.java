@@ -24,14 +24,14 @@
  * GitHubClient
  * 22/09/20
  */
-package br.com.jadson.snooper.github;
+package br.com.jadson.snooper.github.operations;
 
 /**
  * A client for github
  *
  * Jadson Santos - jadsonjs@gmail.com
  */
-abstract class GitHubQuery {
+abstract class AbstractGitHubQuery {
 
     public static final String GIT_HUB_API_URL = "https://api.github.com";
 
@@ -42,9 +42,9 @@ abstract class GitHubQuery {
 
     protected String queryParameters;
 
-    public GitHubQuery(){ }
+    public AbstractGitHubQuery(){ }
 
-    public GitHubQuery(String githubToken){
+    public AbstractGitHubQuery(String githubToken){
         if(githubToken == null || githubToken.trim().equals(""))
             throw new RuntimeException("Invalid GitHub Token: "+githubToken);
 

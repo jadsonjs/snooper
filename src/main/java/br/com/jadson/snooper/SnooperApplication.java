@@ -1,13 +1,8 @@
 package br.com.jadson.snooper;
 
-import br.com.jadson.snooper.github.PullRequestQuery;
-import br.com.jadson.snooper.model.pull.GitHubPullRequestInfo;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-
-import java.sql.SQLOutput;
-import java.util.List;
 
 @SpringBootApplication
 public class SnooperApplication implements CommandLineRunner {

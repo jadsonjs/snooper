@@ -1,4 +1,8 @@
 /*
+ * Federal University of Rio Grande do Norte
+ * Department of Informatics and Applied Mathematics
+ * Collaborative & Automated Software Engineering (CASE) Research Group
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
@@ -19,13 +23,13 @@
  *
  *
  * snooper
- * br.com.jadson.snooper.github
- * GitHubPullRequest
- * 23/09/20
+ * br.com.jadson.snooper.sonarcloud
+ * SonarCloudMetricQuery
+ * 20/10/20
  */
-package br.com.jadson.snooper.github;
+package br.com.jadson.snooper.sonarcloud.operations;
 
-import br.com.jadson.snooper.model.pull.GitHubPullRequestInfo;
+import br.com.jadson.snooper.sonarcloud.data.metric.SonarMetricInfo;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -37,64 +41,46 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * Queries about Pull Request
- *
+ * Return the metrics in the instance of sonar.
  * Jadson Santos - jadsonjs@gmail.com
  */
-public class PullRequestQuery extends GitHubQuery {
+public class SonarCloudMetricQuery extends AbstractSonarCloudQuery {
 
-    public PullRequestQuery(){ }
 
-    public PullRequestQuery(String githubToken){
-        super(githubToken);
-    }
-
-    public List<GitHubPullRequestInfo> pullRequests(String repoOwner, String repoName) {
-        return pullRequests(repoOwner+"/"+repoName);
-    }
-
-    public List<GitHubPullRequestInfo> pullRequests(String repoFullName) {
-
-        validateRepoName(repoFullName);
+    public List<SonarMetricInfo> getMetrics(){
 
         int page = 1;
 
-        // IMPORTANTE ?state=all for bring all PR
         String parameters = "";
 
-        List<GitHubPullRequestInfo> allPull = new ArrayList<>();
+        List<SonarMetricInfo> all = new ArrayList<>();
 
-        ResponseEntity<GitHubPullRequestInfo[]> result;
+        ResponseEntity<SonarMetricInfo[]> result;
 
         do {
+            parameters = "?p="+page+"&ps="+pageSize;
 
-            if(queryParameters != null && ! queryParameters.isEmpty())
-                parameters = "?"+queryParameters+"&page="+page+"&per_page="+pageSize;
-            else
-                parameters = "?page="+page+"&per_page="+pageSize;
-
-            String query = GIT_HUB_API_URL +"/repos/"+repoFullName+"/pulls"+parameters;
-
-            System.out.println("Getting Next Pull Info: "+query);
+            String query = SONAR_CLOUD_API_URL +"/metrics/search"+parameters;
 
             RestTemplate restTemplate = new RestTemplate();
 
             HttpHeaders headers = new HttpHeaders();
-            if(! githubToken.isEmpty())
-                headers.set("Authorization", "token "+githubToken+"");
             headers.set("Accept", "application/json");
+            if(! sonarCloudAPIToken.isEmpty())
+                headers.set("Authorization", "token "+sonarCloudAPIToken+"");
+
             HttpEntity entity = new HttpEntity<>(headers);
 
-            result = restTemplate.exchange( query, HttpMethod.GET, entity, GitHubPullRequestInfo[].class);
+            result = restTemplate.exchange( query, HttpMethod.GET, entity, SonarMetricInfo[].class);
 
-            allPull.addAll(  Arrays.asList(result.getBody()) );
+            all.addAll(  Arrays.asList(result.getBody()) );
 
             page++;
 
-
         }while (result != null && result.getBody().length > 0 );
 
-        return allPull;
+        return all;
+
     }
 
 }

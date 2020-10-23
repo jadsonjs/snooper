@@ -27,7 +27,7 @@
  * GitHubDownload
  * 24/09/20
  */
-package br.com.jadson.snooper.github;
+package br.com.jadson.snooper.github.operations;
 
 import net.lingala.zip4j.ZipFile;
 import net.lingala.zip4j.exception.ZipException;

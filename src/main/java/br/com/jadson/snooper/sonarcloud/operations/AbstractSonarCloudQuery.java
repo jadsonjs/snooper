@@ -23,39 +23,25 @@
  *
  *
  * snooper
- * br.com.jadson.snooper.model.release
- * GitHubReleaseAuthorInfo
- * 23/09/20
+ * br.com.jadson.snooper.sonarcloud
+ * SonarCloudQuery
+ * 20/10/20
  */
-package br.com.jadson.snooper.model.release;
+package br.com.jadson.snooper.sonarcloud.operations;
 
 /**
- * Information about release author
+ * Information to connect to SonarCloud API.
  *
  * Jadson Santos - jadsonjs@gmail.com
  */
-public class GitHubReleaseAuthorInfo {
+abstract class AbstractSonarCloudQuery {
 
-    public String login;
+    public static final String SONAR_CLOUD_API_URL = "https://sonarcloud.io/api";
 
-    public String id;
+    protected String sonarCloudAPIToken = "";
 
-    public String avatar_url;
+    /** Default page size of pagination*/
+    protected int pageSize = 50;
 
-    public String url;
-
-    public String html_url;
-
-    public String followers_url;
-
-    public String following_url;
-
-    public String starred_url;
-
-    public String repos_url;
-
-    public String events_url;
-
-    public String type;
 
 }

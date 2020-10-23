@@ -1,11 +1,9 @@
 package br.com.jadson.snooper.github;
 
-import br.com.jadson.snooper.model.diff.GitHubPullRequestDiffInfo;
+import br.com.jadson.snooper.github.operations.GitHubDownload;
 import graphql.Assert;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class GitHubDownloadTest {
 

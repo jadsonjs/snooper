@@ -23,35 +23,28 @@
  *
  *
  * snooper
- * br.com.jadson.snooper.model.diff
- * GitHubPullRequestDiffUserInfo
- * 23/09/20
+ * br.com.jadson.snooper.sonarcloud.data
+ * SonarMetricInfo
+ * 20/10/20
  */
-package br.com.jadson.snooper.model.diff;
+package br.com.jadson.snooper.sonarcloud.data.metric;
 
 /**
- * PullRequest Diff User Information
+ * Sonar Metric Information
  *
  * Jadson Santos - jadsonjs@gmail.com
  */
-public class GitHubPullRequestDiffUserInfo {
+public class SonarMetricInfo {
 
-    public String login;
-
-    public String id;
-
-    public String followers_url;
-
-    public String starred_url;
-
-    public String subscriptions_url;
-
-    public String organizations_url;
-
-    public String repos_url;
-
-    public String events_url;
-
+    public Long id;
+    public String key;
     public String type;
+    public String name;
+    public String description;
+    public String domain;
+    public Integer direction;
+    public Boolean qualitative;
+    public Boolean hidden;
+    public Integer decimalScale;
 
 }

@@ -1,4 +1,7 @@
 /*
+ * Federal University of Rio Grande do Norte
+ * Department of Informatics and Applied Mathematics
+ * Collaborative & Automated Software Engineering (CASE) Research Group
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -20,45 +23,35 @@
  *
  *
  * snooper
- * br.com.jadson.snooper.model.release
- * GitHubReleaseInfo
+ * br.com.jadson.snooper.github.data.diff
+ * GitHubPullRequestDiffUserInfo
  * 23/09/20
  */
-package br.com.jadson.snooper.model.release;
-
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
-import java.util.Date;
+package br.com.jadson.snooper.github.data.diff;
 
 /**
- * Information about repo releases
+ * PullRequest Diff User Information
  *
  * Jadson Santos - jadsonjs@gmail.com
  */
-@JsonIgnoreProperties(ignoreUnknown = true)
-public class GitHubReleaseInfo {
+public class GitHubPullRequestDiffUserInfo {
+
+    public String login;
 
     public String id;
 
-    public String tag_name;
+    public String followers_url;
 
-    public String target_commitish;
+    public String starred_url;
 
-    public String name;
+    public String subscriptions_url;
 
-    public boolean draft;
+    public String organizations_url;
 
-    public GitHubReleaseAuthorInfo author;
+    public String repos_url;
 
-    public boolean prerelease;
+    public String events_url;
 
-    @JsonFormat(pattern="yyyy-MM-dd'T'HH:mm:ss'Z'")
-    public Date created_at;
-
-    @JsonFormat(pattern="yyyy-MM-dd'T'HH:mm:ss'Z'")
-    public Date published_at;
-
-    public String body;
+    public String type;
 
 }

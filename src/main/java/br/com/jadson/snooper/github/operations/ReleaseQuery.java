@@ -27,9 +27,9 @@
  * ReleaseQuery
  * 23/09/20
  */
-package br.com.jadson.snooper.github;
+package br.com.jadson.snooper.github.operations;
 
-import br.com.jadson.snooper.model.release.GitHubReleaseInfo;
+import br.com.jadson.snooper.github.data.release.GitHubReleaseInfo;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -45,7 +45,7 @@ import java.util.List;
  *
  * Jadson Santos - jadsonjs@gmail.com
  */
-public class ReleaseQuery extends GitHubQuery {
+public class ReleaseQuery extends AbstractGitHubQuery {
 
     public ReleaseQuery(){ }
 
