@@ -29,7 +29,7 @@
  */
 package br.com.jadson.snooper.sonarcloud.operations;
 
-import br.com.jadson.snooper.sonarcloud.data.metric.SonarMetricInfo;
+import br.com.jadson.snooper.sonarcloud.data.measures.ProjectMeasuresRoot;
 import br.com.jadson.snooper.sonarcloud.data.project.SonarProjectInfo;
 import br.com.jadson.snooper.sonarcloud.data.project.SonarProjectRoot;
 import org.springframework.http.HttpEntity;
@@ -39,7 +39,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -97,42 +96,29 @@ public class SonarCloudProjectsQuery extends AbstractSonarCloudQuery{
     /**
      * Return all project form specific metric
      *
-     * @param metric
+     * @param metrics
      * @return
      */
-    public List<SonarMetricInfo> getProjectsByMetric(String metric){
+    public ProjectMeasuresRoot getProjectsMeasure(String projectKey, String metrics){
 
-        int page = 1;
+        ResponseEntity<ProjectMeasuresRoot> result;
 
-        String parameters = "";
+        String parameters = "?component="+projectKey+"&metricKeys="+metrics;
 
-        List<SonarMetricInfo> all = new ArrayList<>();
+        String query = SONAR_CLOUD_API_URL +"/measures/component"+parameters;
 
-        ResponseEntity<SonarMetricInfo[]> result;
+        RestTemplate restTemplate = new RestTemplate();
 
-        do {
-            parameters = "?metricKeys="+metric+"&p="+page+"&ps="+pageSize;
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Accept", "application/json");
+        if(! sonarCloudAPIToken.isEmpty())
+            headers.set("Authorization", "token "+sonarCloudAPIToken+"");
 
-            String query = SONAR_CLOUD_API_URL +"/measures/component"+parameters;
+        HttpEntity entity = new HttpEntity<>(headers);
 
-            RestTemplate restTemplate = new RestTemplate();
+        result = restTemplate.exchange( query, HttpMethod.GET, entity, ProjectMeasuresRoot.class);
 
-            HttpHeaders headers = new HttpHeaders();
-            headers.set("Accept", "application/json");
-            if(! sonarCloudAPIToken.isEmpty())
-                headers.set("Authorization", "token "+sonarCloudAPIToken+"");
-
-            HttpEntity entity = new HttpEntity<>(headers);
-
-            result = restTemplate.exchange( query, HttpMethod.GET, entity, SonarMetricInfo[].class);
-
-            all.addAll(  Arrays.asList(result.getBody()) );
-
-            page++;
-
-        }while (result != null && result.getBody().length > 0 );
-
-        return all;
+        return result.getBody();
 
     }
 
