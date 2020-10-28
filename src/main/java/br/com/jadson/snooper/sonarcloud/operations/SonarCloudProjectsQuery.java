@@ -30,6 +30,8 @@
 package br.com.jadson.snooper.sonarcloud.operations;
 
 import br.com.jadson.snooper.sonarcloud.data.measures.ProjectMeasuresRoot;
+import br.com.jadson.snooper.sonarcloud.data.project.SonarProject;
+import br.com.jadson.snooper.sonarcloud.data.project.SonarProjectComponent;
 import br.com.jadson.snooper.sonarcloud.data.project.SonarProjectInfo;
 import br.com.jadson.snooper.sonarcloud.data.project.SonarProjectRoot;
 import org.springframework.http.HttpEntity;
@@ -47,6 +49,60 @@ import java.util.List;
  * Jadson Santos - jadsonjs@gmail.com
  */
 public class SonarCloudProjectsQuery extends AbstractSonarCloudQuery{
+
+
+
+    /**
+     * Return all project from sonar cloud
+     *
+     * https://sonarcloud.io/api/components/search_projects?s=ncloc&asc=false&p=1&ps=10
+     * https://sonarcloud.io/api/components/search_projects?s=coverage&asc=false&p=1&ps=10
+     *
+     * @param shortByMetric
+     * @return
+     */
+    public List<SonarProjectComponent> getProjects(String shortByMetric){
+
+        int page = 1;
+
+        String parameters = "";
+
+        List<SonarProjectComponent> all = new ArrayList<>();
+
+        ResponseEntity<SonarProject> result;
+
+        int total = 0;
+        int current = 0;
+        do {
+            parameters = "?s="+shortByMetric+"&asc=false"+"&p="+page+"&ps="+pageSize;
+
+            String query = SONAR_CLOUD_API_URL +"/components/search_projects"+parameters;
+
+            RestTemplate restTemplate = new RestTemplate();
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.set("Accept", "application/json");
+            if(! sonarCloudAPIToken.isEmpty())
+                headers.set("Authorization", "token "+sonarCloudAPIToken+"");
+
+            HttpEntity entity = new HttpEntity<>(headers);
+
+            result = restTemplate.exchange( query, HttpMethod.GET, entity, SonarProject.class);
+
+            SonarProject root = result.getBody();
+
+            current = root.paging.pageIndex;
+            total = root.paging.total;
+
+            all.addAll(  new ArrayList<>( root.components ) );
+
+            page++;
+
+        }while (result != null && current <= total);
+
+        return all;
+
+    }
 
 
     public List<SonarProjectInfo> getProjectsOfOrganization(String organization){
