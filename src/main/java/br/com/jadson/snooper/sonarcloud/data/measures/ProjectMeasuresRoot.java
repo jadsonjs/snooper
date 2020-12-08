@@ -38,15 +38,10 @@ import java.util.List;
 public class ProjectMeasuresRoot {
 
     public Component component;
-    public List<Metric> metrics;
-    public List<Period2> periods;
 
     @Override
     public String toString() {
         return "MeasuresRoot{" +
-                "component=" + component +
-                ", metrics=" + metrics +
-                ", periods=" + periods +
-                '}';
+                "component=" + component + '}';
     }
 }

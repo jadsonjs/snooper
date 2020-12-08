@@ -1,11 +1,9 @@
 plugins {
-	id 'org.springframework.boot' version '2.3.4.RELEASE'
-	id 'io.spring.dependency-management' version '1.0.10.RELEASE'
 	id 'java'
 }
 
 group = 'br.com.jadson'
-version = '1.0'
+version = '0.3'
 sourceCompatibility = '11'
 
 configurations {
@@ -16,14 +14,24 @@ configurations {
 
 repositories {
 	mavenCentral()
+
+	maven { url "https://repo.spring.io/plugins-release/" }
+
 }
 
 dependencies {
 
-	implementation 'org.springframework.boot:spring-boot-starter-web'
-	compileOnly 'org.projectlombok:lombok'
-	developmentOnly 'org.springframework.boot:spring-boot-devtools'
-	annotationProcessor 'org.projectlombok:lombok'
+	// rest template
+	compile group: 'org.springframework', name: 'org.springframework.web', version: '3.2.2.RELEASE'
+
+	// json processing
+	compile group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.11.3'
+	compile group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.11.3'
+	compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.11.3'
+
+
+	compileOnly 'org.projectlombok:lombok:1.18.16'
+	annotationProcessor 'org.projectlombok:lombok:1.18.16'
 
 	// This is a GraphQL Java implementation
 	implementation 'com.graphql-java:graphql-java:14.0'
@@ -34,9 +42,9 @@ dependencies {
 	// A Java library for zip files and streams
 	implementation group: 'net.lingala.zip4j', name: 'zip4j', version: '2.4.0'
 
-	testImplementation('org.springframework.boot:spring-boot-starter-test') {
-		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
-	}
+	// junit 5
+	testCompile group: 'org.junit.jupiter', name: 'junit-jupiter', version: '5.6.2'
+
 }
 
 test {

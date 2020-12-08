@@ -12,9 +12,10 @@ class PullRequestDiffQueryTest {
      * Basic test
      */
     @Test
-    void testPullRequest(){
+    void testPullRequestDiff(){
 
         PullRequestDiffQuery gitHub = new PullRequestDiffQuery();
+        gitHub.setTestEnvironment(true);
 
         GitHubPullRequestDiffInfo info =  gitHub.pullRequestsDiff("vuejs/vue-cli", 5356l);
 

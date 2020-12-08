@@ -1,5 +1,7 @@
 package br.com.jadson.snooper.sonarcloud.operations;
 
+import br.com.jadson.snooper.sonarcloud.data.analyses.SonarAnalysesInfo;
+import br.com.jadson.snooper.sonarcloud.data.analyses.SonarEventInfo;
 import br.com.jadson.snooper.sonarcloud.data.measures.ProjectMeasuresRoot;
 import br.com.jadson.snooper.sonarcloud.data.project.SonarProjectInfo;
 import org.junit.jupiter.api.Assertions;
@@ -13,6 +15,8 @@ class SonarCloudProjectsQueryTest {
     void getProjectsOfOrganization() {
 
         SonarCloudProjectsQuery query = new SonarCloudProjectsQuery();
+        query.setTestEnvironment(true);
+
         List<SonarProjectInfo> projects = query.getProjectsOfOrganization("microsoft");
 
         for (SonarProjectInfo pi : projects){
@@ -25,15 +29,60 @@ class SonarCloudProjectsQueryTest {
     }
 
     @Test
-    void getProjectsByMetric() {
+    void testGetProjectsOfOrganization() {
+
         SonarCloudProjectsQuery query = new SonarCloudProjectsQuery();
-        ProjectMeasuresRoot m = query.getProjectsMeasure("microsoft_terraform-provider-azuredevops", "coverage");
+        query.setTestEnvironment(true);
 
-        System.out.println(m.component.name);
-        System.out.println(m.component.measures);
-        System.out.println(m.metrics);
-        System.out.println(m.periods);
+        List<SonarProjectInfo> list = query.getProjectsOfOrganization("jadsonjs");
 
+        for (SonarProjectInfo i : list){
+            System.out.println(i.key);
+            System.out.println(i.name);
+        }
 
+        Assertions.assertEquals("pipeline-demo", list.get(0).name);
+        Assertions.assertEquals("pipe-line-demo", list.get(0).key);
+    }
+
+    @Test
+    void getProjectMeasure() {
+
+        SonarCloudProjectsQuery query = new SonarCloudProjectsQuery();
+        query.setTestEnvironment(true);
+
+        ProjectMeasuresRoot data = query.getProjectMeasure("pipe-line-demo", "coverage");
+
+        Assertions.assertEquals("coverage", data.component.measures.get(0).metric);
+        Assertions.assertEquals("0.0", data.component.measures.get(0).value);
+
+    }
+
+    @Test
+    void getProjectAnalysesTest() {
+
+        SonarCloudProjectsQuery query = new SonarCloudProjectsQuery();
+        query.setTestEnvironment(true);
+
+        List<SonarAnalysesInfo> list = query.getProjectAnalyses("pipe-line-demo", null);
+
+        for (SonarAnalysesInfo i : list){
+            System.out.println(i.key);
+            for (SonarEventInfo eventInfo : i.events) {
+                System.out.println(eventInfo.name+" "+eventInfo.category);
+            }
+        }
+
+        Assertions.assertTrue(list.size() > 0 );
+    }
+
+    @Test
+    void getTotalAnalysesOfProject() {
+
+        SonarCloudProjectsQuery query = new SonarCloudProjectsQuery();
+        query.setTestEnvironment(true);
+
+        int analyses = query.getTotalAnalysesOfProject("pipe-line-demo", null);
+        Assertions.assertTrue(analyses > 0 );
     }
 }

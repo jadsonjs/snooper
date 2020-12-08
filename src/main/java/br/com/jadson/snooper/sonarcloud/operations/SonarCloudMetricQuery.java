@@ -77,7 +77,7 @@ public class SonarCloudMetricQuery extends AbstractSonarCloudQuery {
 
             page++;
 
-        }while (result != null && result.getBody().length > 0 );
+        }while ( ( result != null && result.getBody().length > 0 ) || ! testEnvironment);
 
         return all;
 

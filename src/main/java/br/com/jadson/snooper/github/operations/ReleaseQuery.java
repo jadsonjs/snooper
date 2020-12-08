@@ -97,7 +97,7 @@ public class ReleaseQuery extends AbstractGitHubQuery {
             page++;
 
 
-        }while (result != null && result.getBody().length > 0 );
+        }while ( (result != null && result.getBody().length > 0 ) || !testEnvironment);
 
         return all;
     }

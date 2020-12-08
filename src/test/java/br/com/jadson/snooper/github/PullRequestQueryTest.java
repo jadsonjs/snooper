@@ -16,7 +16,7 @@ class PullRequestQueryTest {
     void testPullRequest(){
 
         PullRequestQuery gitHubClient = new PullRequestQuery();
-
+        gitHubClient.setTestEnvironment(true);
         List<GitHubPullRequestInfo> list =  gitHubClient.pullRequests("webauthn4j/webauthn4j");
 
         Assertions.assertTrue(list.size() > 0);
@@ -29,6 +29,7 @@ class PullRequestQueryTest {
     void testPullRequestWithToken(){
 
         PullRequestQuery gitHubClient = new PullRequestQuery();
+        gitHubClient.setTestEnvironment(true);
 
         List<GitHubPullRequestInfo> list =  gitHubClient.pullRequests("webauthn4j/webauthn4j");
 
@@ -42,6 +43,7 @@ class PullRequestQueryTest {
     void testPullRequestOwnerAndName(){
 
         PullRequestQuery gitHubClient = new PullRequestQuery();
+        gitHubClient.setTestEnvironment(true);
 
         List<GitHubPullRequestInfo> list =  gitHubClient.pullRequests("webauthn4j", "webauthn4j");
 
@@ -56,6 +58,7 @@ class PullRequestQueryTest {
     void testPullRequestPageSize(){
 
         PullRequestQuery gitHubClient = new PullRequestQuery();
+        gitHubClient.setTestEnvironment(true);
         gitHubClient.setPageSize(10);
 
         List<GitHubPullRequestInfo> list =  gitHubClient.pullRequests("webauthn4j/webauthn4j");
@@ -70,6 +73,7 @@ class PullRequestQueryTest {
     void testPullRequestPageSizeAndParameters(){
 
         PullRequestQuery gitHubClient = new PullRequestQuery();
+        gitHubClient.setTestEnvironment(true);
         gitHubClient.setPageSize(10);
         gitHubClient.setQueryParameters(new String[]{"state=all"});
 

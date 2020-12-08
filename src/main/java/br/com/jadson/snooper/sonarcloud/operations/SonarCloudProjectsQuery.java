@@ -29,6 +29,8 @@
  */
 package br.com.jadson.snooper.sonarcloud.operations;
 
+import br.com.jadson.snooper.sonarcloud.data.analyses.SonarAnalysesInfo;
+import br.com.jadson.snooper.sonarcloud.data.analyses.SonarAnalysesRoot;
 import br.com.jadson.snooper.sonarcloud.data.measures.ProjectMeasuresRoot;
 import br.com.jadson.snooper.sonarcloud.data.project.SonarProject;
 import br.com.jadson.snooper.sonarcloud.data.project.SonarProjectComponent;
@@ -50,7 +52,17 @@ import java.util.List;
  */
 public class SonarCloudProjectsQuery extends AbstractSonarCloudQuery{
 
+    /**
+     * it's not possible to browse more than 10.000 issues. We need to refine your search.
+     * https://community.sonarsource.com/t/cannot-get-more-than-10000-results-through-web-api/3662/2
+     */
+    public final int LIMIT_SONAR_CLOUD_API = 10000;
 
+    public SonarCloudProjectsQuery(){}
+
+    public SonarCloudProjectsQuery(int pageSize){
+        this.setPageSize(pageSize);
+    }
 
     /**
      * Return all project from sonar cloud
@@ -98,13 +110,24 @@ public class SonarCloudProjectsQuery extends AbstractSonarCloudQuery{
 
             page++;
 
-        }while (result != null && current <= total);
+            if(page % 10 == 0){
+                System.out.println("Recovering: "+(page*pageSize)+" elements of: "+total);
+                System.out.println(query);
+            }
+
+            try { Thread.sleep(10000); } catch (InterruptedException e) { e.printStackTrace(); } // 10s simulate a page navigation
+
+        }while (( result != null && current <= total) || ! testEnvironment || (page*pageSize) <= LIMIT_SONAR_CLOUD_API);
 
         return all;
 
     }
 
-
+    /**
+     * Return project of one organization.
+     * @param organization
+     * @return
+     */
     public List<SonarProjectInfo> getProjectsOfOrganization(String organization){
 
         int page = 1;
@@ -142,24 +165,26 @@ public class SonarCloudProjectsQuery extends AbstractSonarCloudQuery{
 
             page++;
 
-        }while (result != null && current <= total);
+        }while ( ( result != null && current <= total ) || ! testEnvironment || (page*pageSize) <= LIMIT_SONAR_CLOUD_API);
 
         return all;
 
     }
 
 
+
+
     /**
-     * Return all project form specific metric
+     * Return a metric value form a project
      *
      * @param metrics
      * @return
      */
-    public ProjectMeasuresRoot getProjectsMeasure(String projectKey, String metrics){
+    public ProjectMeasuresRoot getProjectMeasure(String projectKey, String metrics){
 
         ResponseEntity<ProjectMeasuresRoot> result;
 
-        String parameters = "?component="+projectKey+"&metricKeys="+metrics;
+        String parameters = "?componentKey="+projectKey+"&metricKeys="+metrics;
 
         String query = SONAR_CLOUD_API_URL +"/measures/component"+parameters;
 
@@ -175,6 +200,92 @@ public class SonarCloudProjectsQuery extends AbstractSonarCloudQuery{
         result = restTemplate.exchange( query, HttpMethod.GET, entity, ProjectMeasuresRoot.class);
 
         return result.getBody();
+
+    }
+
+
+    /**
+     * Return analysis of a specific project.
+     *
+     * @param projectKey
+     * @return
+     */
+    public List<SonarAnalysesInfo> getProjectAnalyses(String projectKey, String category){
+
+        int page = 1;
+
+        String parameters = "";
+
+        List<SonarAnalysesInfo> all = new ArrayList<>();
+
+        ResponseEntity<SonarAnalysesRoot> result;
+
+        int total = 0;
+        int current = 0;
+        do {
+            parameters = "?project="+projectKey;
+            if(category != null && ! category.trim().equals(""))
+                parameters += "&category="+category;
+
+            parameters +="&p="+page+"&ps="+pageSize;
+
+            String query = SONAR_CLOUD_API_URL +"/project_analyses/search"+parameters;
+
+            RestTemplate restTemplate = new RestTemplate();
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.set("Accept", "application/json");
+            if(! sonarCloudAPIToken.isEmpty())
+                headers.set("Authorization", "token "+sonarCloudAPIToken+"");
+
+            HttpEntity entity = new HttpEntity<>(headers);
+
+            result = restTemplate.exchange( query, HttpMethod.GET, entity, SonarAnalysesRoot.class);
+
+            SonarAnalysesRoot root = result.getBody();
+
+            current = root.paging.pageIndex;
+            total = root.paging.total;
+
+            all.addAll(  new ArrayList<>( root.analyses ) );
+
+            page++;
+
+        }while ( ( result != null && current <= total ) || ! testEnvironment || (page*pageSize) <= LIMIT_SONAR_CLOUD_API);
+
+        return all;
+
+    }
+
+
+    /**
+     * Return just the total of analyses of project
+     *
+     * @param category
+     * @return
+     */
+    public int getTotalAnalysesOfProject(String projectKey, String category){
+
+        ResponseEntity<SonarAnalysesRoot> result;
+
+        String parameters =  parameters = "?project="+projectKey;
+        if(category != null && ! category.trim().equals(""))
+            parameters += "&category="+category;
+
+        String query = SONAR_CLOUD_API_URL +"/project_analyses/search"+parameters;
+
+        RestTemplate restTemplate = new RestTemplate();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Accept", "application/json");
+        if(! sonarCloudAPIToken.isEmpty())
+            headers.set("Authorization", "token "+sonarCloudAPIToken+"");
+
+        HttpEntity entity = new HttpEntity<>(headers);
+
+        result = restTemplate.exchange( query, HttpMethod.GET, entity, SonarAnalysesRoot.class);
+
+        return result.getBody().paging.total;
 
     }
 

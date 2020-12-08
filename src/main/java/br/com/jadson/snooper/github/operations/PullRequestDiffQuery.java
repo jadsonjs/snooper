@@ -61,8 +61,6 @@ public class PullRequestDiffQuery extends AbstractGitHubQuery {
 
         validateRepoName(repoFullName);
 
-        int page = 1;
-
         // IMPORTANTE ?state=all for bring all PR
         String parameters = "";
 

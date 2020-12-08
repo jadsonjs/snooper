@@ -42,6 +42,9 @@ abstract class AbstractGitHubQuery {
 
     protected String queryParameters;
 
+    /** if is executing a test, or ir real query. */
+    protected boolean testEnvironment = false;
+
     public AbstractGitHubQuery(){ }
 
     public AbstractGitHubQuery(String githubToken){
@@ -73,5 +76,10 @@ abstract class AbstractGitHubQuery {
         if(! repoFullName.contains("/"))
             throw new RuntimeException("Invalid GitHub repo full name: "+repoFullName+". The name should be owner/repo");
     }
+
+    public void setTestEnvironment(boolean testEnvironment) {
+        this.testEnvironment = testEnvironment;
+    }
+
 
 }

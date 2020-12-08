@@ -29,11 +29,14 @@
  */
 package br.com.jadson.snooper.github.data.diff;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 /**
  * PullRequest Diff User Information
  *
  * Jadson Santos - jadsonjs@gmail.com
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class GitHubPullRequestDiffUserInfo {
 
     public String login;

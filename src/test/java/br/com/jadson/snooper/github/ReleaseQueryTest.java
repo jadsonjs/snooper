@@ -13,9 +13,10 @@ class ReleaseQueryTest {
      * Basic test
      */
     @Test
-    void testPullRequest(){
+    void testGetReleasesInfo(){
 
         ReleaseQuery gitHub = new ReleaseQuery();
+        gitHub.setTestEnvironment(true);
 
         List<GitHubReleaseInfo> list =  gitHub.releases("webauthn4j/webauthn4j");
 

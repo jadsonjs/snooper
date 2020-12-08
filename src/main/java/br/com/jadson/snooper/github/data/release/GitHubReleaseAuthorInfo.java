@@ -29,11 +29,14 @@
  */
 package br.com.jadson.snooper.github.data.release;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 /**
  * Information about release author
  *
  * Jadson Santos - jadsonjs@gmail.com
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class GitHubReleaseAuthorInfo {
 
     public String login;

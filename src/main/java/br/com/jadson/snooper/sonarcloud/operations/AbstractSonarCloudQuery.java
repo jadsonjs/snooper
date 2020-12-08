@@ -43,5 +43,23 @@ abstract class AbstractSonarCloudQuery {
     /** Default page size of pagination*/
     protected int pageSize = 50;
 
+    /** if is executing a test, or ir real query. */
+    protected boolean testEnvironment = false;
 
+    public void setTestEnvironment(boolean testEnvironment) {
+        this.testEnvironment = testEnvironment;
+    }
+
+
+    public void setSonarCloudAPIToken(String sonarCloudAPIToken) {
+        if(sonarCloudAPIToken == null || sonarCloudAPIToken.trim().isEmpty())
+            throw new IllegalArgumentException("invalid Sonar Cloud API Token: "+sonarCloudAPIToken);
+        this.sonarCloudAPIToken = sonarCloudAPIToken;
+    }
+
+    public void setPageSize(int pageSize) {
+        if(pageSize <= 0 || pageSize > 10000)
+            throw new IllegalArgumentException("page size should be between 1 and 10.000");
+        this.pageSize = pageSize;
+    }
 }

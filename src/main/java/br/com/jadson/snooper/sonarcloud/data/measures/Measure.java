@@ -29,14 +29,27 @@
  */
 package br.com.jadson.snooper.sonarcloud.data.measures;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import java.util.List;
 
 /**
  * TODO
  * Jadson Santos - jadsonjs@gmail.com
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Measure {
     public String metric;
     public String value;
-    public List<Period> periods;
+    public Boolean bestValue;
+
+
+    @Override
+    public String toString() {
+        return "Measure{" +
+                "metric='" + metric + '\'' +
+                ", value='" + value + '\'' +
+                ", bestValue=" + bestValue +
+                '}';
+    }
 }

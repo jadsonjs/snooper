@@ -29,12 +29,15 @@
  */
 package br.com.jadson.snooper.sonarcloud.data.measures;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import java.util.List;
 
 /**
  * TODO
  * Jadson Santos - jadsonjs@gmail.com
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Component {
     public String key;
     public String name;
@@ -42,4 +45,16 @@ public class Component {
     public String language;
     public String path;
     public List<Measure> measures;
+
+    @Override
+    public String toString() {
+        return "Component{" +
+                "key='" + key + '\'' +
+                ", name='" + name + '\'' +
+                ", qualifier='" + qualifier + '\'' +
+                ", language='" + language + '\'' +
+                ", path='" + path + '\'' +
+                ", measures=" + measures +
+                '}';
+    }
 }
