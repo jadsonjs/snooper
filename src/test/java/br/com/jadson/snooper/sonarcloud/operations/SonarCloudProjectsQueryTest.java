@@ -2,7 +2,10 @@ package br.com.jadson.snooper.sonarcloud.operations;
 
 import br.com.jadson.snooper.sonarcloud.data.analyses.SonarAnalysesInfo;
 import br.com.jadson.snooper.sonarcloud.data.analyses.SonarEventInfo;
+import br.com.jadson.snooper.sonarcloud.data.links.ProjectLinkRoot;
+import br.com.jadson.snooper.sonarcloud.data.links.ProjectsLinks;
 import br.com.jadson.snooper.sonarcloud.data.measures.ProjectMeasuresRoot;
+import br.com.jadson.snooper.sonarcloud.data.project.SonarProjectComponent;
 import br.com.jadson.snooper.sonarcloud.data.project.SonarProjectInfo;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -10,6 +13,18 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 
 class SonarCloudProjectsQueryTest {
+
+    @Test
+    void getSonarProjectsTest() {
+
+        SonarCloudProjectsQuery query = new SonarCloudProjectsQuery();
+        query.setTestEnvironment(true);
+        query.pageSize = 1;
+
+        List<SonarProjectComponent> projects = query.getSonarProjects("java", "ncloc");
+
+        Assertions.assertTrue(projects.size() > 0 );
+    }
 
     @Test
     void getProjectsOfOrganization() {
@@ -84,5 +99,16 @@ class SonarCloudProjectsQueryTest {
 
         int analyses = query.getTotalAnalysesOfProject("pipe-line-demo", null);
         Assertions.assertTrue(analyses > 0 );
+    }
+
+
+    @Test
+    void getProjectLinkTeste() {
+
+        SonarCloudProjectsQuery query = new SonarCloudProjectsQuery();
+        query.setTestEnvironment(true);
+
+        List<ProjectsLinks> links = query.getProjectLinks("jbosstools_jbosstools-integration-tests");
+        Assertions.assertTrue(links.size() > 0 );
     }
 }

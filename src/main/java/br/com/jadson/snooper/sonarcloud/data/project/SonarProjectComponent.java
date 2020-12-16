@@ -29,22 +29,56 @@
  */
 package br.com.jadson.snooper.sonarcloud.data.project;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Represent a project on sonar cloud.
  *
  * Jadson Santos - jadsonjs@gmail.com
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class SonarProjectComponent {
 
     public String organization;
     public String key;
     public String name;
-    public List<Object> tags;
     public String visibility;
-    public String eligibilityStatus;
-    public boolean eligible;
-    public boolean isNew;
 
+    /**
+     * Qdd Analyses on sonar for this project.
+     * (VASSALLO et al., 2018) state that at least 20 quality inspections on SonarCloud are required to consider that a project actively uses SonarCloud.
+     */
+    public int qtdAnalyses;
+
+    /**
+     * If this sonar project exist on github, we keep a link here
+     */
+    public String githubLink;
+
+    /**
+     * If this sonar project exist on travisCI, we keep a link here
+     */
+    public String travisCILink;
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        SonarProjectComponent that = (SonarProjectComponent) o;
+        return key.equals(that.key);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(key);
+    }
+
+    @Override
+    public String toString() {
+        return "SonarProjectComponent{" + "key='" + key + '\'' + ", name='" + name + '\'' + '}';
+    }
 }

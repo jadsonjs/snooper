@@ -23,25 +23,21 @@
  *
  *
  * snooper
- * br.com.jadson.snooper.sonarcloud.data.project
- * SonarProject
- * 28/10/20
+ * br.com.jadson.snooper.sonarcloud.data.links
+ * ProjectLinkRoot
+ * 10/12/20
  */
-package br.com.jadson.snooper.sonarcloud.data.project;
-
-import br.com.jadson.snooper.sonarcloud.data.SonarPaging;
+package br.com.jadson.snooper.sonarcloud.data.links;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Information of the service to get all projects of sonarcloud.
- *
+ * Represents the links of sonar cloud projects
  * Jadson Santos - jadsonjs@gmail.com
  */
-public class SonarProject {
+public class ProjectLinkRoot {
 
-    public List<SonarProjectComponent> components = new ArrayList <SonarProjectComponent> ();
+    public List<ProjectsLinks> links = new ArrayList<>();
 
-    public SonarPaging paging;
 }

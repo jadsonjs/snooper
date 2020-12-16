@@ -23,25 +23,19 @@
  *
  *
  * snooper
- * br.com.jadson.snooper.sonarcloud.data.measures
- * MeasuresRoot
- * 26/10/20
+ * br.com.jadson.snooper.sonarcloud.data.links
+ * Links
+ * 10/12/20
  */
-package br.com.jadson.snooper.sonarcloud.data.measures;
-
-import java.util.List;
+package br.com.jadson.snooper.sonarcloud.data.links;
 
 /**
- * Keep all links of a project
+ * TODO
  * Jadson Santos - jadsonjs@gmail.com
  */
-public class ProjectMeasuresRoot {
+public class ProjectsLinks {
 
-    public Component component;
-
-    @Override
-    public String toString() {
-        return "MeasuresRoot{" +
-                "component=" + component + '}';
-    }
+    public String id;
+    public String type;
+    public String url;
 }

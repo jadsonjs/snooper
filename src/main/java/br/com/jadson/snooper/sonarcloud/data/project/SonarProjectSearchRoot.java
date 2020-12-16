@@ -23,25 +23,30 @@
  *
  *
  * snooper
- * br.com.jadson.snooper.sonarcloud.data.measures
- * MeasuresRoot
- * 26/10/20
+ * br.com.jadson.snooper.sonarcloud.data.project
+ * SonarProject
+ * 28/10/20
  */
-package br.com.jadson.snooper.sonarcloud.data.measures;
+package br.com.jadson.snooper.sonarcloud.data.project;
 
+import br.com.jadson.snooper.sonarcloud.data.SonarPaging;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Keep all links of a project
+ * Root Information of the service to get all projects of sonarcloud.
+ *
  * Jadson Santos - jadsonjs@gmail.com
  */
-public class ProjectMeasuresRoot {
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class SonarProjectSearchRoot {
 
-    public Component component;
+    /**
+     * the sonar projects.
+     */
+    public List<SonarProjectComponent> components = new ArrayList <SonarProjectComponent> ();
 
-    @Override
-    public String toString() {
-        return "MeasuresRoot{" +
-                "component=" + component + '}';
-    }
+    public SonarPaging paging;
 }

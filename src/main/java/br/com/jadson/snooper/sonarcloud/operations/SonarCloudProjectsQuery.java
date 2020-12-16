@@ -31,8 +31,10 @@ package br.com.jadson.snooper.sonarcloud.operations;
 
 import br.com.jadson.snooper.sonarcloud.data.analyses.SonarAnalysesInfo;
 import br.com.jadson.snooper.sonarcloud.data.analyses.SonarAnalysesRoot;
+import br.com.jadson.snooper.sonarcloud.data.links.ProjectsLinks;
+import br.com.jadson.snooper.sonarcloud.data.links.ProjectLinkRoot;
 import br.com.jadson.snooper.sonarcloud.data.measures.ProjectMeasuresRoot;
-import br.com.jadson.snooper.sonarcloud.data.project.SonarProject;
+import br.com.jadson.snooper.sonarcloud.data.project.SonarProjectSearchRoot;
 import br.com.jadson.snooper.sonarcloud.data.project.SonarProjectComponent;
 import br.com.jadson.snooper.sonarcloud.data.project.SonarProjectInfo;
 import br.com.jadson.snooper.sonarcloud.data.project.SonarProjectRoot;
@@ -67,13 +69,25 @@ public class SonarCloudProjectsQuery extends AbstractSonarCloudQuery{
     /**
      * Return all project from sonar cloud
      *
-     * https://sonarcloud.io/api/components/search_projects?s=ncloc&asc=false&p=1&ps=10
-     * https://sonarcloud.io/api/components/search_projects?s=coverage&asc=false&p=1&ps=10
+     * Access the sonar explore:  https://sonarcloud.io/explore/projects?languages=java&sort=-size
      *
-     * @param shortByMetric
+     * and see the api begin calling in network tab
+     *
+     * https://community.sonarsource.com/t/list-of-all-public-projects-on-sonarcloud-using-api/33551/2
+     *
+     * Example of query generate by sonar explore to API:
+     *
+     * https://sonarcloud.io/api/components/search_projects?boostNewProjects=false&facets=ncloc,languages&filter=languages=java&s=ncloc&asc=false&p=1&ps=100
+     *
+     * @param languages languages of project
      * @return
      */
-    public List<SonarProjectComponent> getProjects(String shortByMetric){
+    public List<SonarProjectComponent> getSonarProjects(String languages, String sortBy){
+
+        if(languages == null && languages.length() == 0)
+            throw new IllegalArgumentException("languages is mandatory");
+        if(sortBy == null && sortBy.length() == 0)
+            throw new IllegalArgumentException("sortBy is mandatory");
 
         int page = 1;
 
@@ -81,14 +95,21 @@ public class SonarCloudProjectsQuery extends AbstractSonarCloudQuery{
 
         List<SonarProjectComponent> all = new ArrayList<>();
 
-        ResponseEntity<SonarProject> result;
+        ResponseEntity<SonarProjectSearchRoot> result;
 
         int total = 0;
         int current = 0;
         do {
-            parameters = "?s="+shortByMetric+"&asc=false"+"&p="+page+"&ps="+pageSize;
+
+            parameters = "?boostNewProjects=false&facets=ncloc,languages&filter=languages="+languages+"&s="+sortBy+"&asc=false"+"&p="+page+"&ps="+pageSize;
 
             String query = SONAR_CLOUD_API_URL +"/components/search_projects"+parameters;
+
+            System.out.println("Recovering: "+(page*pageSize)+" elements of: "+total);
+            System.out.println("page: "+page);
+            System.out.println("pageSize: "+pageSize);
+
+            System.out.println(query);
 
             RestTemplate restTemplate = new RestTemplate();
 
@@ -99,25 +120,20 @@ public class SonarCloudProjectsQuery extends AbstractSonarCloudQuery{
 
             HttpEntity entity = new HttpEntity<>(headers);
 
-            result = restTemplate.exchange( query, HttpMethod.GET, entity, SonarProject.class);
+            result = restTemplate.exchange( query, HttpMethod.GET, entity, SonarProjectSearchRoot.class);
 
-            SonarProject root = result.getBody();
+            SonarProjectSearchRoot root = result.getBody();
 
-            current = root.paging.pageIndex;
+            current = root.paging.pageIndex * root.paging.pageSize;
             total = root.paging.total;
 
             all.addAll(  new ArrayList<>( root.components ) );
 
             page++;
 
-            if(page % 10 == 0){
-                System.out.println("Recovering: "+(page*pageSize)+" elements of: "+total);
-                System.out.println(query);
-            }
+            try { Thread.sleep(5000); } catch (InterruptedException e) { e.printStackTrace(); } // 10s simulate a page navigation
 
-            try { Thread.sleep(10000); } catch (InterruptedException e) { e.printStackTrace(); } // 10s simulate a page navigation
-
-        }while (( result != null && current <= total) || ! testEnvironment || (page*pageSize) <= LIMIT_SONAR_CLOUD_API);
+        }while ( ( result != null && current <= total) && ! testEnvironment  && (page*pageSize) <= LIMIT_SONAR_CLOUD_API  );
 
         return all;
 
@@ -158,14 +174,14 @@ public class SonarCloudProjectsQuery extends AbstractSonarCloudQuery{
 
             SonarProjectRoot root = result.getBody();
 
-            current = root.paging.pageIndex;
+            current = root.paging.pageIndex * root.paging.pageSize;
             total = root.paging.total;
 
             all.addAll(  new ArrayList<>( root.components ) );
 
             page++;
 
-        }while ( ( result != null && current <= total ) || ! testEnvironment || (page*pageSize) <= LIMIT_SONAR_CLOUD_API);
+        }while ( ( result != null && current <= total) && ! testEnvironment  && (page*pageSize) <= LIMIT_SONAR_CLOUD_API );
 
         return all;
 
@@ -244,14 +260,14 @@ public class SonarCloudProjectsQuery extends AbstractSonarCloudQuery{
 
             SonarAnalysesRoot root = result.getBody();
 
-            current = root.paging.pageIndex;
+            current = root.paging.pageIndex * root.paging.pageSize;
             total = root.paging.total;
 
             all.addAll(  new ArrayList<>( root.analyses ) );
 
             page++;
 
-        }while ( ( result != null && current <= total ) || ! testEnvironment || (page*pageSize) <= LIMIT_SONAR_CLOUD_API);
+        }while ( ( result != null && current <= total) && ! testEnvironment  && (page*pageSize) <= LIMIT_SONAR_CLOUD_API );
 
         return all;
 
@@ -286,6 +302,36 @@ public class SonarCloudProjectsQuery extends AbstractSonarCloudQuery{
         result = restTemplate.exchange( query, HttpMethod.GET, entity, SonarAnalysesRoot.class);
 
         return result.getBody().paging.total;
+
+    }
+
+
+    /**
+     * Return links of the project. With the links we can link the project
+     *
+     * @param projectKey
+     * @return
+     */
+    public List<ProjectsLinks> getProjectLinks(String projectKey){
+
+        ResponseEntity<ProjectLinkRoot> result;
+
+        String parameters = "?projectKey="+projectKey;
+
+        String query = SONAR_CLOUD_API_URL +"/project_links/search"+parameters;
+
+        RestTemplate restTemplate = new RestTemplate();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Accept", "application/json");
+        if(! sonarCloudAPIToken.isEmpty())
+            headers.set("Authorization", "token "+sonarCloudAPIToken+"");
+
+        HttpEntity entity = new HttpEntity<>(headers);
+
+        result = restTemplate.exchange( query, HttpMethod.GET, entity, ProjectLinkRoot.class);
+
+        return result.getBody().links;
 
     }
 
