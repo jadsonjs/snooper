@@ -12,7 +12,7 @@ class SonarCloudMetricQueryTest {
     @Test
     @Disabled
     void getMetricsTest() {
-        SonarCloudMetricQuery query = new SonarCloudMetricQuery();
+        SonarCloudMetricQueryExecutor query = new SonarCloudMetricQueryExecutor();
         query.setTestEnvironment(true);
         Assertions.assertTrue(query.getMetrics().size() > 0 );
     }

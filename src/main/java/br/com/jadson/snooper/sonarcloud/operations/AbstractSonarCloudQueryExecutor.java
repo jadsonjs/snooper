@@ -23,26 +23,43 @@
  *
  *
  * snooper
- * br.com.jadson.snooper.travisci.operations
- * TravisCIQuery
- * 29/09/20
+ * br.com.jadson.snooper.sonarcloud
+ * SonarCloudQuery
+ * 20/10/20
  */
-package br.com.jadson.snooper.travisci.operations;
+package br.com.jadson.snooper.sonarcloud.operations;
 
 /**
- * Travis CI client
- *
- * https://docs.travis-ci.com/user/developer/
+ * Information to connect to SonarCloud API.
  *
  * Jadson Santos - jadsonjs@gmail.com
  */
-abstract class AbstractTravisCIQuery {
+abstract class AbstractSonarCloudQueryExecutor {
 
-    public static final String TRAVIS_CI_API_URL = "https://api.travis-ci.org";
+    public static final String SONAR_CLOUD_API_URL = "https://sonarcloud.io/api";
 
-    protected String travisAPIToken = "";
+    protected String sonarCloudAPIToken = "";
 
     /** Default page size of pagination*/
     protected int pageSize = 50;
 
+    /** if is executing a test, or ir real query. */
+    protected boolean testEnvironment = false;
+
+    public void setTestEnvironment(boolean testEnvironment) {
+        this.testEnvironment = testEnvironment;
+    }
+
+
+    public void setSonarCloudAPIToken(String sonarCloudAPIToken) {
+        if(sonarCloudAPIToken == null || sonarCloudAPIToken.trim().isEmpty())
+            throw new IllegalArgumentException("invalid Sonar Cloud API Token: "+sonarCloudAPIToken);
+        this.sonarCloudAPIToken = sonarCloudAPIToken;
+    }
+
+    public void setPageSize(int pageSize) {
+        if(pageSize <= 0 || pageSize > 10000)
+            throw new IllegalArgumentException("page size should be between 1 and 10.000");
+        this.pageSize = pageSize;
+    }
 }

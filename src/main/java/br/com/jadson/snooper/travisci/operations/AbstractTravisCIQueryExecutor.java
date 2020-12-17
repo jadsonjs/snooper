@@ -24,41 +24,41 @@
  *
  * snooper
  * br.com.jadson.snooper.travisci.operations
- * TravisCIBuildDuration
+ * TravisCIQuery
  * 29/09/20
  */
 package br.com.jadson.snooper.travisci.operations;
 
-
-import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.web.client.RestTemplate;
 
 /**
- * Recovery data from build on travis CI
+ * Travis CI client
+ *
+ * https://docs.travis-ci.com/user/developer/
  *
  * Jadson Santos - jadsonjs@gmail.com
  */
-public class TravisCIBuildQuery extends AbstractTravisCIQuery {
+abstract class AbstractTravisCIQueryExecutor {
 
+    public static final String TRAVIS_CI_API_URL = "https://api.travis-ci.org";
 
-    public void build(){
+    protected String travisAPIToken = "";
 
-        String query = TRAVIS_CI_API_URL +"/repo/{provider}/{repository.id}/builds";
+    /** Default page size of pagination*/
+    protected int pageSize = 50;
 
-        RestTemplate restTemplate = new RestTemplate();
+    protected HttpHeaders getDefaultHeaders() {
 
         HttpHeaders headers = new HttpHeaders();
-        headers.set("Accept", "application/json");
-        headers.set("Travis-API-Version", "3");
-        if(! travisAPIToken.isEmpty())
-            headers.set("Authorization", "token "+travisAPIToken+"");
+        headers.set("User-Agent", "Snooper");
+        headers.set("Accept", "application/vnd.travis-ci.2.1+json");
+        headers.set("Host", "api.travis-ci.org");
 
-        HttpEntity entity = new HttpEntity<>(headers);
+        return headers;
+    }
 
-         restTemplate.exchange( query, HttpMethod.GET, entity, String.class);
-
+    protected void setTravisAPIToken(HttpHeaders headers) {
+        headers.set("Authorization", "token "+travisAPIToken);
     }
 
 }

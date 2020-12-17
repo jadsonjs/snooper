@@ -44,7 +44,7 @@ import java.util.List;
  * Return the metrics in the instance of sonar.
  * Jadson Santos - jadsonjs@gmail.com
  */
-public class SonarCloudMetricQuery extends AbstractSonarCloudQuery {
+public class SonarCloudMetricQueryExecutor extends AbstractSonarCloudQueryExecutor {
 
 
     public List<SonarMetricInfo> getMetrics(){

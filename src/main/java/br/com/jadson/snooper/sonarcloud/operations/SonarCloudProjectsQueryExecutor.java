@@ -52,7 +52,7 @@ import java.util.List;
  *
  * Jadson Santos - jadsonjs@gmail.com
  */
-public class SonarCloudProjectsQuery extends AbstractSonarCloudQuery{
+public class SonarCloudProjectsQueryExecutor extends AbstractSonarCloudQueryExecutor {
 
     /**
      * it's not possible to browse more than 10.000 issues. We need to refine your search.
@@ -60,9 +60,9 @@ public class SonarCloudProjectsQuery extends AbstractSonarCloudQuery{
      */
     public final int LIMIT_SONAR_CLOUD_API = 10000;
 
-    public SonarCloudProjectsQuery(){}
+    public SonarCloudProjectsQueryExecutor(){}
 
-    public SonarCloudProjectsQuery(int pageSize){
+    public SonarCloudProjectsQueryExecutor(int pageSize){
         this.setPageSize(pageSize);
     }
 

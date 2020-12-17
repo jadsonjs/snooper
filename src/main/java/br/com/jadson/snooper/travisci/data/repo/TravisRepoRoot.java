@@ -23,43 +23,25 @@
  *
  *
  * snooper
- * br.com.jadson.snooper.sonarcloud
- * SonarCloudQuery
- * 20/10/20
+ * br.com.jadson.snooper.travisci.data.repository
+ * TravisRepoRoot
+ * 17/12/20
  */
-package br.com.jadson.snooper.sonarcloud.operations;
+package br.com.jadson.snooper.travisci.data.repo;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
- * Information to connect to SonarCloud API.
+ * Information about one repository on travis ci
  *
  * Jadson Santos - jadsonjs@gmail.com
  */
-abstract class AbstractSonarCloudQuery {
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class TravisRepoRoot {
 
-    public static final String SONAR_CLOUD_API_URL = "https://sonarcloud.io/api";
+    /** information about the builds */
+    @JsonProperty("repo")
+    public TravisRepoInfo repo;
 
-    protected String sonarCloudAPIToken = "";
-
-    /** Default page size of pagination*/
-    protected int pageSize = 50;
-
-    /** if is executing a test, or ir real query. */
-    protected boolean testEnvironment = false;
-
-    public void setTestEnvironment(boolean testEnvironment) {
-        this.testEnvironment = testEnvironment;
-    }
-
-
-    public void setSonarCloudAPIToken(String sonarCloudAPIToken) {
-        if(sonarCloudAPIToken == null || sonarCloudAPIToken.trim().isEmpty())
-            throw new IllegalArgumentException("invalid Sonar Cloud API Token: "+sonarCloudAPIToken);
-        this.sonarCloudAPIToken = sonarCloudAPIToken;
-    }
-
-    public void setPageSize(int pageSize) {
-        if(pageSize <= 0 || pageSize > 10000)
-            throw new IllegalArgumentException("page size should be between 1 and 10.000");
-        this.pageSize = pageSize;
-    }
 }

@@ -1,0 +1,93 @@
+/*
+ * Federal University of Rio Grande do Norte
+ * Department of Informatics and Applied Mathematics
+ * Collaborative & Automated Software Engineering (CASE) Research Group
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ *
+ *
+ * snooper
+ * br.com.jadson.snooper.travisci.data
+ * TravisBuilds
+ * 17/12/20
+ */
+package br.com.jadson.snooper.travisci.data.builds;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+
+/**
+ * Information about the builds on travis CI
+ *
+ * @see {https://docs.travis-ci.com/api/?http#builds}
+ *
+ * Jadson Santos - jadsonjs@gmail.com
+ */
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class TravisBuildsInfo implements Comparable<TravisBuildsInfo> {
+
+    public long id;
+
+    public int commit_id;
+
+    public int number;
+
+    public boolean pull_request;
+
+    public int pull_request_number;
+
+    public String pull_request_title;
+
+    /** if success or failed */
+    public String state;
+
+    public String started_at;
+
+    public String finished_at;
+
+    /** duration fo the build in seconds  */
+    public long duration;
+
+    @Override
+    public String toString() {
+        return "TravisBuilds{" + "state='" + state + '\'' + ", duration=" + duration + '}';
+    }
+
+    /**
+     * Compare two travis build by the started time.
+     *
+     * @param travisBuildsInfo
+     * @return
+     */
+    @Override
+    public int compareTo(TravisBuildsInfo travisBuildsInfo) {
+        if(started_at == null)  return 1;
+        if(travisBuildsInfo.started_at == null)  return 0;
+
+        OffsetDateTime odt = OffsetDateTime.parse(started_at);
+        LocalDateTime startedTime = odt.toLocalDateTime();
+        OffsetDateTime odt2 = OffsetDateTime.parse(travisBuildsInfo.started_at);
+        LocalDateTime startedTime2 = odt2.toLocalDateTime();
+        return startedTime2.compareTo(startedTime);
+    }
+
+
+}
