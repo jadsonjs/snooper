@@ -1,13 +1,13 @@
-package br.com.jadson.snooper.github;
+package br.com.jadson.snooper.github.operations;
 
-import br.com.jadson.snooper.github.operations.PullRequestQuery;
+import br.com.jadson.snooper.github.operations.PullRequestQueryExecutor;
 import br.com.jadson.snooper.github.data.pull.GitHubPullRequestInfo;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-class PullRequestQueryTest {
+class PullRequestQueryExecutorTest {
 
     /**
      * Basic test
@@ -15,7 +15,7 @@ class PullRequestQueryTest {
     @Test
     void testPullRequest(){
 
-        PullRequestQuery gitHubClient = new PullRequestQuery();
+        PullRequestQueryExecutor gitHubClient = new PullRequestQueryExecutor();
         gitHubClient.setTestEnvironment(true);
         List<GitHubPullRequestInfo> list =  gitHubClient.pullRequests("webauthn4j/webauthn4j");
 
@@ -28,7 +28,7 @@ class PullRequestQueryTest {
     @Test
     void testPullRequestWithToken(){
 
-        PullRequestQuery gitHubClient = new PullRequestQuery();
+        PullRequestQueryExecutor gitHubClient = new PullRequestQueryExecutor();
         gitHubClient.setTestEnvironment(true);
 
         List<GitHubPullRequestInfo> list =  gitHubClient.pullRequests("webauthn4j/webauthn4j");
@@ -42,7 +42,7 @@ class PullRequestQueryTest {
     @Test
     void testPullRequestOwnerAndName(){
 
-        PullRequestQuery gitHubClient = new PullRequestQuery();
+        PullRequestQueryExecutor gitHubClient = new PullRequestQueryExecutor();
         gitHubClient.setTestEnvironment(true);
 
         List<GitHubPullRequestInfo> list =  gitHubClient.pullRequests("webauthn4j", "webauthn4j");
@@ -57,7 +57,7 @@ class PullRequestQueryTest {
     @Test
     void testPullRequestPageSize(){
 
-        PullRequestQuery gitHubClient = new PullRequestQuery();
+        PullRequestQueryExecutor gitHubClient = new PullRequestQueryExecutor();
         gitHubClient.setTestEnvironment(true);
         gitHubClient.setPageSize(10);
 
@@ -72,7 +72,7 @@ class PullRequestQueryTest {
     @Test
     void testPullRequestPageSizeAndParameters(){
 
-        PullRequestQuery gitHubClient = new PullRequestQuery();
+        PullRequestQueryExecutor gitHubClient = new PullRequestQueryExecutor();
         gitHubClient.setTestEnvironment(true);
         gitHubClient.setPageSize(10);
         gitHubClient.setQueryParameters(new String[]{"state=all"});
@@ -80,6 +80,19 @@ class PullRequestQueryTest {
         List<GitHubPullRequestInfo> list =  gitHubClient.pullRequests("webauthn4j/webauthn4j");
 
         Assertions.assertTrue(list.size() > 0);
+    }
+
+
+    /**
+     * Basic test
+     */
+    @Test
+    void testMinimumPullRequest(){
+
+        PullRequestQueryExecutor gitHubClient = new PullRequestQueryExecutor();
+        boolean has = gitHubClient.hasMinimumPullRequest("webauthn4j/webauthn4j", 20);
+
+        Assertions.assertTrue(has);
     }
 
     

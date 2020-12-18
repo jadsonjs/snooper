@@ -1,13 +1,13 @@
-package br.com.jadson.snooper.github;
+package br.com.jadson.snooper.github.operations;
 
-import br.com.jadson.snooper.github.operations.ReleaseQuery;
+import br.com.jadson.snooper.github.operations.ReleaseQueryExecutor;
 import br.com.jadson.snooper.github.data.release.GitHubReleaseInfo;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-class ReleaseQueryTest {
+class ReleaseQueryExecutorTest {
 
     /**
      * Basic test
@@ -15,7 +15,7 @@ class ReleaseQueryTest {
     @Test
     void testGetReleasesInfo(){
 
-        ReleaseQuery gitHub = new ReleaseQuery();
+        ReleaseQueryExecutor gitHub = new ReleaseQueryExecutor();
         gitHub.setTestEnvironment(true);
 
         List<GitHubReleaseInfo> list =  gitHub.releases("webauthn4j/webauthn4j");

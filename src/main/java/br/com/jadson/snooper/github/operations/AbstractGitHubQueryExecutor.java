@@ -26,12 +26,14 @@
  */
 package br.com.jadson.snooper.github.operations;
 
+import org.springframework.http.HttpHeaders;
+
 /**
  * A client for github
  *
  * Jadson Santos - jadsonjs@gmail.com
  */
-abstract class AbstractGitHubQuery {
+abstract class AbstractGitHubQueryExecutor {
 
     public static final String GIT_HUB_API_URL = "https://api.github.com";
 
@@ -45,9 +47,9 @@ abstract class AbstractGitHubQuery {
     /** if is executing a test, or ir real query. */
     protected boolean testEnvironment = false;
 
-    public AbstractGitHubQuery(){ }
+    public AbstractGitHubQueryExecutor(){ }
 
-    public AbstractGitHubQuery(String githubToken){
+    public AbstractGitHubQueryExecutor(String githubToken){
         if(githubToken == null || githubToken.trim().equals(""))
             throw new RuntimeException("Invalid GitHub Token: "+githubToken);
 
@@ -75,6 +77,18 @@ abstract class AbstractGitHubQuery {
 
         if(! repoFullName.contains("/"))
             throw new RuntimeException("Invalid GitHub repo full name: "+repoFullName+". The name should be owner/repo");
+    }
+
+    protected HttpHeaders getDefaultHeaders(){
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Accept", "application/json");
+        if(! githubToken.isEmpty())
+            headers.set("Authorization", "token "+githubToken+"");
+        return headers;
+    }
+
+    public void setGithubToken(String githubToken) {
+        this.githubToken = githubToken;
     }
 
     public void setTestEnvironment(boolean testEnvironment) {

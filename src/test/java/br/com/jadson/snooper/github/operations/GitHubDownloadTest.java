@@ -1,4 +1,4 @@
-package br.com.jadson.snooper.github;
+package br.com.jadson.snooper.github.operations;
 
 import br.com.jadson.snooper.github.operations.GitHubDownload;
 import graphql.Assert;

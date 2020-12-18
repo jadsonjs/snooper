@@ -23,49 +23,39 @@
  *
  *
  * snooper
- * br.com.jadson.snooper.travisci.operations
- * TravisCIQuery
- * 29/09/20
+ * br.com.jadson.snooper.github.data.repo
+ * GitHubOrganizationInfo
+ * 18/12/20
  */
-package br.com.jadson.snooper.travisci.operations;
+package br.com.jadson.snooper.github.data.repo;
 
-import org.springframework.http.HttpHeaders;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 /**
- * Travis CI client
- *
- * https://docs.travis-ci.com/user/developer/
+ * Organization info
  *
  * Jadson Santos - jadsonjs@gmail.com
  */
-abstract class AbstractTravisCIQueryExecutor {
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class GitHubOrganizationInfo {
 
-    public static final String TRAVIS_CI_API_URL = "https://api.travis-ci.org";
-
-    protected String travisAPIToken = "";
-
-    /** Default page size of pagination */
-    protected int pageSize = 50;
-
-    /** used in tests */
-    protected boolean testEnvironment = false;
-
-    protected HttpHeaders getDefaultHeaders() {
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.set("User-Agent", "Snooper");
-        headers.set("Accept", "application/vnd.travis-ci.2.1+json");
-        headers.set("Host", "api.travis-ci.org");
-
-        return headers;
-    }
-
-    protected void setTravisAPIToken(HttpHeaders headers) {
-        headers.set("Authorization", "token "+travisAPIToken);
-    }
-
-    public void setTestEnvironment(boolean testEnvironment) {
-        this.testEnvironment = testEnvironment;
-    }
+    public String login;
+    public int id;
+    public String node_id;
+    public String avatar_url;
+    public String gravatar_id;
+    public String url;
+    public String html_url;
+    public String followers_url;
+    public String following_url;
+    public String gists_url;
+    public String starred_url;
+    public String subscriptions_url;
+    public String organizations_url;
+    public String repos_url;
+    public String events_url;
+    public String received_events_url;
+    public String type;
+    public boolean site_admin;
 
 }

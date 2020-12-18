@@ -1,4 +1,8 @@
 /*
+ * Federal University of Rio Grande do Norte
+ * Department of Informatics and Applied Mathematics
+ * Collaborative & Automated Software Engineering (CASE) Research Group
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
@@ -20,11 +24,12 @@
  *
  * snooper
  * br.com.jadson.snooper.github
- * GitHubPullRequest
+ * PullRequestDiffQuery
  * 23/09/20
  */
 package br.com.jadson.snooper.github.operations;
 
+import br.com.jadson.snooper.github.data.diff.GitHubPullRequestDiffInfo;
 import br.com.jadson.snooper.github.data.pull.GitHubPullRequestInfo;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -33,68 +38,46 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
- * Queries about Pull Request
+ * Pull Request Diff Query
  *
  * Jadson Santos - jadsonjs@gmail.com
  */
-public class PullRequestQuery extends AbstractGitHubQuery {
+public class PullRequestDiffQueryExecutor extends AbstractGitHubQueryExecutor {
 
-    public PullRequestQuery(){ }
+    public PullRequestDiffQueryExecutor(){ }
 
-    public PullRequestQuery(String githubToken){
+    public PullRequestDiffQueryExecutor(String githubToken){
         super(githubToken);
     }
 
-    public List<GitHubPullRequestInfo> pullRequests(String repoOwner, String repoName) {
-        return pullRequests(repoOwner+"/"+repoName);
+    public GitHubPullRequestDiffInfo pullRequestsDiff(String repoOwner, String repoName, Long pullNumber) {
+        return pullRequestsDiff(repoOwner+"/"+repoName, pullNumber);
     }
 
-    public List<GitHubPullRequestInfo> pullRequests(String repoFullName) {
+    public GitHubPullRequestDiffInfo pullRequestsDiff(String repoFullName, Long pullNumber) {
 
         validateRepoName(repoFullName);
-
-        int page = 1;
 
         // IMPORTANTE ?state=all for bring all PR
         String parameters = "";
 
         List<GitHubPullRequestInfo> allPull = new ArrayList<>();
 
-        ResponseEntity<GitHubPullRequestInfo[]> result;
+        ResponseEntity<GitHubPullRequestDiffInfo> result;
 
-        do {
+        String query = GIT_HUB_API_URL +"/repos/"+repoFullName+"/pulls/"+pullNumber+".diff";
 
-            if(queryParameters != null && ! queryParameters.isEmpty())
-                parameters = "?"+queryParameters+"&page="+page+"&per_page="+pageSize;
-            else
-                parameters = "?page="+page+"&per_page="+pageSize;
+        RestTemplate restTemplate = new RestTemplate();
 
-            String query = GIT_HUB_API_URL +"/repos/"+repoFullName+"/pulls"+parameters;
+        HttpEntity entity = new HttpEntity(getDefaultHeaders());
 
-            System.out.println("Getting Next Pull Info: "+query);
+        result = restTemplate.exchange( query, HttpMethod.GET, entity, GitHubPullRequestDiffInfo.class);
 
-            RestTemplate restTemplate = new RestTemplate();
+        return result.getBody();
 
-            HttpHeaders headers = new HttpHeaders();
-            if(! githubToken.isEmpty())
-                headers.set("Authorization", "token "+githubToken+"");
-            headers.set("Accept", "application/json");
-            HttpEntity entity = new HttpEntity<>(headers);
-
-            result = restTemplate.exchange( query, HttpMethod.GET, entity, GitHubPullRequestInfo[].class);
-
-            allPull.addAll(  Arrays.asList(result.getBody()) );
-
-            page++;
-
-
-        }while ( ( result != null && result.getBody().length > 0  ) ||  !testEnvironment);
-
-        return allPull;
     }
 
 }

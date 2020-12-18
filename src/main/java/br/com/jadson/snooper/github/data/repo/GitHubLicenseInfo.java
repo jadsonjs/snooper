@@ -23,49 +23,23 @@
  *
  *
  * snooper
- * br.com.jadson.snooper.travisci.operations
- * TravisCIQuery
- * 29/09/20
+ * br.com.jadson.snooper.github.data.repo
+ * GitHubLicenseInfo
+ * 18/12/20
  */
-package br.com.jadson.snooper.travisci.operations;
+package br.com.jadson.snooper.github.data.repo;
 
-import org.springframework.http.HttpHeaders;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 /**
- * Travis CI client
- *
- * https://docs.travis-ci.com/user/developer/
- *
+ * Licente of repository info
  * Jadson Santos - jadsonjs@gmail.com
  */
-abstract class AbstractTravisCIQueryExecutor {
-
-    public static final String TRAVIS_CI_API_URL = "https://api.travis-ci.org";
-
-    protected String travisAPIToken = "";
-
-    /** Default page size of pagination */
-    protected int pageSize = 50;
-
-    /** used in tests */
-    protected boolean testEnvironment = false;
-
-    protected HttpHeaders getDefaultHeaders() {
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.set("User-Agent", "Snooper");
-        headers.set("Accept", "application/vnd.travis-ci.2.1+json");
-        headers.set("Host", "api.travis-ci.org");
-
-        return headers;
-    }
-
-    protected void setTravisAPIToken(HttpHeaders headers) {
-        headers.set("Authorization", "token "+travisAPIToken);
-    }
-
-    public void setTestEnvironment(boolean testEnvironment) {
-        this.testEnvironment = testEnvironment;
-    }
-
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class GitHubLicenseInfo {
+    public String key;
+    public String name;
+    public String spdx_id;
+    public String url;
+    public String node_id;
 }

@@ -85,83 +85,93 @@ public class TravisCIQueryExecutor extends AbstractTravisCIQueryExecutor {
      * @param projectNameWithOwner
      * @return
      */
-    public List<TravisBuildsInfo> getBuildsInfo(String projectNameWithOwner ) {
+    public List<TravisBuildsInfo> getBuildsInfo(String projectNameWithOwner) {
 
-        String searchUrl = TRAVIS_CI_API_URL+"/repos/" + projectNameWithOwner + "/builds";
+        Integer afterBuildNumber = null;
 
-        RestTemplate restTemplate = new RestTemplate();
-        HttpEntity entity = new HttpEntity(getDefaultHeaders());
+        List<TravisBuildsInfo> result = new ArrayList<>();
+        List<TravisBuildsInfo> tempResult = new ArrayList<>();
 
-        ResponseEntity<TravisBuildsRoot> result = restTemplate.exchange(searchUrl, HttpMethod.GET, entity, TravisBuildsRoot.class);
+        if(testEnvironment)
+            afterBuildNumber = 2; // just last 2 builds
 
-        return result.getBody().builds;
-    }
+        do {
 
+            String searchUrl = TRAVIS_CI_API_URL + "/repos/" + projectNameWithOwner + "/builds" + (afterBuildNumber != null ? "?after_number=" + afterBuildNumber : "" );
 
+            RestTemplate restTemplate = new RestTemplate();
+            HttpEntity entity = new HttpEntity(getDefaultHeaders());
 
+            ResponseEntity<TravisBuildsRoot> resp = restTemplate.exchange(searchUrl, HttpMethod.GET, entity, TravisBuildsRoot.class);
 
-    /**
-     * Return build information on travis api v3.
-     *
-     * @param projectNameWithOwner
-     * @return
-     */
-    public TravisBuildsRoot getBuildsV3(String projectNameWithOwner, Integer afterBuildNumber) {
+            tempResult = resp.getBody().builds;
 
-        List<TravisBuildsInfo> releaseBuilds = new ArrayList<>();
-
-        String searchUrl = TRAVIS_CI_API_URL+"/repos/" + projectNameWithOwner + "/builds" + (afterBuildNumber != null ? "?after_number="+afterBuildNumber : " ");
-
-        RestTemplate restTemplate = new RestTemplate();
-        HttpHeaders headers = getDefaultHeaders();
-        setTravisAPIToken(headers);
-        headers.set("Travis-API-Version", "3");
-
-        HttpEntity entity = new HttpEntity(headers);
-
-        ResponseEntity<TravisBuildsRoot> result = restTemplate.exchange(searchUrl, HttpMethod.GET, entity, TravisBuildsRoot.class);
-
-        TravisBuildsRoot info = result.getBody();
-
-        return info;
-    }
-
-
-    /**
-     * Return build form specfic relese of a system by the date of build
-     *
-     * @param projectNameWithOwner
-     * @return
-     */
-    public List<TravisBuildsInfo> getBuildsOfRelase(String projectNameWithOwner, LocalDateTime startRelease, LocalDateTime endRelease) {
-
-        List<TravisBuildsInfo> releaseBuilds = new ArrayList<>();
-
-
-        TravisBuildsRoot info = getBuildsV3(projectNameWithOwner, null);
-
-        while(info.builds.size() > 0){
-
-            for (TravisBuildsInfo build : info.builds) {
-
-                LocalDateTime startBuild = LocalDateTime.parse(build.started_at, DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.ENGLISH));
-
-                if( startBuild.isAfter(startRelease) && startBuild.isBefore(endRelease) ){ // this build if of this relese
-                    releaseBuilds.add(build);
-                }
+            // the last result has the last build number. paga size = 50
+            // https://stackoverflow.com/questions/34277366/how-to-list-all-builds-of-a-given-project-through-travis-api
+            if(tempResult.size() > 0 ) {
+                result.addAll(tempResult);
+                afterBuildNumber = tempResult.get(tempResult.size()-1).number;
             }
 
-            TravisBuildsInfo firstBuild = info.builds.get(info.builds.size()-1);
+        }while (tempResult.size() > 0 && ! testEnvironment);
 
-            info = getBuildsV3(projectNameWithOwner, firstBuild.number);
-
-        }
-
-
-
-        return releaseBuilds;
+        return result;
     }
 
+
+
+
+    /**
+     * Return build form specific release of a system by the date of build
+     *
+     * @param projectNameWithOwner
+     * @return
+     */
+    public List<TravisBuildsInfo> getBuildsOfRelease(String projectNameWithOwner, LocalDateTime startRelease, LocalDateTime endRelease) {
+
+        List<TravisBuildsInfo> buildsOfRelease = new ArrayList<>();
+
+        List<TravisBuildsInfo> builds = getBuildsInfo(projectNameWithOwner);
+
+        for (TravisBuildsInfo build : builds) {
+
+            LocalDateTime startBuild = LocalDateTime.parse(build.started_at, DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.ENGLISH));
+
+            if( startBuild.isAfter(startRelease) && startBuild.isBefore(endRelease) ){ // this build if of this relese
+                buildsOfRelease.add(build);
+            }
+        }
+
+        return buildsOfRelease;
+    }
+
+
+
+//    /**
+//     * Return build information on travis api v3.
+//     *
+//     * @param projectNameWithOwner
+//     * @return
+//     */
+//    public List<TravisBuildsInfo> getBuildsV3(String projectNameWithOwner, Integer afterBuildNumber) {
+//
+//        List<TravisBuildsInfo> releaseBuilds = new ArrayList<>();
+//
+//        String searchUrl = TRAVIS_CI_API_URL+"/repos/" + projectNameWithOwner + "/builds" + (afterBuildNumber != null ? "?after_number="+afterBuildNumber : " ");
+//
+//        RestTemplate restTemplate = new RestTemplate();
+//        HttpHeaders headers = getDefaultHeaders();
+//        setTravisAPIToken(headers);
+//        headers.set("Travis-API-Version", "3");
+//
+//        HttpEntity entity = new HttpEntity(headers);
+//
+//        ResponseEntity<TravisBuildsRoot> result = restTemplate.exchange(searchUrl, HttpMethod.GET, entity, TravisBuildsRoot.class);
+//
+//        TravisBuildsRoot root = result.getBody();
+//
+//        return root.builds;
+//    }
 
 
 //    public void build(){

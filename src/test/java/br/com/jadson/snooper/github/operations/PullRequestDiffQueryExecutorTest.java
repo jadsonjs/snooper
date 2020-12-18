@@ -1,12 +1,12 @@
-package br.com.jadson.snooper.github;
+package br.com.jadson.snooper.github.operations;
 
-import br.com.jadson.snooper.github.operations.PullRequestDiffQuery;
+import br.com.jadson.snooper.github.operations.PullRequestDiffQueryExecutor;
 import br.com.jadson.snooper.github.data.diff.GitHubPullRequestDiffInfo;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 
-class PullRequestDiffQueryTest {
+class PullRequestDiffQueryExecutorTest {
 
     /**
      * Basic test
@@ -14,7 +14,7 @@ class PullRequestDiffQueryTest {
     @Test
     void testPullRequestDiff(){
 
-        PullRequestDiffQuery gitHub = new PullRequestDiffQuery();
+        PullRequestDiffQueryExecutor gitHub = new PullRequestDiffQueryExecutor();
         gitHub.setTestEnvironment(true);
 
         GitHubPullRequestDiffInfo info =  gitHub.pullRequestsDiff("vuejs/vue-cli", 5356l);

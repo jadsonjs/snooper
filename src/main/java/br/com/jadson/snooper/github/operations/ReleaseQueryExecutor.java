@@ -45,11 +45,11 @@ import java.util.List;
  *
  * Jadson Santos - jadsonjs@gmail.com
  */
-public class ReleaseQuery extends AbstractGitHubQuery {
+public class ReleaseQueryExecutor extends AbstractGitHubQueryExecutor {
 
-    public ReleaseQuery(){ }
+    public ReleaseQueryExecutor(){ }
 
-    public ReleaseQuery(String githubToken){
+    public ReleaseQueryExecutor(String githubToken){
         super(githubToken);
     }
 
@@ -84,11 +84,7 @@ public class ReleaseQuery extends AbstractGitHubQuery {
 
             RestTemplate restTemplate = new RestTemplate();
 
-            HttpHeaders headers = new HttpHeaders();
-            if(! githubToken.isEmpty())
-                headers.set("Authorization", "token "+githubToken+"");
-            headers.set("Accept", "application/json");
-            HttpEntity entity = new HttpEntity<>(headers);
+            HttpEntity entity = new HttpEntity(getDefaultHeaders());
 
             result = restTemplate.exchange( query, HttpMethod.GET, entity, GitHubReleaseInfo[].class);
 

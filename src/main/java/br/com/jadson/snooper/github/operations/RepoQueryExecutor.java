@@ -23,16 +23,17 @@
  *
  *
  * snooper
- * br.com.jadson.snooper.github
- * PullRequestDiffQuery
- * 23/09/20
+ * br.com.jadson.snooper.github.operations
+ * RepoQueryExecutor
+ * 18/12/20
  */
 package br.com.jadson.snooper.github.operations;
 
 import br.com.jadson.snooper.github.data.diff.GitHubPullRequestDiffInfo;
 import br.com.jadson.snooper.github.data.pull.GitHubPullRequestInfo;
+import br.com.jadson.snooper.github.data.release.GitHubReleaseInfo;
+import br.com.jadson.snooper.github.data.repo.GitHubRepoInfo;
 import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
@@ -41,47 +42,52 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Pull Request Diff Query
+ * Return information about repository of github
+ *
+ * https://api.github.com/repos/webauthn4j/webauthn4j
  *
  * Jadson Santos - jadsonjs@gmail.com
  */
-public class PullRequestDiffQuery extends AbstractGitHubQuery {
+public class RepoQueryExecutor extends AbstractGitHubQueryExecutor{
 
-    public PullRequestDiffQuery(){ }
+    public RepoQueryExecutor(){ }
 
-    public PullRequestDiffQuery(String githubToken){
+    public RepoQueryExecutor(String githubToken){
         super(githubToken);
     }
 
-    public GitHubPullRequestDiffInfo pullRequestsDiff(String repoOwner, String repoName, Long pullNumber) {
-        return pullRequestsDiff(repoOwner+"/"+repoName, pullNumber);
+    /**
+     * Return all information about Github repository
+     *
+     * @param repoOwner
+     * @param repoName
+     * @return
+     */
+    public GitHubRepoInfo getRepoInfo(String repoOwner, String repoName) {
+        return getRepoInfo(repoOwner+"/"+repoName);
     }
 
-    public GitHubPullRequestDiffInfo pullRequestsDiff(String repoFullName, Long pullNumber) {
-
-        validateRepoName(repoFullName);
-
-        // IMPORTANTE ?state=all for bring all PR
-        String parameters = "";
+    /**
+     * Return all information about Github repository
+     *
+     * @param repoFullName
+     * @return
+     */
+    public GitHubRepoInfo getRepoInfo(String repoFullName) {
 
         List<GitHubPullRequestInfo> allPull = new ArrayList<>();
 
-        ResponseEntity<GitHubPullRequestDiffInfo> result;
+        ResponseEntity<GitHubRepoInfo> result;
 
-        String query = GIT_HUB_API_URL +"/repos/"+repoFullName+"/pulls/"+pullNumber+".diff";
+        String query = GIT_HUB_API_URL +"/repos/"+repoFullName;
 
         RestTemplate restTemplate = new RestTemplate();
 
-        HttpHeaders headers = new HttpHeaders();
-        if(! githubToken.isEmpty())
-            headers.set("Authorization", "token "+githubToken+"");
-        headers.set("Accept", "application/json");
-        HttpEntity entity = new HttpEntity<>(headers);
+        HttpEntity entity = new HttpEntity(getDefaultHeaders());
 
-        result = restTemplate.exchange( query, HttpMethod.GET, entity, GitHubPullRequestDiffInfo.class);
+        result = restTemplate.exchange( query, HttpMethod.GET, entity, GitHubRepoInfo.class);
 
         return result.getBody();
-
     }
 
 }

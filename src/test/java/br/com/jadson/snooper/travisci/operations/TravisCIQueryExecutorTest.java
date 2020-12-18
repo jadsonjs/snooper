@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class TravisCIQueryExecutorTest {
 
     @Test
-    void getRepoInfo() {
+    void getRepoInfoTest() {
 
         TravisCIQueryExecutor executor = new TravisCIQueryExecutor();
         TravisRepoInfo info = executor.getRepoInfo("jadsonjs/continuous-delivery");
@@ -24,10 +24,10 @@ class TravisCIQueryExecutorTest {
     }
 
     @Test
-    void getBuildsInfo() {
+    void getBuildsInfoTest() {
 
         TravisCIQueryExecutor executor = new TravisCIQueryExecutor();
-        List<TravisBuildsInfo> builds = executor.getBuildsInfo("jadsonjs/continuous-delivery");
+        List<TravisBuildsInfo> builds = executor.getBuildsInfo("JodaOrg/joda-time");
 
         Assertions.assertTrue(builds != null && builds.size() > 0 );
     }
