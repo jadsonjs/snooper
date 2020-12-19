@@ -35,7 +35,6 @@ import br.com.jadson.snooper.travisci.data.builds.TravisBuildsInfo;
 import br.com.jadson.snooper.travisci.data.repo.TravisRepoInfo;
 import br.com.jadson.snooper.travisci.data.repo.TravisRepoRoot;
 import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
@@ -43,6 +42,7 @@ import org.springframework.web.client.RestTemplate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
@@ -85,7 +85,7 @@ public class TravisCIQueryExecutor extends AbstractTravisCIQueryExecutor {
      * @param projectNameWithOwner
      * @return
      */
-    public List<TravisBuildsInfo> getBuildsInfo(String projectNameWithOwner) {
+    public List<TravisBuildsInfo> getBuilds(String projectNameWithOwner) {
 
         Integer afterBuildNumber = null;
 
@@ -119,6 +119,55 @@ public class TravisCIQueryExecutor extends AbstractTravisCIQueryExecutor {
     }
 
 
+    /**
+     * Checks is a project has a number minimum of builds
+     *
+     *
+     * @param projectNameWithOwner
+     * @return
+     */
+    public boolean hasMinimumBuilds(String projectNameWithOwner, final int limit) {
+
+        Integer afterBuildNumber = null;
+
+        List<TravisBuildsInfo> result = new ArrayList<>();
+        List<TravisBuildsInfo> tempResult = new ArrayList<>();
+
+        if(testEnvironment)
+            afterBuildNumber = 2; // just last 2 builds
+
+        System.out.println("Counting Pull Requests for : "+projectNameWithOwner);
+
+        long totalbuilds = 0l;
+
+        do {
+
+            String searchUrl = TRAVIS_CI_API_URL + "/repos/" + projectNameWithOwner + "/builds" + (afterBuildNumber != null ? "?after_number=" + afterBuildNumber : "" );
+
+            RestTemplate restTemplate = new RestTemplate();
+            HttpEntity entity = new HttpEntity(getDefaultHeaders());
+
+            ResponseEntity<TravisBuildsRoot> resp = restTemplate.exchange(searchUrl, HttpMethod.GET, entity, TravisBuildsRoot.class);
+
+            totalbuilds += Arrays.asList(resp.getBody()).size();
+
+            tempResult = resp.getBody().builds;
+            totalbuilds += tempResult.size();
+
+            // the last result has the last build number. paga size = 50
+            // https://stackoverflow.com/questions/34277366/how-to-list-all-builds-of-a-given-project-through-travis-api
+            if(tempResult.size() > 0 ) {
+                result.addAll(tempResult);
+                afterBuildNumber = tempResult.get(tempResult.size()-1).number;
+            }
+
+        }while (tempResult.size() > 0 && ! testEnvironment && totalbuilds < limit );
+
+        System.out.println("project: "+projectNameWithOwner+" total of builds: "+totalbuilds);
+
+        return totalbuilds >= limit;
+    }
+
 
 
     /**
@@ -131,7 +180,7 @@ public class TravisCIQueryExecutor extends AbstractTravisCIQueryExecutor {
 
         List<TravisBuildsInfo> buildsOfRelease = new ArrayList<>();
 
-        List<TravisBuildsInfo> builds = getBuildsInfo(projectNameWithOwner);
+        List<TravisBuildsInfo> builds = getBuilds(projectNameWithOwner);
 
         for (TravisBuildsInfo build : builds) {
 

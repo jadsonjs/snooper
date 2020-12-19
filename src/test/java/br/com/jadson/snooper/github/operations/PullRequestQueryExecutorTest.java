@@ -95,5 +95,12 @@ class PullRequestQueryExecutorTest {
         Assertions.assertTrue(has);
     }
 
-    
+
+    @Test
+    void getQtdPullRequests() {
+        PullRequestQueryExecutor gitHubExecutor = new PullRequestQueryExecutor();
+        int qtd = gitHubExecutor.getQtdPullRequests("atomix/atomix");
+        System.out.println("QTD PR: "+qtd);
+        Assertions.assertTrue(qtd > 0);
+    }
 }

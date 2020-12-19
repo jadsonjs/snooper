@@ -63,6 +63,21 @@ public class SonarProjectComponent {
      */
     public String travisCILink;
 
+    /**
+     * Identity if the project has enough builds on travis CI
+     */
+    public int qtdBuilds;
+
+    /**
+     * Identity if the project is relevant
+     */
+    public int qtdStars;
+
+    /**
+     * Identity if the project has enought PR
+     */
+    public int qtdPullRequest;
+
 
     @Override
     public boolean equals(Object o) {

@@ -75,8 +75,6 @@ public class RepoQueryExecutor extends AbstractGitHubQueryExecutor{
      */
     public GitHubRepoInfo getRepoInfo(String repoFullName) {
 
-        List<GitHubPullRequestInfo> allPull = new ArrayList<>();
-
         ResponseEntity<GitHubRepoInfo> result;
 
         String query = GIT_HUB_API_URL +"/repos/"+repoFullName;
