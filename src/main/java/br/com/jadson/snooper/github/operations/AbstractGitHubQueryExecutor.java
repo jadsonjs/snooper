@@ -39,7 +39,11 @@ abstract class AbstractGitHubQueryExecutor {
 
     protected String githubToken = "";
 
-    /** Default page size of pagination*/
+    /**
+     * Default page size of pagination
+     * maximum 100
+     * https://docs.github.com/en/free-pro-team@latest/rest/guides/traversing-with-pagination
+     */
     protected int pageSize = 50;
 
     protected String queryParameters;
@@ -57,8 +61,8 @@ abstract class AbstractGitHubQueryExecutor {
     }
 
     public void setPageSize(int pageSize) {
-        if(pageSize < 0)
-            throw new RuntimeException("Invalid Page Size: "+pageSize);
+        if(pageSize < 0 || pageSize > 100)
+            throw new RuntimeException("Invalid Page Size: "+pageSize+" see: https://docs.github.com/en/free-pro-team@latest/rest/guides/traversing-with-pagination");
         this.pageSize = pageSize;
     }
 

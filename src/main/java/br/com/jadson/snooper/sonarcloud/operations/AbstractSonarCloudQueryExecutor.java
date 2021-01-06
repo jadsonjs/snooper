@@ -46,6 +46,13 @@ abstract class AbstractSonarCloudQueryExecutor {
     /** if is executing a test, or ir real query. */
     protected boolean testEnvironment = false;
 
+    /**
+     * it's not possible to browse more than 10.000 issues. We need to refine your search.
+     * https://community.sonarsource.com/t/cannot-get-more-than-10000-results-through-web-api/3662/2
+     */
+    protected final int LIMIT_SONAR_CLOUD_API_RESULTS = 10000;
+
+
     public void setTestEnvironment(boolean testEnvironment) {
         this.testEnvironment = testEnvironment;
     }

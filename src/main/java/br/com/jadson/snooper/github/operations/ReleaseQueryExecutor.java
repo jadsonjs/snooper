@@ -71,7 +71,19 @@ public class ReleaseQueryExecutor extends AbstractGitHubQueryExecutor {
 
         ResponseEntity<GitHubReleaseInfo[]> result;
 
+        int index = 1;
+
         do {
+
+            /* ***********************************************************
+             limit 5.000 request per hour to git hub API
+             sleep 30 minutes
+             https://docs.github.com/en/free-pro-team@latest/rest/reference/search
+               ***********************************************************/
+            if(index % 5000 == 0){
+                System.out.println("git hub limit reached, sleeping for 30 minutes ");
+                try { Thread.sleep(30* 60 * 1000); } catch (InterruptedException e) { e.printStackTrace(); }
+            }
 
             if(queryParameters != null && ! queryParameters.isEmpty())
                 parameters = "?"+queryParameters+"&page="+page+"&per_page="+pageSize;
@@ -92,8 +104,9 @@ public class ReleaseQueryExecutor extends AbstractGitHubQueryExecutor {
 
             page++;
 
+            index++;
 
-        }while ( (result != null && result.getBody().length > 0 ) || !testEnvironment);
+        }while ( result != null && result.getBody().length > 0 && ! testEnvironment);
 
         return all;
     }

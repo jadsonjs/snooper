@@ -100,7 +100,7 @@ public class PullRequestQueryExecutor extends AbstractGitHubQueryExecutor {
             page++;
 
 
-        }while ( ( result != null && result.getBody().length > 0  ) ||  !testEnvironment);
+        }while ( result != null && result.getBody().length > 0   && !testEnvironment);
 
         return allPull;
     }

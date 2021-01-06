@@ -18,7 +18,7 @@ class ReleaseQueryExecutorTest {
         ReleaseQueryExecutor gitHub = new ReleaseQueryExecutor();
         gitHub.setTestEnvironment(true);
 
-        List<GitHubReleaseInfo> list =  gitHub.releases("webauthn4j/webauthn4j");
+        List<GitHubReleaseInfo> list =  gitHub.releases("unbounce/iidy");
 
         System.out.println(list.get(0).id);
 
