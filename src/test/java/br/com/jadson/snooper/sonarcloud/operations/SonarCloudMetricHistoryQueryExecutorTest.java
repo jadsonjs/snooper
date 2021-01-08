@@ -20,5 +20,7 @@ class SonarCloudMetricHistoryQueryExecutorTest {
         LocalDateTime to = LocalDateTime.of(2021,01,06,23,59,59);
         List<SonarHistoryEntry> historyEntries = query.getProjectMetricHistory("simgrid_simgrid", "coverage", from, to);
         Assertions.assertTrue(  historyEntries.size() == 2);
+        Assertions.assertEquals("81.8", historyEntries.get(0).value);
+        Assertions.assertEquals("81.7", historyEntries.get(1).value);
     }
 }

@@ -41,6 +41,6 @@ import java.time.LocalDateTime;
 public class SonarHistoryEntry {
 
     @JsonProperty
-    public LocalDateTime date;
+    public String date;
     public String value;
 }
