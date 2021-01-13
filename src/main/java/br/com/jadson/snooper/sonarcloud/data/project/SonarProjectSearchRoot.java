@@ -46,7 +46,7 @@ public class SonarProjectSearchRoot {
     /**
      * the sonar projects.
      */
-    public List<SonarProjectComponent> components = new ArrayList <SonarProjectComponent> ();
+    public List<SonarProjectInfo> components = new ArrayList <SonarProjectInfo> ();
 
     public SonarPaging paging;
 }

@@ -75,7 +75,7 @@ public class SonarCloudMetricHistoryQueryExecutor extends AbstractSonarCloudQuer
         ResponseEntity<SonarMetricHistoryRoot> result;
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
-        String timeZone = "+0200"; // "%2B0200"; // +0200
+        String timeZone = "%2B0200"; // +0200
 
         int total = 0;
         int current = 0;
@@ -118,9 +118,9 @@ public class SonarCloudMetricHistoryQueryExecutor extends AbstractSonarCloudQuer
 
             System.out.println(query);
 
-            // allow '%' character in URL
-            //UriComponentsBuilder builder = UriComponentsBuilder.fromUriString(query);
-            //URI uri = builder.build(false).toUri();
+
+            UriComponentsBuilder builder = UriComponentsBuilder.fromUriString(query);
+            URI uri = builder.build(true).toUri();
 
             RestTemplate restTemplate = new RestTemplate();
 
@@ -131,7 +131,7 @@ public class SonarCloudMetricHistoryQueryExecutor extends AbstractSonarCloudQuer
 
             HttpEntity entity = new HttpEntity<>(headers);
 
-            result = restTemplate.exchange( query, HttpMethod.GET, entity, SonarMetricHistoryRoot.class);
+            result = restTemplate.exchange( uri, HttpMethod.GET, entity, SonarMetricHistoryRoot.class);
 
             SonarMetricHistoryRoot root = result.getBody();
 

@@ -35,8 +35,8 @@ import br.com.jadson.snooper.sonarcloud.data.links.ProjectsLinks;
 import br.com.jadson.snooper.sonarcloud.data.links.ProjectLinkRoot;
 import br.com.jadson.snooper.sonarcloud.data.measures.ProjectMeasuresRoot;
 import br.com.jadson.snooper.sonarcloud.data.project.SonarProjectSearchRoot;
-import br.com.jadson.snooper.sonarcloud.data.project.SonarProjectComponent;
 import br.com.jadson.snooper.sonarcloud.data.project.SonarProjectInfo;
+import br.com.jadson.snooper.sonarcloud.data.project.SonarOrganizationProjectInfo;
 import br.com.jadson.snooper.sonarcloud.data.project.SonarProjectRoot;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -82,7 +82,7 @@ public class SonarCloudProjectsQueryExecutor extends AbstractSonarCloudQueryExec
      * @param languages languages of project
      * @return
      */
-    public List<SonarProjectComponent> getSonarProjects(String languages, String sortBy){
+    public List<SonarProjectInfo> getSonarProjects(String languages, String sortBy){
 
         if(languages == null && languages.length() == 0)
             throw new IllegalArgumentException("languages is mandatory");
@@ -93,7 +93,7 @@ public class SonarCloudProjectsQueryExecutor extends AbstractSonarCloudQueryExec
 
         String parameters = "";
 
-        List<SonarProjectComponent> all = new ArrayList<>();
+        List<SonarProjectInfo> all = new ArrayList<>();
 
         ResponseEntity<SonarProjectSearchRoot> result;
 
@@ -144,13 +144,13 @@ public class SonarCloudProjectsQueryExecutor extends AbstractSonarCloudQueryExec
      * @param organization
      * @return
      */
-    public List<SonarProjectInfo> getProjectsOfOrganization(String organization){
+    public List<SonarOrganizationProjectInfo> getProjectsOfOrganization(String organization){
 
         int page = 1;
 
         String parameters = "";
 
-        List<SonarProjectInfo> all = new ArrayList<>();
+        List<SonarOrganizationProjectInfo> all = new ArrayList<>();
 
         ResponseEntity<SonarProjectRoot> result;
 

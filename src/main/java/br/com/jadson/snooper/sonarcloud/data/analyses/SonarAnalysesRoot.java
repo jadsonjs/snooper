@@ -30,7 +30,6 @@
 package br.com.jadson.snooper.sonarcloud.data.analyses;
 
 import br.com.jadson.snooper.sonarcloud.data.SonarPaging;
-import br.com.jadson.snooper.sonarcloud.data.project.SonarProjectInfo;
 
 import java.util.List;
 

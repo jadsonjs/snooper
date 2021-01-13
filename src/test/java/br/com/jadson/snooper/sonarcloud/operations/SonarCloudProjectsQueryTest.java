@@ -4,8 +4,8 @@ import br.com.jadson.snooper.sonarcloud.data.analyses.SonarAnalysesInfo;
 import br.com.jadson.snooper.sonarcloud.data.analyses.SonarEventInfo;
 import br.com.jadson.snooper.sonarcloud.data.links.ProjectsLinks;
 import br.com.jadson.snooper.sonarcloud.data.measures.ProjectMeasuresRoot;
-import br.com.jadson.snooper.sonarcloud.data.project.SonarProjectComponent;
 import br.com.jadson.snooper.sonarcloud.data.project.SonarProjectInfo;
+import br.com.jadson.snooper.sonarcloud.data.project.SonarOrganizationProjectInfo;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -20,7 +20,7 @@ class SonarCloudProjectsQueryTest {
         query.setTestEnvironment(true);
         query.pageSize = 1;
 
-        List<SonarProjectComponent> projects = query.getSonarProjects("java", "ncloc");
+        List<SonarProjectInfo> projects = query.getSonarProjects("java", "ncloc");
 
         Assertions.assertTrue(projects.size() > 0 );
     }
@@ -31,13 +31,15 @@ class SonarCloudProjectsQueryTest {
         SonarCloudProjectsQueryExecutor query = new SonarCloudProjectsQueryExecutor();
         query.setTestEnvironment(true);
 
-        List<SonarProjectInfo> projects = query.getProjectsOfOrganization("microsoft");
+        List<SonarOrganizationProjectInfo> projects = query.getProjectsOfOrganization("microsoft");
 
-        for (SonarProjectInfo pi : projects){
+        for (SonarOrganizationProjectInfo pi : projects){
             System.out.println("key: "+pi.key);
             System.out.println("name: "+pi.name);
             System.out.println("project: "+pi.project);
             System.out.println("organization: "+pi.organization);
+            System.out.println("qualifier: "+pi.qualifier);
+            System.out.println("language: "+pi.language);
         }
         Assertions.assertTrue(projects.size() > 0 );
     }
@@ -48,9 +50,9 @@ class SonarCloudProjectsQueryTest {
         SonarCloudProjectsQueryExecutor query = new SonarCloudProjectsQueryExecutor();
         query.setTestEnvironment(true);
 
-        List<SonarProjectInfo> list = query.getProjectsOfOrganization("jadsonjs");
+        List<SonarOrganizationProjectInfo> list = query.getProjectsOfOrganization("jadsonjs");
 
-        for (SonarProjectInfo i : list){
+        for (SonarOrganizationProjectInfo i : list){
             System.out.println(i.key);
             System.out.println(i.name);
         }

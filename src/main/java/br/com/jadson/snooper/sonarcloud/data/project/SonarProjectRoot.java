@@ -44,6 +44,6 @@ public class SonarProjectRoot {
 
     public SonarPaging paging;
 
-    public List<SonarProjectInfo> components;
+    public List<SonarOrganizationProjectInfo> components;
 
 }

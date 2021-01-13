@@ -23,4 +23,16 @@ class SonarCloudMetricHistoryQueryExecutorTest {
         Assertions.assertEquals("81.8", historyEntries.get(0).value);
         Assertions.assertEquals("81.7", historyEntries.get(1).value);
     }
+
+
+    @Test
+    void getProjectMetricHistoryTest2() {
+
+        SonarCloudMetricHistoryQueryExecutor query = new SonarCloudMetricHistoryQueryExecutor();
+        query.setTestEnvironment(true);
+        LocalDateTime from = LocalDateTime.of(2020,11,12,13,46,11);
+        LocalDateTime to = LocalDateTime.of(2020,11,12,17,50,05);
+        List<SonarHistoryEntry> historyEntries = query.getProjectMetricHistory("maibornwolff-gmbh_codecharta_visualization", "coverage", from, to);
+        Assertions.assertTrue(  historyEntries.size() == 0 );
+    }
 }
