@@ -42,7 +42,7 @@ import java.time.OffsetDateTime;
  * Jadson Santos - jadsonjs@gmail.com
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class TravisBuildsInfo implements Comparable<TravisBuildsInfo> {
+public class TravisBuildsInfo {
 
     public long id;
 
@@ -69,24 +69,6 @@ public class TravisBuildsInfo implements Comparable<TravisBuildsInfo> {
     @Override
     public String toString() {
         return "TravisBuilds{" + "state='" + state + '\'' + ", duration=" + duration + '}';
-    }
-
-    /**
-     * Compare two travis build by the started time.
-     *
-     * @param travisBuildsInfo
-     * @return
-     */
-    @Override
-    public int compareTo(TravisBuildsInfo travisBuildsInfo) {
-        if(started_at == null)  return 1;
-        if(travisBuildsInfo.started_at == null)  return 0;
-
-        OffsetDateTime odt = OffsetDateTime.parse(started_at);
-        LocalDateTime startedTime = odt.toLocalDateTime();
-        OffsetDateTime odt2 = OffsetDateTime.parse(travisBuildsInfo.started_at);
-        LocalDateTime startedTime2 = odt2.toLocalDateTime();
-        return startedTime2.compareTo(startedTime);
     }
 
 
