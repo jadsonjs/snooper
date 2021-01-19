@@ -80,6 +80,10 @@ class PullRequestQueryExecutorTest {
         List<GitHubPullRequestInfo> list =  gitHubClient.pullRequests("webauthn4j/webauthn4j");
 
         Assertions.assertTrue(list.size() > 0);
+
+        Assertions.assertTrue(list.get(0).user.id > 0);
+        Assertions.assertTrue(list.get(0).user.followers_url != null);
+
     }
 
 

@@ -37,7 +37,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
  * Jadson Santos - jadsonjs@gmail.com
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class GitHubPullRequestDiffUserInfo {
+public class GitHubPullRequestUserInfo {
 
     public String login;
 
