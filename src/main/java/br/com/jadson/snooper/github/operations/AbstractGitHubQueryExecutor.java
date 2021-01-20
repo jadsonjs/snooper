@@ -46,6 +46,15 @@ abstract class AbstractGitHubQueryExecutor {
      */
     protected int pageSize = 50;
 
+    /**
+     * All to set fix parameters beyond of page and pageSize
+     *
+     * Executor e = new Executor();
+     * e.setPageSize(10);
+     * e.setQueryParameters(new String[]{"state=all"});
+     *
+     * this will generate a query:  ?state=all&page=X&per_page=10
+     */
     protected String queryParameters;
 
     /** if is executing a test, or ir real query. */
@@ -66,11 +75,12 @@ abstract class AbstractGitHubQueryExecutor {
         this.pageSize = pageSize;
     }
 
-    public void setQueryParameters(String[] queryParameters) {
-        if(queryParameters == null || queryParameters.length == 0)
+    public void setQueryParameters(String[] parametersArrays) {
+        if(parametersArrays == null || parametersArrays.length == 0)
             throw new RuntimeException("Invalid Query Parameters: "+queryParameters);
 
-        for (String p :queryParameters){
+        this.queryParameters = "";
+        for (String p :parametersArrays){
             this.queryParameters += p+"&";
         }
     }
@@ -98,6 +108,9 @@ abstract class AbstractGitHubQueryExecutor {
     public void setTestEnvironment(boolean testEnvironment) {
         this.testEnvironment = testEnvironment;
     }
+
+    public String getQueryParameters() { return queryParameters; }
+
 
 
 }

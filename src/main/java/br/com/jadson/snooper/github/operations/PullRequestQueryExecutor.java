@@ -71,7 +71,7 @@ public class PullRequestQueryExecutor extends AbstractGitHubQueryExecutor {
 
         int page = 1;
 
-        // IMPORTANTE ?state=all for bring all PR
+        // IMPORTANTE state=all for bring all PR
         String parameters = "";
 
         List<GitHubPullRequestInfo> allPull = new ArrayList<>();
@@ -81,7 +81,7 @@ public class PullRequestQueryExecutor extends AbstractGitHubQueryExecutor {
         do {
 
             if(queryParameters != null && ! queryParameters.isEmpty())
-                parameters = "?"+queryParameters+"&page="+page+"&per_page="+pageSize;
+                parameters = "?"+queryParameters+"page="+page+"&per_page="+pageSize;
             else
                 parameters = "?page="+page+"&per_page="+pageSize;
 
@@ -108,29 +108,41 @@ public class PullRequestQueryExecutor extends AbstractGitHubQueryExecutor {
 
     /**
      * Verify the minimum number of PR for a projects.
+     * 
+     * @deprecated  @see {@link this#getQtdPullRequests(String)}
      *
-     * @param projectName
+     * @param repoFullName
      * @param limit
      * @return
      */
-    public boolean hasMinimumPullRequest(String projectName, final int limit) {
+    @Deprecated
+    public boolean hasMinimumPullRequest(String repoFullName, final int limit) {
 
-        System.out.println("Counting Pull Requests for : "+projectName);
+        validateRepoName(repoFullName);
+
+        System.out.println("Counting Pull Requests for : "+repoFullName);
 
         long totalPROfProject = 0l;
 
         int page = 1;
         int perPage = 50;
 
-
-        // IMPORTANTE ?state=all for bring all PR
-        String queryParameters = "?state=all&page="+page+"&per_page="+perPage;
-
-        String query = GIT_HUB_API_URL+"/repos/"+projectName+"/pulls"+queryParameters;
+        // IMPORTANTE state=all for bring all PR
+        // gitHubClient.setQueryParameters(new String[]{"state=all"});
+        String parameters = "";
 
         ResponseEntity<GitHubPullRequestInfo[]> result;
 
         do {
+
+            if(queryParameters != null && ! queryParameters.isEmpty())
+                parameters = "?"+queryParameters+"page="+page+"&per_page="+pageSize;
+            else
+                parameters = "?page="+page+"&per_page="+pageSize;
+
+            String query = GIT_HUB_API_URL +"/repos/"+repoFullName+"/pulls"+parameters;
+
+            System.out.println("Getting Next Pull Info: "+query);
 
             RestTemplate restTemplate = new RestTemplate();
 
@@ -142,12 +154,9 @@ public class PullRequestQueryExecutor extends AbstractGitHubQueryExecutor {
 
             page++;
 
-            query = GIT_HUB_API_URL+"/repos/"+projectName+"/pulls"+"?state=all&page="+page+"&per_page="+perPage;
-
-
         }while (result != null && result.getBody().length > 0 && totalPROfProject < limit );
 
-        System.out.println("project: "+projectName+" total of PR: "+totalPROfProject);
+        System.out.println("project: "+repoFullName+" total of PR: "+totalPROfProject);
 
         return totalPROfProject >= limit;
     }
@@ -183,6 +192,5 @@ public class PullRequestQueryExecutor extends AbstractGitHubQueryExecutor {
 
         return result.getBody().total_count;
     }
-
 
 }

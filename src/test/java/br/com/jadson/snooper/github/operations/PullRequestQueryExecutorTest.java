@@ -94,6 +94,8 @@ class PullRequestQueryExecutorTest {
     void testMinimumPullRequest(){
 
         PullRequestQueryExecutor gitHubClient = new PullRequestQueryExecutor();
+        gitHubClient.setQueryParameters(new String[]{"state=all"});
+        gitHubClient.setPageSize(21);
         boolean has = gitHubClient.hasMinimumPullRequest("webauthn4j/webauthn4j", 20);
 
         Assertions.assertTrue(has);
@@ -107,4 +109,19 @@ class PullRequestQueryExecutorTest {
         System.out.println("QTD PR: "+qtd);
         Assertions.assertTrue(qtd > 0);
     }
+
+
+    @Test
+    void testQueryParameter(){
+
+        PullRequestQueryExecutor gitHubClient = new PullRequestQueryExecutor();
+        gitHubClient.setTestEnvironment(true);
+        gitHubClient.setPageSize(10);
+        gitHubClient.setQueryParameters(new String[]{"state=all"});
+
+
+        Assertions.assertEquals(gitHubClient.getQueryParameters(), "state=all&");
+
+    }
+
 }
