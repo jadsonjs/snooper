@@ -4,8 +4,8 @@ import br.com.jadson.snooper.sonarcloud.data.analyses.SonarAnalysesInfo;
 import br.com.jadson.snooper.sonarcloud.data.analyses.SonarEventInfo;
 import br.com.jadson.snooper.sonarcloud.data.links.ProjectsLinks;
 import br.com.jadson.snooper.sonarcloud.data.measures.ProjectMeasuresRoot;
-import br.com.jadson.snooper.sonarcloud.data.project.SonarProjectInfo;
 import br.com.jadson.snooper.sonarcloud.data.project.SonarOrganizationProjectInfo;
+import br.com.jadson.snooper.sonarcloud.data.project.SonarProjectInfo;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

@@ -40,11 +40,11 @@ import java.io.IOException;
 /**
  * Class to clone a github repository.
  *
- * To just download the content of repository: @see {@link GitHubDownload}
+ * To just download the content of repository: @see {@link DownloadExecutor}
  *
  * Jadson Santos - jadsonjs@gmail.com
  */
-public class GitHubClone {
+public class CloneExecutor {
 
     /**
      * token of github to use as credentials.
@@ -53,7 +53,7 @@ public class GitHubClone {
     private final String githubToken;
 
 
-    public GitHubClone(String githubToken){
+    public CloneExecutor(String githubToken){
         if(githubToken == null || githubToken.trim().equals(""))
             throw new RuntimeException("Invalid GitHub Token: "+githubToken);
 
@@ -78,13 +78,15 @@ public class GitHubClone {
         if(localPath == null || localPath.isEmpty())
             throw new IllegalArgumentException("Invalid Local Path: "+repoURL);
 
-        String repoName = repoURL.substring(repoURL.lastIndexOf("/")+1, repoURL.length());
+        String repoName = repoURL.replace("https://github.com/", "");
+
+        String fullPath = localPath+repoName;
 
         CredentialsProvider cp = new UsernamePasswordCredentialsProvider(githubToken, "");
 
         try {
-            System.out.println("Cloning repository: " + repoURL + " to: " + localPath+repoName);
-            Git.cloneRepository().setURI(repoURL).setDirectory(new File(localPath+repoName)).setCloneAllBranches(true).setCredentialsProvider(cp).call();
+            System.out.println("Cloning repository: " + repoURL + " to: " + fullPath);
+            Git.cloneRepository().setURI(repoURL).setDirectory(new File(fullPath)).setCloneAllBranches(true).setCredentialsProvider(cp).call();
         }catch(Exception ex){
             ex.printStackTrace();
 
@@ -110,7 +112,7 @@ public class GitHubClone {
 
         }
 
-        return localPath;
+        return fullPath;
     }
 
     /**

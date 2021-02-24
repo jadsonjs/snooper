@@ -45,12 +45,12 @@ import java.nio.channels.Channels;
  * Download just download the repository files. But it is not a clone.
  * You can not commit or pull changes into local code.
  *
- * To clone the full repository use: @see {@link GitHubClone}
+ * To clone the full repository use: @see {@link CloneExecutor}
  *
  * Jadson Santos - jadsonjs@gmail.com
  */
 @Component
-public class GitHubDownload {
+public class DownloadExecutor {
 
     /**
      * Download the content of a github repository to local directoty in a zip file

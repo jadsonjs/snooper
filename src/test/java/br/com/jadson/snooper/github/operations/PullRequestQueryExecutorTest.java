@@ -1,6 +1,5 @@
 package br.com.jadson.snooper.github.operations;
 
-import br.com.jadson.snooper.github.operations.PullRequestQueryExecutor;
 import br.com.jadson.snooper.github.data.pull.GitHubPullRequestInfo;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;

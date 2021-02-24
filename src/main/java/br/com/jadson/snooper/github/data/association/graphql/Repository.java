@@ -23,22 +23,17 @@
  *
  *
  * snooper
- * br.com.jadson.snooper.sonarcloud.data.history
- * History
- * 06/01/21
+ * br.com.jadson.snooper.github.data.association.graphql
+ * Repository
+ * 24/02/21
  */
-package br.com.jadson.snooper.sonarcloud.data.history;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
+package br.com.jadson.snooper.github.data.association.graphql;
 
 /**
- * An entry in the history
- *
+ * TODO
  * Jadson Santos - jadsonjs@gmail.com
  */
-public class SonarHistoryEntry {
+public class Repository {
 
-    @JsonProperty
-    public String date;
-    public String value;
+    public CommitObject object;
 }

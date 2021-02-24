@@ -23,22 +23,42 @@
  *
  *
  * snooper
- * br.com.jadson.snooper.sonarcloud.data.history
- * History
- * 06/01/21
+ * br.com.jadson.snooper.github.data.commit
+ * Author
+ * 24/02/21
  */
-package br.com.jadson.snooper.sonarcloud.data.history;
+package br.com.jadson.snooper.github.data.commit;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+import java.util.Date;
 
 /**
- * An entry in the history
  *
  * Jadson Santos - jadsonjs@gmail.com
  */
-public class SonarHistoryEntry {
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class Author {
+    public String name;
+    public String email;
+    public Date date;
+    public String login;
+    public int id;
+    public String node_id;
+    public String avatar_url;
+    public String gravatar_id;
+    public String url;
+    public String html_url;
+    public String followers_url;
+    public String following_url;
+    public String gists_url;
+    public String starred_url;
+    public String subscriptions_url;
+    public String organizations_url;
+    public String repos_url;
+    public String events_url;
+    public String received_events_url;
+    public String type;
+    public boolean site_admin;
 
-    @JsonProperty
-    public String date;
-    public String value;
 }

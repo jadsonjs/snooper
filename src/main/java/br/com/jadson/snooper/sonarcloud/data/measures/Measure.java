@@ -31,8 +31,6 @@ package br.com.jadson.snooper.sonarcloud.data.measures;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-import java.util.List;
-
 /**
  * TODO
  * Jadson Santos - jadsonjs@gmail.com

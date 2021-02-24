@@ -31,13 +31,13 @@ package br.com.jadson.snooper.sonarcloud.operations;
 
 import br.com.jadson.snooper.sonarcloud.data.analyses.SonarAnalysesInfo;
 import br.com.jadson.snooper.sonarcloud.data.analyses.SonarAnalysesRoot;
-import br.com.jadson.snooper.sonarcloud.data.links.ProjectsLinks;
 import br.com.jadson.snooper.sonarcloud.data.links.ProjectLinkRoot;
+import br.com.jadson.snooper.sonarcloud.data.links.ProjectsLinks;
 import br.com.jadson.snooper.sonarcloud.data.measures.ProjectMeasuresRoot;
-import br.com.jadson.snooper.sonarcloud.data.project.SonarProjectSearchRoot;
-import br.com.jadson.snooper.sonarcloud.data.project.SonarProjectInfo;
 import br.com.jadson.snooper.sonarcloud.data.project.SonarOrganizationProjectInfo;
+import br.com.jadson.snooper.sonarcloud.data.project.SonarProjectInfo;
 import br.com.jadson.snooper.sonarcloud.data.project.SonarProjectRoot;
+import br.com.jadson.snooper.sonarcloud.data.project.SonarProjectSearchRoot;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;

@@ -29,17 +29,11 @@
  */
 package br.com.jadson.snooper.github.operations;
 
-import br.com.jadson.snooper.github.data.diff.GitHubPullRequestDiffInfo;
-import br.com.jadson.snooper.github.data.pull.GitHubPullRequestInfo;
-import br.com.jadson.snooper.github.data.release.GitHubReleaseInfo;
 import br.com.jadson.snooper.github.data.repo.GitHubRepoInfo;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Return information about repository of github

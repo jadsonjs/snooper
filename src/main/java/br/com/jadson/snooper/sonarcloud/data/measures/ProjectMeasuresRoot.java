@@ -29,8 +29,6 @@
  */
 package br.com.jadson.snooper.sonarcloud.data.measures;
 
-import java.util.List;
-
 /**
  * Keep all links of a project
  * Jadson Santos - jadsonjs@gmail.com

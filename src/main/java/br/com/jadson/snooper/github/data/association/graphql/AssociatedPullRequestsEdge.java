@@ -23,22 +23,19 @@
  *
  *
  * snooper
- * br.com.jadson.snooper.sonarcloud.data.history
- * History
- * 06/01/21
+ * br.com.jadson.snooper.github.data.association.graphql
+ * AssociatedPullRequestsEdge
+ * 24/02/21
  */
-package br.com.jadson.snooper.sonarcloud.data.history;
+package br.com.jadson.snooper.github.data.association.graphql;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import br.com.jadson.snooper.github.data.association.PullRequestNodeInfo;
 
 /**
- * An entry in the history
- *
+ * TODO
  * Jadson Santos - jadsonjs@gmail.com
  */
-public class SonarHistoryEntry {
+public class AssociatedPullRequestsEdge {
 
-    @JsonProperty
-    public String date;
-    public String value;
+    public PullRequestNodeInfo node;
 }

@@ -31,9 +31,6 @@ package br.com.jadson.snooper.travisci.data.builds;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-import java.time.LocalDateTime;
-import java.time.OffsetDateTime;
-
 /**
  * Information about the builds on travis CI
  *

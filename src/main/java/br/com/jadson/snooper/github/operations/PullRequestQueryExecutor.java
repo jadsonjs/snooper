@@ -27,7 +27,6 @@ package br.com.jadson.snooper.github.operations;
 
 import br.com.jadson.snooper.github.data.pull.GitHubPullRequestInfo;
 import br.com.jadson.snooper.github.data.pull.GitHubQTDPullRequestInfo;
-import br.com.jadson.snooper.github.data.repo.GitHubRepoInfo;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -35,9 +34,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import java.io.UnsupportedEncodingException;
 import java.net.URI;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;

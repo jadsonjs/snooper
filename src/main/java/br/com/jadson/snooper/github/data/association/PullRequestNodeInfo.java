@@ -23,22 +23,51 @@
  *
  *
  * snooper
- * br.com.jadson.snooper.sonarcloud.data.history
- * History
- * 06/01/21
+ * br.com.jadson.snooper.github.data.commit
+ * PullRequestNodeInfo
+ * 26/01/21
  */
-package br.com.jadson.snooper.sonarcloud.data.history;
+package br.com.jadson.snooper.github.data.association;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import java.util.Objects;
 
 /**
- * An entry in the history
+ * Simple information about pull requests in github
  *
  * Jadson Santos - jadsonjs@gmail.com
  */
-public class SonarHistoryEntry {
+public class PullRequestNodeInfo {
 
-    @JsonProperty
-    public String date;
-    public String value;
+    /** ID of Pull Request */
+    public String id;
+
+    /** Number of Pull Request (this is the main information we want.) */
+    public Long number;
+
+    public PullRequestNodeInfo() {
+
+    }
+
+    public PullRequestNodeInfo(String id, Long number) {
+        this.id = id;
+        this.number = number;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        PullRequestNodeInfo that = (PullRequestNodeInfo) o;
+        return id.equals(that.id) && number.equals(that.number);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, number);
+    }
+
+    @Override
+    public String toString() {
+        return "PullRequestNodeInfo{" + "id='" + id + '\'' + ", number=" + number + '}';
+    }
 }

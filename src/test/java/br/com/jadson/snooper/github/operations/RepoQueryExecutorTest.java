@@ -1,13 +1,8 @@
 package br.com.jadson.snooper.github.operations;
 
-import br.com.jadson.snooper.github.data.release.GitHubReleaseInfo;
 import br.com.jadson.snooper.github.data.repo.GitHubRepoInfo;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class RepoQueryExecutorTest {
 

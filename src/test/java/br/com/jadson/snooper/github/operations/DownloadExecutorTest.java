@@ -1,11 +1,10 @@
 package br.com.jadson.snooper.github.operations;
 
-import br.com.jadson.snooper.github.operations.GitHubDownload;
 import graphql.Assert;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-class GitHubDownloadTest {
+class DownloadExecutorTest {
 
     /**
      * Basic test
@@ -13,7 +12,7 @@ class GitHubDownloadTest {
     @Test
     void testDownload(){
 
-        GitHubDownload gitHub = new GitHubDownload();
+        DownloadExecutor gitHub = new DownloadExecutor();
 
         String localRepo = gitHub.download("https://github.com/vuejs/vue-cli","/tmp/");
 
@@ -27,7 +26,7 @@ class GitHubDownloadTest {
     @Test
     void testEmptyRepoURLDownload(){
 
-        GitHubDownload gitHub = new GitHubDownload();
+        DownloadExecutor gitHub = new DownloadExecutor();
 
         String repoURL = "";
 
@@ -45,7 +44,7 @@ class GitHubDownloadTest {
     @Test
     void testDownloadAndUnzip(){
 
-        GitHubDownload gitHub = new GitHubDownload();
+        DownloadExecutor gitHub = new DownloadExecutor();
 
         String localRepo = gitHub.download("https://github.com/vuejs/vue-cli","/tmp/", true);
 

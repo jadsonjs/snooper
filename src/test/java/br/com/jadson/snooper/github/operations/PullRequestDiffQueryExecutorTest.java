@@ -1,6 +1,5 @@
 package br.com.jadson.snooper.github.operations;
 
-import br.com.jadson.snooper.github.operations.PullRequestDiffQueryExecutor;
 import br.com.jadson.snooper.github.data.diff.GitHubPullRequestDiffInfo;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;

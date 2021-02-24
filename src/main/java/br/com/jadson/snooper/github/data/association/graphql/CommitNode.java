@@ -23,22 +23,25 @@
  *
  *
  * snooper
- * br.com.jadson.snooper.sonarcloud.data.history
- * History
- * 06/01/21
+ * br.com.jadson.snooper.github.data.association.graphql
+ * CommitNode
+ * 24/02/21
  */
-package br.com.jadson.snooper.sonarcloud.data.history;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
+package br.com.jadson.snooper.github.data.association.graphql;
 
 /**
- * An entry in the history
- *
+ * TODO
  * Jadson Santos - jadsonjs@gmail.com
  */
-public class SonarHistoryEntry {
+public class CommitNode {
 
-    @JsonProperty
-    public String date;
-    public String value;
+    /**
+     * Information about commit, like this:
+     * <p>
+     * https://github.com/vuejs/vue/commit/0948d999f2fddf9f90991956493f976273c5da1f
+     */
+    public String commitUrl;
+
+    public AssociatedPullRequests associatedPullRequests;
+
 }
