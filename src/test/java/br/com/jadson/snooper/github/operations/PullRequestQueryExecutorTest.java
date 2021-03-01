@@ -14,9 +14,9 @@ class PullRequestQueryExecutorTest {
     @Test
     void testPullRequest(){
 
-        PullRequestQueryExecutor gitHubClient = new PullRequestQueryExecutor();
-        gitHubClient.setTestEnvironment(true);
-        List<GitHubPullRequestInfo> list =  gitHubClient.pullRequests("webauthn4j/webauthn4j");
+        PullRequestQueryExecutor executor = new PullRequestQueryExecutor();
+        executor.setTestEnvironment(true);
+        List<GitHubPullRequestInfo> list =  executor.pullRequests("octocat/hello-world");
 
         Assertions.assertTrue(list.size() > 0);
     }
@@ -81,7 +81,7 @@ class PullRequestQueryExecutorTest {
         Assertions.assertTrue(list.size() > 0);
 
         Assertions.assertTrue(list.get(0).user.id > 0);
-        Assertions.assertTrue(list.get(0).user.followers_url != null);
+        Assertions.assertNotNull(list.get(0).user.followers_url);
 
     }
 

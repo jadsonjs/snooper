@@ -14,10 +14,11 @@ class ReleaseQueryExecutorTest {
     @Test
     void testGetReleasesInfo(){
 
-        ReleaseQueryExecutor gitHub = new ReleaseQueryExecutor();
-        gitHub.setTestEnvironment(true);
+        ReleaseQueryExecutor executor = new ReleaseQueryExecutor();
+        executor.setTestEnvironment(true);
+        executor.setQueryParameters(new String[]{"state=all"});
 
-        List<GitHubReleaseInfo> list =  gitHub.releases("unbounce/iidy");
+        List<GitHubReleaseInfo> list =  executor.releases("unbounce/iidy");
 
         System.out.println(list.get(0).id);
 

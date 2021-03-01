@@ -49,19 +49,32 @@ Examples of how to use:
 
 
 
-# Get all pull request of a repository
+# Get all Pull Requests of a repository
 
-    PullRequestQuery gitHubClient = new PullRequestQuery(" git hub access token ");
-    gitHubClient.setPageSize(100);
-    gitHubClient.setQueryParameters(new String[]{"state=all"});
+    PullRequestQueryExecutor executor = new PullRequestQueryExecutor();
+    executor.setPageSize(100);
+    executor.setQueryParameters(new String[]{"state=all"});
+    
+    List<GitHubPullRequestInfo> list =  executor.pullRequests("octocat/hello-world");
 
-    List<GitHubPullRequestInfo> list =  gitHubClient.pullRequests("vuejs/vue-cli");
 
 
-# Get all releases of a repository
+# Get all Issues of a repository
 
-    ReleaseQuery gitHub = new ReleaseQuery(" git hub access token ");
-    List<GitHubReleaseInfo> list =  gitHub.releases("vuejs/vue-cli");
+    IssueQueryExecutor executor = new IssueQueryExecutor();
+    executor.setPageSize(100);
+    executor.setQueryParameters(new String[]{"state=all"});
+    
+    List<GitHubIssueInfo> list =  executor.pullRequests("octocat/hello-world");
+    
+    
+
+# Get all Releases of a repository
+
+    ReleaseQueryExecutor executor = new ReleaseQueryExecutor(" git hub access token ");
+    executor.setPageSize(100);
+    executor.setQueryParameters(new String[]{"state=all"});
+    List<GitHubReleaseInfo> list =  executor.releases(octocat/hello-world");
 
 
 
