@@ -11,10 +11,26 @@ import java.util.List;
 class CommitQueryExecutorTest {
 
     /**
-     * Basic test
+     * Basic test to get commit form a date of a project
      */
     @Test
     void testCommitsOfProject(){
+
+        CommitQueryExecutor commitExecutor = new CommitQueryExecutor();
+        commitExecutor.setQueryParameters(new String[]{"since=2021-03-01T22:26:45Z", "until=2021-04-08T22:26:45Z"});
+        commitExecutor.setPageSize(100);
+        List<GitHubCommitInfo> commitsInfo = commitExecutor.getCommits("vuejs/vue-router");
+
+        Assertions.assertTrue(commitsInfo.size() == 10);
+        Assertions.assertEquals("677f3c1f714fb61cc495345e535409b1cbb90429", commitsInfo.get(0).sha);
+
+    }
+
+    /**
+     * Basic test
+     */
+    @Test
+    void testCommitsOfProjectByPullRequest(){
 
         CommitQueryExecutor commitExecutor = new CommitQueryExecutor();
         commitExecutor.setPageSize(100);

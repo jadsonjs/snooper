@@ -43,6 +43,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -54,6 +55,54 @@ import java.util.List;
  */
 public class CommitQueryExecutor extends AbstractGitHubQueryExecutor {
 
+
+    /**
+     * Return all commits of a project
+     *
+     * Get the commits between dates with the param: since=2021-03-01T22:26:45Z&until=2021-04-08T22:26:45Z&page=1&per_page=50
+     *
+     * @param repoFullName
+     * @return
+     */
+    public List<GitHubCommitInfo> getCommits(String repoFullName) {
+
+        validateRepoName(repoFullName);
+
+        int page = 1;
+
+        // IMPORTANTE state=all for bring all PR
+        String parameters = "";
+
+        List<GitHubCommitInfo> allPull = new ArrayList<>();
+
+        ResponseEntity<GitHubCommitInfo[]> result;
+
+        do {
+
+            if(queryParameters != null && ! queryParameters.isEmpty())
+                parameters = "?"+queryParameters+"page="+page+"&per_page="+pageSize;
+            else
+                parameters = "?page="+page+"&per_page="+pageSize;
+
+            String query = GIT_HUB_API_URL +"/repos/"+repoFullName+"/commits"+parameters;
+
+            System.out.println("Getting Next Commit: "+query);
+
+            RestTemplate restTemplate = new RestTemplate();
+
+            HttpEntity entity = new HttpEntity(getDefaultHeaders());
+
+            result = restTemplate.exchange( query, HttpMethod.GET, entity, GitHubCommitInfo[].class);
+
+            allPull.addAll(  Arrays.asList(result.getBody()) );
+
+            page++;
+
+
+        }while ( result != null && result.getBody().length > 0   && !testEnvironment);
+
+        return allPull;
+    }
 
     /**
      * Return all commits associated with the PR
@@ -100,6 +149,9 @@ public class CommitQueryExecutor extends AbstractGitHubQueryExecutor {
 
         return allPull;
     }
+
+
+
 
 
 

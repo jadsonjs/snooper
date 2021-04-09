@@ -30,7 +30,7 @@ class PullRequestQueryExecutorTest {
         PullRequestQueryExecutor gitHubClient = new PullRequestQueryExecutor();
         gitHubClient.setTestEnvironment(true);
 
-        List<GitHubPullRequestInfo> list =  gitHubClient.pullRequests("webauthn4j/webauthn4j");
+        List<GitHubPullRequestInfo> list =  gitHubClient.pullRequests("octocat/hello-world");
 
         Assertions.assertTrue(list.size() > 0);
     }
@@ -44,7 +44,7 @@ class PullRequestQueryExecutorTest {
         PullRequestQueryExecutor gitHubClient = new PullRequestQueryExecutor();
         gitHubClient.setTestEnvironment(true);
 
-        List<GitHubPullRequestInfo> list =  gitHubClient.pullRequests("webauthn4j", "webauthn4j");
+        List<GitHubPullRequestInfo> list =  gitHubClient.pullRequests("octocat", "hello-world");
 
         Assertions.assertTrue(list.size() > 0);
     }
@@ -60,7 +60,7 @@ class PullRequestQueryExecutorTest {
         gitHubClient.setTestEnvironment(true);
         gitHubClient.setPageSize(10);
 
-        List<GitHubPullRequestInfo> list =  gitHubClient.pullRequests("webauthn4j/webauthn4j");
+        List<GitHubPullRequestInfo> list =  gitHubClient.pullRequests("octocat/hello-world");
 
         Assertions.assertTrue(list.size() > 0);
     }
