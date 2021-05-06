@@ -26,10 +26,12 @@
  */
 package br.com.jadson.snooper.github.data.pull;
 
+import br.com.jadson.snooper.github.data.LabelInfo;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * Information about pull request
@@ -64,6 +66,8 @@ public class GitHubPullRequestInfo {
     public Date merged_at;
 
     public String merge_commit_sha;
+
+    public List<LabelInfo> labels;
 
     public String commits_url;
 
