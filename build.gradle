@@ -3,7 +3,7 @@ plugins {
 }
 
 group = 'br.com.jadson'
-version = '0.20'
+version = '0.21'
 sourceCompatibility = '11'
 
 configurations {
@@ -14,7 +14,7 @@ configurations {
 
 repositories {
 	mavenCentral()
-
+	jcenter()
 	maven { url "https://repo.spring.io/plugins-release/" }
 
 }

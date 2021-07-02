@@ -120,6 +120,33 @@ public class TravisCIQueryExecutor extends AbstractTravisCIQueryExecutor {
 
 
     /**
+     * Return builds between dates
+     *
+     * @param projectNameWithOwner
+     * @param start
+     * @param end
+     * @return
+     */
+    public List<TravisBuildsInfo> getBuilds(String projectNameWithOwner, LocalDateTime start, LocalDateTime end) {
+
+        List<TravisBuildsInfo> builds = new ArrayList<>();
+
+        List<TravisBuildsInfo> allBuilds = getBuilds(projectNameWithOwner);
+
+        for (TravisBuildsInfo build : allBuilds) {
+
+            LocalDateTime startBuild = LocalDateTime.parse(build.started_at, DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.ENGLISH));
+
+            if( startBuild.isAfter(start) && startBuild.isBefore(end) ){ // this build is betwenn dates
+                builds.add(build);
+            }
+        }
+
+        return builds;
+    }
+
+
+    /**
      * Checks is a project has a number minimum of builds
      *
      *
@@ -170,29 +197,7 @@ public class TravisCIQueryExecutor extends AbstractTravisCIQueryExecutor {
 
 
 
-    /**
-     * Return build form specific release of a system by the date of build
-     *
-     * @param projectNameWithOwner
-     * @return
-     */
-    public List<TravisBuildsInfo> getBuildsOfRelease(String projectNameWithOwner, LocalDateTime startRelease, LocalDateTime endRelease) {
 
-        List<TravisBuildsInfo> buildsOfRelease = new ArrayList<>();
-
-        List<TravisBuildsInfo> builds = getBuilds(projectNameWithOwner);
-
-        for (TravisBuildsInfo build : builds) {
-
-            LocalDateTime startBuild = LocalDateTime.parse(build.started_at, DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.ENGLISH));
-
-            if( startBuild.isAfter(startRelease) && startBuild.isBefore(endRelease) ){ // this build if of this relese
-                buildsOfRelease.add(build);
-            }
-        }
-
-        return buildsOfRelease;
-    }
 
 
 
