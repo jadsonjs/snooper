@@ -135,10 +135,13 @@ public class TravisCIQueryExecutor extends AbstractTravisCIQueryExecutor {
 
         for (TravisBuildsInfo build : allBuilds) {
 
-            LocalDateTime startBuild = LocalDateTime.parse(build.started_at, DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.ENGLISH));
+            if(build.started_at != null) {
 
-            if( startBuild.isAfter(start) && startBuild.isBefore(end) ){ // this build is betwenn dates
-                builds.add(build);
+                LocalDateTime startBuild = LocalDateTime.parse(build.started_at, DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.ENGLISH));
+
+                if (startBuild.isAfter(start) && startBuild.isBefore(end)) { // this build is between dates
+                    builds.add(build);
+                }
             }
         }
 
