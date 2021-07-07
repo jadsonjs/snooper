@@ -1,10 +1,10 @@
 # Snooper
 
-Snooper is a project to collect data from repositories like GitHub.
+Snooper is a project to collect data from repositories like GitHub, TravisCI and Sonar.
 
 #### Versions: 
 
- - 1.0 - Basic Queries from GitHub.
+ - 0.23 - Improve Clone and Download options
 
 #### Authors:
 
@@ -37,16 +37,22 @@ Examples of how to use:
 ```
 # download the repository from github to local machine
     
-    GitHubDownload gitHub = new GitHubDownload();
-    String localRepo = gitHub.download("https://github.com/vuejs/vue-cli", "/tmp/");
-
+    DownloadGitHubExecutor executor = new DownloadGitHubExecutor();
+    String localRepo = executor.download(""jadsonjs/snooper"", "/tmp");
 
 
 # Clone the repository from github to local machine
     
-    GitHubClone gitHub = new GitHubClone(" git hub access token ");
-    String localRepo = gitHub.clone("https://github.com/vuejs/vue-cli","/tmp/");
+    CloneGitHubExecutor executor = new CloneGitHubExecutor(githubToken);
+    String localRepo = executor.clone("jadsonjs/snooper", "/tmp");
+    
 
+# Get all Commits of a repository
+
+     CommitQueryExecutor executor = new CommitQueryExecutor();
+     executor.setGithubToken(githubToken);
+     executor.setPageSize(100);
+     List<GitHubCommitInfo> commits = executor.getCommits("jadsonjs/snooper");
 
 
 # Get all Pull Requests of a repository
@@ -55,7 +61,7 @@ Examples of how to use:
     executor.setPageSize(100);
     executor.setQueryParameters(new String[]{"state=all"});
     
-    List<GitHubPullRequestInfo> list =  executor.pullRequests("octocat/hello-world");
+    List<GitHubPullRequestInfo> list =  executor.pullRequests("jadsonjs/snooper");
 
 
 
@@ -65,7 +71,7 @@ Examples of how to use:
     executor.setPageSize(100);
     executor.setQueryParameters(new String[]{"state=all"});
     
-    List<GitHubIssueInfo> list =  executor.pullRequests("octocat/hello-world");
+    List<GitHubIssueInfo> list =  executor.pullRequests("jadsonjs/snooper");
     
     
 
@@ -74,16 +80,31 @@ Examples of how to use:
     ReleaseQueryExecutor executor = new ReleaseQueryExecutor(" git hub access token ");
     executor.setPageSize(100);
     executor.setQueryParameters(new String[]{"state=all"});
-    List<GitHubReleaseInfo> list =  executor.releases(octocat/hello-world");
-
+    List<GitHubReleaseInfo> list =  executor.releases("jadsonjs/snooper");
 
 
 
 # Get a pull request diff info
 
     PullRequestDiffQuery gitHub = new PullRequestDiffQuery(" git hub access token ");
-    GitHubPullRequestDiffInfo info =  gitHub.pullRequestsDiff("vuejs/vue-cli", 5356l);
+    GitHubPullRequestDiffInfo info =  gitHub.pullRequestsDiff("jadsonjs/snooper", 5356l);
 
+
+
+# Get All builds from Travis-CI of a project
+
+    TravisCIQueryExecutor executor = new TravisCIQueryExecutor();
+    List<TravisBuildsInfo> builds = executor.getBuilds("jadsonjs/snooper");
+
+
+# Get projects on Sonar Cloud
+
+   int pageSize = 500;
+   String language = "Java";
+   String sortBy = "ncloc";
+   SonarCloudProjectsQueryExecutor executor = new SonarCloudProjectsQueryExecutor(pageSize);
+   query.getSonarProjects(language, sortBy)
+   
 
 ```
 
