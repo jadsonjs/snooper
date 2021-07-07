@@ -4,7 +4,7 @@ import graphql.Assert;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-class DownloadExecutorTest {
+class DownloadGitHubExecutorTest {
 
     /**
      * Basic test
@@ -12,11 +12,11 @@ class DownloadExecutorTest {
     @Test
     void testDownload(){
 
-        DownloadExecutor gitHub = new DownloadExecutor();
+        DownloadGitHubExecutor gitHub = new DownloadGitHubExecutor();
 
-        String localRepo = gitHub.download("https://github.com/vuejs/vue-cli","/tmp/");
+        String localRepo = gitHub.download("vuejs/vue-cli","/tmp/");
 
-        Assertions.assertEquals("/tmp/vue-cli-master.zip", localRepo);
+        Assertions.assertEquals("/tmp/vuejs/vue-cli-master.zip", localRepo);
     }
 
 
@@ -26,7 +26,7 @@ class DownloadExecutorTest {
     @Test
     void testEmptyRepoURLDownload(){
 
-        DownloadExecutor gitHub = new DownloadExecutor();
+        DownloadGitHubExecutor gitHub = new DownloadGitHubExecutor();
 
         String repoURL = "";
 
@@ -44,11 +44,11 @@ class DownloadExecutorTest {
     @Test
     void testDownloadAndUnzip(){
 
-        DownloadExecutor gitHub = new DownloadExecutor();
+        DownloadGitHubExecutor gitHub = new DownloadGitHubExecutor();
 
-        String localRepo = gitHub.download("https://github.com/vuejs/vue-cli","/tmp/", true);
+        String localRepo = gitHub.download("vuejs/vue-cli","/tmp/", true);
 
-        Assertions.assertEquals("/tmp/vue-cli-master.zip", localRepo);
+        Assertions.assertEquals("/tmp/vuejs/vue-cli-master.zip", localRepo);
     }
 
 

@@ -40,11 +40,11 @@ import java.io.IOException;
 /**
  * Class to clone a github repository.
  *
- * To just download the content of repository: @see {@link DownloadExecutor}
+ * To just download the content of repository: @see {@link DownloadGitHubExecutor}
  *
  * Jadson Santos - jadsonjs@gmail.com
  */
-public class CloneExecutor {
+public class CloneGitHubExecutor {
 
     /**
      * token of github to use as credentials.
@@ -53,7 +53,7 @@ public class CloneExecutor {
     private final String githubToken;
 
 
-    public CloneExecutor(String githubToken){
+    public CloneGitHubExecutor(String githubToken){
         if(githubToken == null || githubToken.trim().equals(""))
             throw new RuntimeException("Invalid GitHub Token: "+githubToken);
 
@@ -65,28 +65,26 @@ public class CloneExecutor {
      *
      * When clone you can you have all the repository in local machine. Can commit and pull.
      *
-     * @param repoURL
+     * @param repoFullName
      * @param localPath
      * @return
      * @throws IOException
      */
-    public String clone(String repoURL, String localPath){
+    public String clone(String repoFullName, String localPath){
 
-        if(repoURL == null || repoURL.isEmpty())
-            throw new IllegalArgumentException("Invalid repo url: "+repoURL);
+        if(repoFullName == null || repoFullName.isEmpty())
+            throw new IllegalArgumentException("Invalid repo url: "+repoFullName);
 
         if(localPath == null || localPath.isEmpty())
-            throw new IllegalArgumentException("Invalid Local Path: "+repoURL);
+            throw new IllegalArgumentException("Invalid Local Path: "+localPath);
 
-        String repoName = repoURL.replace("https://github.com/", "");
-
-        String fullPath = localPath+repoName;
+        String fullPath = localPath+repoFullName;
 
         CredentialsProvider cp = new UsernamePasswordCredentialsProvider(githubToken, "");
 
         try {
-            System.out.println("Cloning repository: " + repoURL + " to: " + fullPath);
-            Git.cloneRepository().setURI(repoURL).setDirectory(new File(fullPath)).setCloneAllBranches(true).setCredentialsProvider(cp).call();
+            System.out.println("Cloning repository: https://github.com/"+ repoFullName + " to: " + fullPath);
+            Git.cloneRepository().setURI("https://github.com/"+repoFullName).setDirectory(new File(fullPath)).setCloneAllBranches(true).setCredentialsProvider(cp).call();
         }catch(Exception ex){
             ex.printStackTrace();
 

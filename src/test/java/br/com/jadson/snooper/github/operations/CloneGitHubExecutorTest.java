@@ -3,7 +3,7 @@ package br.com.jadson.snooper.github.operations;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-class GitHubCloneTest {
+class CloneGitHubExecutorTest {
 
 
     /**
@@ -12,9 +12,9 @@ class GitHubCloneTest {
     @Test
     void testDownload(){
 
-        CloneExecutor gitHub = new CloneExecutor("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+        CloneGitHubExecutor gitHub = new CloneGitHubExecutor("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
 
-        String localRepo = gitHub.clone("https://github.com/vuejs/vue-cli","/tmp/");
+        String localRepo = gitHub.clone("vuejs/vue-cli","/tmp/");
 
         Assertions.assertEquals("/tmp/vuejs/vue-cli", localRepo);
     }

@@ -45,12 +45,12 @@ import java.nio.channels.Channels;
  * Download just download the repository files. But it is not a clone.
  * You can not commit or pull changes into local code.
  *
- * To clone the full repository use: @see {@link CloneExecutor}
+ * To clone the full repository use: @see {@link CloneGitHubExecutor}
  *
  * Jadson Santos - jadsonjs@gmail.com
  */
 @Component
-public class DownloadExecutor {
+public class DownloadGitHubExecutor {
 
     /**
      * Download the content of a github repository to local directoty in a zip file
@@ -58,36 +58,36 @@ public class DownloadExecutor {
      * @param localPath
      * @return
      */
-    public String download(String repoURL, String localPath) {
-        return download(repoURL, localPath, false);
+    public String download(String repoFullName, String localPath) {
+        return download(repoFullName, localPath, false);
     }
 
     /**
      * Download the content of a github repository to local directoty in a zip file
      *
-     * @param repoURL
+     * @param repoFullName
      * @param localPath
      * @param unzip if after download the repo content also unzip it.
      * @return
      */
-    public String download(String repoURL, String localPath, boolean unzip) {
+    public String download(String repoFullName, String localPath, boolean unzip) {
 
-        if(repoURL == null || repoURL.isEmpty())
-            throw new IllegalArgumentException("Invalid repo url: "+repoURL);
+        if(repoFullName == null || repoFullName.isEmpty())
+            throw new IllegalArgumentException("Invalid repo url: "+repoFullName);
 
         if(localPath == null || localPath.isEmpty())
-            throw new IllegalArgumentException("Invalid Local Path: "+repoURL);
+            throw new IllegalArgumentException("Invalid Local Path: "+localPath);
 
         if(! localPath.endsWith("/") )
             throw new IllegalArgumentException("Local Path should ends with slash '/' ");
 
 
 
-        String downloadURL = repoURL+"/archive/master.zip";
+        String downloadURL = "https://github.com/"+repoFullName+"/archive/master.zip";
 
-        String repoName = repoURL.substring(repoURL.lastIndexOf("/")+1, repoURL.length());
+        //String repoName = repoURL.substring(repoURL.lastIndexOf("/")+1, repoURL.length());
 
-        String localZipProjectName = localPath + repoName + "-master.zip";
+        String localZipProjectName = localPath + repoFullName + "-master.zip";
 
         if(! new File(localZipProjectName).exists() ) {
 
@@ -109,7 +109,7 @@ public class DownloadExecutor {
                 e.printStackTrace();
             }
         }else{
-            System.out.println("Repository "+repoName+" is already saved locally.");
+            System.out.println("Repository "+repoFullName+" is already saved locally.");
         }
 
 
