@@ -78,36 +78,40 @@ public class CloneGitHubExecutor {
         if(localPath == null || localPath.isEmpty())
             throw new IllegalArgumentException("Invalid Local Path: "+localPath);
 
-        String fullPath = localPath+repoFullName;
+        String fullPath = localPath+"/"+repoFullName;
 
         CredentialsProvider cp = new UsernamePasswordCredentialsProvider(githubToken, "");
 
-        try {
-            System.out.println("Cloning repository: https://github.com/"+ repoFullName + " to: " + fullPath);
-            Git.cloneRepository().setURI("https://github.com/"+repoFullName).setDirectory(new File(fullPath)).setCloneAllBranches(true).setCredentialsProvider(cp).call();
-        }catch(Exception ex){
-            ex.printStackTrace();
+        if(! new File(fullPath).exists() ) {
+            try {
+                System.out.println("Cloning repository: https://github.com/"+ repoFullName + " to: " + fullPath);
+                Git.cloneRepository().setURI("https://github.com/"+repoFullName).setDirectory(new File(fullPath)).setCloneAllBranches(true).setCredentialsProvider(cp).call();
+            }catch(Exception ex){
+                ex.printStackTrace();
 
-            /* IMPORTANT: if there is a error because of certificate, skip ssl verify
-             * We have to wait give an exception because the local gitconfig file just exist after try to clone the repository
-             *
-             * It is not possible to use de API to set this information and the user does not have a home directory to create .gitconfig file.
-             */
-            if(ex.getMessage().contains("cannot open git-upload-pack")){
+                /* IMPORTANT: if there is a error because of certificate, skip ssl verify
+                 * We have to wait give an exception because the local gitconfig file just exist after try to clone the repository
+                 *
+                 * It is not possible to use de API to set this information and the user does not have a home directory to create .gitconfig file.
+                 */
+                if(ex.getMessage().contains("cannot open git-upload-pack")){
 
-                String localGitConfig = localPath+"/"+".git"+"/"+"config";
-                File localGitConfigFile = new File(localPath);
-                if( localGitConfigFile.exists() ){
-                    try {
-                        createSkipSSLVerifyConfiguration(localGitConfig);
-                    } catch (IOException e) {
-                        throw new RuntimeException("Erro creating file "+localGitConfig+". "+e.getMessage());
+                    String localGitConfig = localPath+"/"+".git"+"/"+"config";
+                    File localGitConfigFile = new File(localPath);
+                    if( localGitConfigFile.exists() ){
+                        try {
+                            createSkipSSLVerifyConfiguration(localGitConfig);
+                        } catch (IOException e) {
+                            throw new RuntimeException("Erro creating file "+localGitConfig+". "+e.getMessage());
+                        }
                     }
+
+                    throw new RuntimeException("SSL Problem: Creating skip SSL verify configuration file, try to clone again.");
                 }
 
-                throw new RuntimeException("SSL Problem: Creating skip SSL verify configuration file, try to clone again.");
             }
-
+        }else{
+            System.out.println("Repository "+fullPath+" is already saved locally.");
         }
 
         return fullPath;

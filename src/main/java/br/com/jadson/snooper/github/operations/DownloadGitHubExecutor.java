@@ -54,7 +54,7 @@ public class DownloadGitHubExecutor {
 
     /**
      * Download the content of a github repository to local directoty in a zip file
-     * @param repoURL
+     * @param repoFullName
      * @param localPath
      * @return
      */
@@ -72,22 +72,26 @@ public class DownloadGitHubExecutor {
      */
     public String download(String repoFullName, String localPath, boolean unzip) {
 
-        if(repoFullName == null || repoFullName.isEmpty())
-            throw new IllegalArgumentException("Invalid repo url: "+repoFullName);
+        if(repoFullName == null || repoFullName.isEmpty() || ! repoFullName.contains("/"))
+            throw new IllegalArgumentException("Invalid repo name: "+repoFullName);
 
         if(localPath == null || localPath.isEmpty())
             throw new IllegalArgumentException("Invalid Local Path: "+localPath);
 
-        if(! localPath.endsWith("/") )
-            throw new IllegalArgumentException("Local Path should ends with slash '/' ");
+        if( localPath.endsWith("/") )
+            throw new IllegalArgumentException("Local Path should not ends with slash '/' ");
 
+        String[] splitName = repoFullName.split("/");
 
 
         String downloadURL = "https://github.com/"+repoFullName+"/archive/master.zip";
 
         //String repoName = repoURL.substring(repoURL.lastIndexOf("/")+1, repoURL.length());
 
-        String localZipProjectName = localPath + repoFullName + "-master.zip";
+        String localZipProjectName = localPath + "/" + repoFullName + "-master.zip";
+
+        File directory = new File(localPath + "/"+splitName[0]);
+        directory.mkdir();
 
         if(! new File(localZipProjectName).exists() ) {
 
@@ -98,11 +102,12 @@ public class DownloadGitHubExecutor {
                         Channels.newChannel(new URL(downloadURL).openStream()), 0, Long.MAX_VALUE);
 
                 // include a ".zip" in the file name
-                renameFile(localZipProjectName.substring(0, localZipProjectName.lastIndexOf(".")), localZipProjectName);
+                //renameFile(localZipProjectName.substring(0, localZipProjectName.lastIndexOf(".")), localZipProjectName);
 
                 if(unzip) {
                     String localUnZipRepoName = localZipProjectName.substring(0, localZipProjectName.lastIndexOf(".")); // removing  ".zip" extension
-                    unzip(localUnZipRepoName, localZipProjectName, localPath);
+                    localUnZipRepoName = localUnZipRepoName.replace("-master", ""); // removing -master of the directory name
+                    unzip(localUnZipRepoName, localZipProjectName, localPath + "/"+splitName[0]);
                 }
 
             } catch (IOException e) {
