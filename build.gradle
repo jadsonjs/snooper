@@ -32,6 +32,9 @@ dependencies {
 	// file manipulation
 	implementation 'commons-io:commons-io:2.6'
 
+	// jsoup is a Java library for working with real-world HTML.
+	implementation group: 'org.jsoup', name: 'jsoup', version: '1.13.1'
+
 	compileOnly 'org.projectlombok:lombok:1.18.16'
 	annotationProcessor 'org.projectlombok:lombok:1.18.16'
 
