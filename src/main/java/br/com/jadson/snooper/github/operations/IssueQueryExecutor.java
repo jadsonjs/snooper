@@ -101,5 +101,39 @@ public class IssueQueryExecutor extends AbstractGitHubQueryExecutor{
 
         return all;
     }
+    
+    /**
+     * Return closed issues between dates
+     *
+     * @param projectNameWithOwner
+     * @param start
+     * @param end
+     * @return
+     */
+    fun getIssuesClosedByPeriod(projectNameWithOwner: String?, start: LocalDateTime?, end: LocalDateTime?): List<GitHubIssueInfo?> {
+        
+        val issuesList: MutableList<GitHubIssueInfo?> = ArrayList<GitHubIssueInfo?>()
+
+        this.setQueryParameters(arrayOf("state=closed")) // Only closed issues
+
+        val allIssues: List<GitHubIssueInfo?> = this.issues(projectNameWithOwner);
+        
+        val var6: Iterator<*> = allIssues.iterator()
+            
+        while (var6.hasNext()) {
+            
+            val issue: GitHubIssueInfo = var6.next() as GitHubIssueInfo
+                
+            val startIssue = LocalDateTime.ofInstant(issue.created_at.toInstant(), ZoneId.systemDefault())
+                
+            if (startIssue.isAfter(start) && startIssue.isBefore(end)) { // this issue is between dates
+                issuesList.add(issue)
+            }
+            
+        }
+        
+        return issuesList
+            
+    }
 
 }
