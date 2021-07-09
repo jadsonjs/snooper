@@ -103,37 +103,36 @@ public class IssueQueryExecutor extends AbstractGitHubQueryExecutor{
     }
     
     /**
-     * Return closed issues between dates
+     * Return issues between dates
      *
      * @param projectNameWithOwner
      * @param start
      * @param end
      * @return
      */
-    fun getIssuesClosedByPeriod(projectNameWithOwner: String?, start: LocalDateTime?, end: LocalDateTime?): List<GitHubIssueInfo?> {
+    public List<GitHubIssueInfo> issues(String projectNameWithOwner, LocalDateTime start, LocalDateTime end) {
         
-        val issuesList: MutableList<GitHubIssueInfo?> = ArrayList<GitHubIssueInfo?>()
+        List<GitHubIssueInfo> issues = new ArrayList();
+        List<GitHubIssueInfo> allIssues = this.issues(projectNameWithOwner);
+        Iterator var6 = allIssues.iterator();
 
-        this.setQueryParameters(arrayOf("state=closed")) // Only closed issues
-
-        val allIssues: List<GitHubIssueInfo?> = this.issues(projectNameWithOwner);
-        
-        val var6: Iterator<*> = allIssues.iterator()
+        while(var6.hasNext()) {
             
-        while (var6.hasNext()) {
+            GitHubIssueInfo issue = (GitHubIssueInfo)var6.next();
             
-            val issue: GitHubIssueInfo = var6.next() as GitHubIssueInfo
+            if (issue.started_at != null) {
                 
-            val startIssue = LocalDateTime.ofInstant(issue.created_at.toInstant(), ZoneId.systemDefault())
+                LocalDateTime startIssue = LocalDateTime.parse(issue.started_at, DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.ENGLISH));
                 
-            if (startIssue.isAfter(start) && startIssue.isBefore(end)) { // this issue is between dates
-                issuesList.add(issue)
+                if (startIssue.isAfter(start) && startIssue.isBefore(end)) {
+                    
+                    issues.add(issue);
+                    
+                }
             }
-            
         }
-        
-        return issuesList
-            
+
+        return issues;
     }
 
 }
