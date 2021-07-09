@@ -7,11 +7,15 @@
 package br.com.jadson.snooper.github.operations;
 
 import br.com.jadson.snooper.github.data.repo.GitHubRepoInfo;
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
@@ -46,47 +50,90 @@ public class GitHubSearchExecutor extends AbstractGitHubQueryExecutor{
         if(! "asc".equals(order) && ! "desc".equals(order))
             return projects;
 
-        int page = 1;
 
-        StringBuilder urlBuffer = generateQuery(language, stars, size, sort, order, page);
+        pagination:
+        for(int page = 1; page <= 100 ; page++) { // github allow just 100 pages
 
-        try {
-            //Thread.sleep(500);
-            URL url = new URL(urlBuffer.toString());
-            // create a urlconnection object
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            connection.setRequestMethod("GET");
-            connection.connect();
-            int code = connection.getResponseCode();
+            System.out.println(" Searching project on github ( page "+page+" of 100 )"+" q=  "+language+" "+stars+" "+size+" "+sort+" "+order);
 
-            if(code == 200){
-                String htmlCode = connection.getResponseMessage();
+            StringBuilder urlBuffer = generateQuery(language, stars, size, sort, order, page);
 
-                projects.addAll(extractRepositoriesInfo(htmlCode));
+            HttpURLConnection connection = null;
 
+            try {
+
+                URL url = new URL(urlBuffer.toString());
+                // create a urlconnection object
+                connection = (HttpURLConnection) url.openConnection();
+                connection.setRequestMethod("GET");
+                if(! githubToken.isEmpty())
+                    connection.setRequestProperty("Authorization", "token "+githubToken+"");
+
+                connection.connect();
+                int code = connection.getResponseCode();
+
+
+
+                if (code == 200) {
+                    connection.getInputStream();
+
+                    BufferedReader in = new BufferedReader(new InputStreamReader((InputStream) connection.getContent()));
+
+                    StringBuilder htmlCode = new StringBuilder();
+
+                    String inputLine;
+                    while ((inputLine = in.readLine()) != null)
+                        htmlCode.append(inputLine);
+
+                    List<GitHubRepoInfo> ps = extractRepositoriesInfo(htmlCode.toString());
+                    if(ps.size() == 0)
+                        break pagination; // when page < 100 but the project list already finished, github resturn a empty page.
+
+                    projects.addAll(ps);
+
+                    if(testEnvironment)
+                        break pagination;
+
+                    Thread.sleep(5000); // 20 per minute with github token
+
+                }else{
+                    System.err.println( "["+code+"]"+"  ==>  "+connection.getResponseMessage());
+
+                    Thread.sleep(10000); // 20 per minute with github token
+                }
+            } catch (Exception e) {
+                System.err.println(e.getMessage());
+            } finally {
+                if(connection != null)
+                    connection.disconnect();
             }
-        } catch(Exception e) {
-            System.err.println(e.getMessage());
         }
 
 
         return projects;
     }
 
+
     private List<GitHubRepoInfo> extractRepositoriesInfo(String htmlCode) {
+
         List<GitHubRepoInfo> projects = new ArrayList<>();
 
         Document html = Jsoup.parse(htmlCode);
         Elements divs = html.getElementsByClass("f4");
 
         for (Element div : divs) {
+
+            if(! div.tagName().equals("div") || ! div.hasClass("text-normal")){
+                continue; // is not the div with name of project
+            }
+
             Element link = div.getElementsByTag("a").first();
 
             GitHubRepoInfo project = new GitHubRepoInfo();
             String[] names = link.attr("href").split("/");
-            project.name = names[0];
-            project.full_name = link.attr("href");
-            project.url = "https://github.com/"+link.attr("href");
+            project.name = names[2];
+            project.full_name = names[1]+"/"+names[2];
+            project.url = "https://github.com/"+project.full_name;
             projects.add(project);
 
         }
@@ -107,8 +154,11 @@ public class GitHubSearchExecutor extends AbstractGitHubQueryExecutor{
 
         boolean plus = false;
 
+        final String GREATER_THAN_OR_EQUAL_TO = "%3A%3E%3D";
+        final String EQUAL_TO = "%3A";
+
         if(stars != null && stars > 0) {
-            urlBuffer.append("stars%3A>=" + stars);
+            urlBuffer.append("stars"+GREATER_THAN_OR_EQUAL_TO+ stars);
             plus = true;
         }
 
@@ -118,7 +168,7 @@ public class GitHubSearchExecutor extends AbstractGitHubQueryExecutor{
                 urlBuffer.append("+");
             }
             plus = true;
-            urlBuffer.append("size%3A>=" + size);
+            urlBuffer.append("size"+GREATER_THAN_OR_EQUAL_TO+ size);
         }
 
         if(language != null && ! language.isEmpty()) {
@@ -127,7 +177,7 @@ public class GitHubSearchExecutor extends AbstractGitHubQueryExecutor{
             }
             plus = true;
 
-            urlBuffer.append("language%3A" + language);
+            urlBuffer.append("language"+EQUAL_TO + language);
         }
 
 
