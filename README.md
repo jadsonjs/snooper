@@ -2,9 +2,12 @@
 
 Snooper is a project to collect data from repositories like GitHub, TravisCI and Sonar.
 
+This tool supports the **GitHub API**, **TravisCI API** and **Sonar Cloud API**.
+
 #### Versions: 
 
  - 0.23 - Improve Clone and Download options
+ - 1.00 - Github Search
 
 #### Authors:
 
@@ -35,10 +38,16 @@ Snooper is a project to collect data from repositories like GitHub, TravisCI and
 Examples of how to use:
 
 ```
+
+#############################################
+##### GitHub #####
+#############################################
+
+
 # download the repository from github to local machine
     
     DownloadGitHubExecutor executor = new DownloadGitHubExecutor();
-    String localRepo = executor.download(""jadsonjs/snooper"", "/tmp");
+    String localRepo = executor.download("jadsonjs/snooper", "/tmp");
 
 
 # Clone the repository from github to local machine
@@ -91,10 +100,28 @@ Examples of how to use:
 
 
 
+# Search github project of language Java, with 100 stars or more, 1MB or more sort by stars, order by desc
+
+   GitHubSearchExecutor executor = new GitHubSearchExecutor();
+   executor.setGithubToken(githubToken);
+
+   // java projects with more the 100 stars and 1MB
+   List<GitHubRepoInfo> listOfProjects = search.searchRepositories("Java", 100, 1000, "stars", "desc");   
+
+
+#############################################
+##### TRAVIS #####
+#############################################
+
 # Get All builds from Travis-CI of a project
 
     TravisCIQueryExecutor executor = new TravisCIQueryExecutor();
     List<TravisBuildsInfo> builds = executor.getBuilds("jadsonjs/snooper");
+
+
+#############################################
+##### Sonar #####
+#############################################
 
 
 # Get projects on Sonar Cloud
@@ -104,7 +131,8 @@ Examples of how to use:
    String sortBy = "ncloc";
    SonarCloudProjectsQueryExecutor executor = new SonarCloudProjectsQueryExecutor(pageSize);
    query.getSonarProjects(language, sortBy)
-   
+
+
 
 ```
 
