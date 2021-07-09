@@ -134,5 +134,59 @@ public class IssueQueryExecutor extends AbstractGitHubQueryExecutor{
 
         return issues;
     }
+    
+        /**
+     * Return issues with error between dates
+     *
+     * @param projectNameWithOwner
+     * @param start
+     * @param end
+     * @return
+     */
+    public List<GitHubIssueInfo> issues(String projectNameWithOwner, LocalDateTime start, LocalDateTime end) {
+
+        List<GitHubIssueInfo> issues = new ArrayList();
+        List<GitHubIssueInfo> allIssues = this.issues(projectNameWithOwner);
+        Iterator var6 = allIssues.iterator();
+
+        while(var6.hasNext()) {
+
+            GitHubIssueInfo issue = (GitHubIssueInfo)var6.next();
+
+            if (issue.started_at != null) {
+
+                LocalDateTime startIssue = LocalDateTime.parse(issue.started_at, DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.ENGLISH));
+
+                if (startIssue.isAfter(start) && startIssue.isBefore(end)) {
+
+                    Iterator var7 = labelsIssue.iterator();
+
+                    Boolean bug = false;
+
+                    while(var7.hasNext()){
+
+                        LabelInfo label = (LabelInfo)var7.next();
+
+                        if(label.name=="bug"){
+
+                            bug = true;
+                            break;
+
+                        }
+
+                    }
+
+                    if(bug){
+
+                        issues.add(issue);
+
+                    }
+
+                }
+            }
+        }
+
+        return issues;
+    }
 
 }
