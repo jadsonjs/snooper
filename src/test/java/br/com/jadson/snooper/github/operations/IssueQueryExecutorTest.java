@@ -18,29 +18,15 @@ class IssueQueryExecutorTest {
 
         Assertions.assertTrue(list.size() > 0);
     }
-    
-    @Test
-    void issuesTestBetweenDates() {
-
-        IssueQueryExecutor executor = new IssueQueryExecutor();
-        executor.setTestEnvironment(true);
-        executor.setQueryParameters(new String[]{"stage=all"});
-	LocalDateTime start = LocalDateTime.of(2021, 07, 08, 23, 59, 59);
-	LocalDateTime end = LocalDateTime.of(2021, 07, 09, 23, 59, 59);
-
-        List<GitHubIssueInfo> list =  executor.issues("octocat/hello-world", start, end);
-
-        Assertions.assertTrue(list.size() > 0);
-    }
 
     @Test
-    void issuesClosedTestBetweenDates() {
+    void closedIssuesTestBetweenDatesWithError() {
 
         IssueQueryExecutor executor = new IssueQueryExecutor();
         executor.setTestEnvironment(true);
         executor.setQueryParameters(new String[]{"state=closed"});
-        LocalDateTime start = LocalDateTime.of(2021, 07, 05, 23, 59, 59);
-        LocalDateTime end = LocalDateTime.of(2021, 07, 06, 23, 59, 59);
+        LocalDateTime start = LocalDateTime.of(2016, 08, 18, 23, 59, 59);
+        LocalDateTime end = LocalDateTime.of(2016, 08, 20, 23, 59, 59);
 
         List<GitHubIssueInfo> list =  executor.issues("octocat/hello-world", start, end);
 
