@@ -143,7 +143,7 @@ public class IssueQueryExecutor extends AbstractGitHubQueryExecutor{
      * @param end
      * @return
      */
-    public List<GitHubIssueInfo> issues(String projectNameWithOwner, LocalDateTime start, LocalDateTime end) {
+    public List<GitHubIssueInfo> issuesWithError(String projectNameWithOwner, LocalDateTime start, LocalDateTime end) {
 
         List<GitHubIssueInfo> issues = new ArrayList();
         List<GitHubIssueInfo> allIssues = this.issues(projectNameWithOwner);
