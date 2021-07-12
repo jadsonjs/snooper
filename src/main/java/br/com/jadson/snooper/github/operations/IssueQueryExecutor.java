@@ -30,11 +30,15 @@
 package br.com.jadson.snooper.github.operations;
 
 import br.com.jadson.snooper.github.data.issue.GitHubIssueInfo;
+import br.com.jadson.snooper.github.data.pull.GitHubQTDPullRequestInfo;
 import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -100,6 +104,38 @@ public class IssueQueryExecutor extends AbstractGitHubQueryExecutor{
         }while ( result != null && result.getBody().length > 0   && !testEnvironment);
 
         return all;
+    }
+
+
+    /**
+     * Return the qtd of ISSUES of a project
+     *
+     * https://stackoverflow.com/questions/13094712/github-api-get-number-of-pull-requests
+     * https://docs.github.com/en/free-pro-team@latest/github/searching-for-information-on-github/searching-issues-and-pull-requests
+     *
+     * @param repoFullName
+     * @return
+     */
+    public int getQtdIssues(String repoFullName) {
+
+        validateRepoName(repoFullName);
+
+        String query = GIT_HUB_API_URL +"/search/issues?q=type:issue+repo:"+repoFullName+"&sort=created&order=asc";
+
+        // allow '+' character in URL
+        UriComponentsBuilder builder = UriComponentsBuilder.fromUriString(query);
+        URI uri = builder.build(false).toUri();
+
+
+        RestTemplate restTemplate = new RestTemplate();
+
+        HttpHeaders headers = getDefaultHeaders();
+        headers.set("Accept", "application/vnd.github.v3+json");
+        HttpEntity entity = new HttpEntity(headers);
+
+        ResponseEntity<GitHubQTDPullRequestInfo> result = restTemplate.exchange( uri, HttpMethod.GET, entity, GitHubQTDPullRequestInfo.class);
+
+        return result.getBody().total_count;
     }
 
 }

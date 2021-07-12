@@ -94,7 +94,8 @@ public class GitHubSearchExecutor extends AbstractGitHubQueryExecutor{
                     if(testEnvironment)
                         break pagination;
 
-                    Thread.sleep(5000); // 20 per minute with github token
+                    // For unauthenticated requests, the rate limit allows you to make up to 10 requests per minute.
+                    Thread.sleep(6000);
 
                 }else{
                     System.err.println( "["+code+"]"+"  ==>  "+connection.getResponseMessage());

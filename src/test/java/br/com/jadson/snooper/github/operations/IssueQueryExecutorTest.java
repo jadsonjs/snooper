@@ -18,4 +18,15 @@ class IssueQueryExecutorTest {
 
         Assertions.assertTrue(list.size() > 0);
     }
+
+
+    @Test
+    void qtdIssuesTest() {
+
+        IssueQueryExecutor executor = new IssueQueryExecutor();
+        executor.setTestEnvironment(true);
+        int qtd =  executor.getQtdIssues("octocat/hello-world");
+        System.out.println("QTD ISSUES: "+qtd);
+        Assertions.assertTrue(qtd > 0);
+    }
 }
