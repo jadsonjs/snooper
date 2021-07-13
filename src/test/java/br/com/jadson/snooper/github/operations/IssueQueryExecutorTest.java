@@ -42,7 +42,7 @@ class IssueQueryExecutorTest {
         LocalDateTime start = LocalDateTime.of(2016, 08, 18, 23, 59, 59);
         LocalDateTime end = LocalDateTime.of(2016, 08, 20, 23, 59, 59);
         
-        List<GitHubIssueInfo> list =  executor.issuesWithLabel("octocat/hello-world", start, end, "bug");
+        List<GitHubIssueInfo> list =  executor.issuesWithLabelBetweenDates("octocat/hello-world", start, end, "bug");
 
         Assertions.assertTrue(list.size() > 0);
     }
