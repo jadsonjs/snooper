@@ -135,18 +135,64 @@ public class IssueQueryExecutor extends AbstractGitHubQueryExecutor{
         return issues;
     }
     
-        /**
-     * Return issues with error between dates
+     /**
+     * Return all issues of a project with a given label
+     *
+     * @param repoFullName
+     * @return
+     */
+    public List<GitHubIssueInfo> issues(String repoFullName, String label) {
+
+        validateRepoName(repoFullName);
+
+        int page = 1;
+
+        // IMPORTANTE state=all for bring all Issues
+        String parameters = "";
+
+        List<GitHubIssueInfo> all = new ArrayList<>();
+
+        ResponseEntity<GitHubIssueInfo[]> result;
+
+        do {
+
+            if(queryParameters != null && ! queryParameters.isEmpty())
+                parameters = "?"+queryParameters}+"labels="+ label +"&page="+page+"&per_page="+pageSize;
+            else
+                parameters = "?"+"labels="+ label +"&page="+page+"&per_page="+pageSize;
+
+            String query = GIT_HUB_API_URL +"/repos/"+repoFullName+"/issues"+parameters;
+
+            System.out.println("Getting Next Issues Info: "+query);
+
+            RestTemplate restTemplate = new RestTemplate();
+
+            HttpEntity entity = new HttpEntity(getDefaultHeaders());
+
+            result = restTemplate.exchange( query, HttpMethod.GET, entity, GitHubIssueInfo[].class);
+
+            all.addAll(  Arrays.asList(result.getBody()) );
+
+            page++;
+
+
+        }while ( result != null && result.getBody().length > 0   && !testEnvironment);
+
+        return all;
+    }
+	
+	/**
+     * Return issues with label between dates
      *
      * @param projectNameWithOwner
      * @param start
      * @param end
      * @return
      */
-    public List<GitHubIssueInfo> issuesWithError(String projectNameWithOwner, LocalDateTime start, LocalDateTime end) {
+    public List<GitHubIssueInfo> issuesWithLabel(String projectNameWithOwner, LocalDateTime start, LocalDateTime end, String label) {
 
         List<GitHubIssueInfo> issues = new ArrayList();
-        List<GitHubIssueInfo> allIssues = this.issues(projectNameWithOwner);
+        List<GitHubIssueInfo> allIssues = this.issues(projectNameWithOwner, label);
         Iterator var6 = allIssues.iterator();
 
         while(var6.hasNext()) {
@@ -159,28 +205,7 @@ public class IssueQueryExecutor extends AbstractGitHubQueryExecutor{
 
                 if (startIssue.isAfter(start) && startIssue.isBefore(end)) {
 
-                    Iterator var7 = labelsIssue.iterator();
-
-                    Boolean bug = false;
-
-                    while(var7.hasNext()){
-
-                        LabelInfo label = (LabelInfo)var7.next();
-
-                        if(label.name=="bug"){
-
-                            bug = true;
-                            break;
-
-                        }
-
-                    }
-
-                    if(bug){
-
-                        issues.add(issue);
-
-                    }
+                	issues.add(issue);
 
                 }
             }
