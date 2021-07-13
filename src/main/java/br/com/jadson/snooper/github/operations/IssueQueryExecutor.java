@@ -31,6 +31,7 @@ package br.com.jadson.snooper.github.operations;
 
 import br.com.jadson.snooper.github.data.issue.GitHubIssueInfo;
 import br.com.jadson.snooper.github.data.pull.GitHubQTDPullRequestInfo;
+import br.com.jadson.snooper.travisci.data.builds.TravisBuildsInfo;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -39,9 +40,10 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 
 /**
  *
@@ -104,6 +106,37 @@ public class IssueQueryExecutor extends AbstractGitHubQueryExecutor{
         }while ( result != null && result.getBody().length > 0   && !testEnvironment);
 
         return all;
+    }
+
+    /**
+     * Return all issues between dates.
+     *
+     * @param repoFullName
+     * @param start
+     * @param end
+     * @return
+     */
+    public List<GitHubIssueInfo> issues(String repoFullName, LocalDateTime start, LocalDateTime end) {
+
+        List<GitHubIssueInfo> issues = new ArrayList();
+
+        List<GitHubIssueInfo> allIssues = issues(repoFullName);
+
+        for (GitHubIssueInfo issue : allIssues) {
+
+            if (issue.created_at != null) {
+
+                LocalDateTime startIssue = issue.created_at.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+
+                if (startIssue.isAfter(start) && startIssue.isBefore(end)) {
+
+                    issues.add(issue);
+
+                }
+            }
+        }
+
+        return issues;
     }
 
 
