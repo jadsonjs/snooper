@@ -4,6 +4,8 @@ import br.com.jadson.snooper.github.data.pull.GitHubPullRequestInfo;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.List;
 
 class PullRequestQueryExecutorTest {

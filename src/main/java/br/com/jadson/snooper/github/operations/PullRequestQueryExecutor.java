@@ -35,6 +35,7 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -112,11 +113,11 @@ public class PullRequestQueryExecutor extends AbstractGitHubQueryExecutor {
      * @param end
      * @return
      */
-    public List<GitHubPullRequestInfo> pullRequests(String projectNameWithOwner, LocalDateTime start, LocalDateTime end) {
+    public List<GitHubPullRequestInfo> pullRequests(String repoFullName, LocalDateTime start, LocalDateTime end) {
         
         List<GitHubPullRequestInfo> pullRequests = new ArrayList();
         
-        List<GitHubPullRequestInfo> allPullRequests = this.pullRequests(projectNameWithOwner);
+        List<GitHubPullRequestInfo> allPullRequests = this.pullRequests(repoFullName);
         
         Iterator var6 = allPullRequests.iterator();
 
