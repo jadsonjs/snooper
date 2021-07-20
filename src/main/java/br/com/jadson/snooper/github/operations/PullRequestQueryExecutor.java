@@ -38,6 +38,8 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Iterator;
+import java.time.ZoneId;
 
 /**
  * Queries about Pull Request
@@ -101,8 +103,39 @@ public class PullRequestQueryExecutor extends AbstractGitHubQueryExecutor {
 
         return allPull;
     }
+    
+    /**
+     * Return all PR between dates of a project
+     *
+     * @param repoFullName
+     * @param start
+     * @param end
+     * @return
+     */
+    public List<GitHubPullRequestInfo> pullRequests(String projectNameWithOwner, LocalDateTime start, LocalDateTime end) {
+        
+        List<GitHubPullRequestInfo> pullRequests = new ArrayList();
+        
+        List<GitHubPullRequestInfo> allPullRequests = this.pullRequests(projectNameWithOwner);
+        
+        Iterator var6 = allPullRequests.iterator();
 
+        while(var6.hasNext()) {
+            
+            GitHubPullRequestInfo pr = (GitHubPullRequestInfo)var6.next();
+            
+            if (pr.created_at != null) {
+                LocalDateTime createdPR = LocalDateTime.ofInstant(pr.created_at.toInstant(), ZoneId.systemDefault());
+                if (createdPR.isAfter(start) && createdPR.isBefore(end)) {
+                    pullRequests.add(pr);
+                }
+            }
+        }
 
+        return pullRequests;
+    }
+
+    
     /**
      * Verify the minimum number of PR for a projects.
      * 
