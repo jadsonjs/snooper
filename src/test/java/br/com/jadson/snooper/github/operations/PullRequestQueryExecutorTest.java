@@ -34,6 +34,28 @@ class PullRequestQueryExecutorTest {
 
         Assertions.assertTrue(list.size() > 0);
     }
+    
+    /**
+     * Test PR between dates whit token
+     */
+    @Test
+    void testPullRequestBetweenDatesWithToken(){
+
+        PullRequestQueryExecutor gitHubClient = new PullRequestQueryExecutor();
+        gitHubClient.setTestEnvironment(true);
+
+        LocalDateTime start = LocalDateTime.of(2021, 3, 1, 23, 59, 59);
+        LocalDateTime end = LocalDateTime.of(2021, 3, 30, 23, 59, 59);
+
+        List<GitHubPullRequestInfo> list =  gitHubClient.pullRequests("octocat/hello-world", start, end);
+
+        Assertions.assertTrue(list.size() > 0);
+
+        LocalDateTime createPR = list.get(0).created_at.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+        System.out.println(list.get(0).number +" "+ list.get(0).created_at);
+
+        Assertions.assertTrue(createPR.isAfter(start) && createPR.isBefore(end));
+    }
 
     /**
      * Basic test
