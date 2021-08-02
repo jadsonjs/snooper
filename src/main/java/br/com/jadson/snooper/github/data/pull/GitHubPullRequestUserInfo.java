@@ -36,9 +36,10 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class GitHubPullRequestUserInfo {
 
-    public long id;
 
     public String login;
+
+    public long id;
 
     public String followers_url;
 

@@ -63,7 +63,7 @@ public class IssueQueryExecutor extends AbstractGitHubQueryExecutor{
     }
 
     /**
-     * Return all PR of a project
+     * Return all Issues of a project
      *
      * @param repoFullName
      * @return
