@@ -32,6 +32,7 @@ package br.com.jadson.snooper.github.operations;
 import br.com.jadson.snooper.github.data.issue.GitHubIssueInfo;
 import br.com.jadson.snooper.github.data.pull.GitHubQTDPullRequestInfo;
 import br.com.jadson.snooper.travisci.data.builds.TravisBuildsInfo;
+import br.com.jadson.snooper.utils.DateUtils;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -122,16 +123,14 @@ public class IssueQueryExecutor extends AbstractGitHubQueryExecutor{
 
         List<GitHubIssueInfo> allIssues = issues(repoFullName);
 
+        DateUtils dateUtils = new DateUtils();
+
         for (GitHubIssueInfo issue : allIssues) {
 
             if (issue.created_at != null) {
-
                 LocalDateTime startIssue = issue.created_at.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
-
-                if (startIssue.isAfter(start) && startIssue.isBefore(end)) {
-
+                if (dateUtils.isBetweenDates(startIssue, start, end)) {
                     issues.add(issue);
-
                 }
             }
         }

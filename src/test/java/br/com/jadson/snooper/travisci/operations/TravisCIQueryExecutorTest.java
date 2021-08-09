@@ -5,6 +5,7 @@ import br.com.jadson.snooper.travisci.data.repo.TravisRepoInfo;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 class TravisCIQueryExecutorTest {
@@ -33,4 +34,5 @@ class TravisCIQueryExecutorTest {
         TravisCIQueryExecutor executor = new TravisCIQueryExecutor();
         Assertions.assertTrue(executor.hasMinimumBuilds("JodaOrg/joda-time", 20) );
     }
+
 }

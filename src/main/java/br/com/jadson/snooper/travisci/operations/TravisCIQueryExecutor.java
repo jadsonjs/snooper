@@ -34,6 +34,7 @@ import br.com.jadson.snooper.travisci.data.builds.TravisBuildsInfo;
 import br.com.jadson.snooper.travisci.data.builds.TravisBuildsRoot;
 import br.com.jadson.snooper.travisci.data.repo.TravisRepoInfo;
 import br.com.jadson.snooper.travisci.data.repo.TravisRepoRoot;
+import br.com.jadson.snooper.utils.DateUtils;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
@@ -133,13 +134,16 @@ public class TravisCIQueryExecutor extends AbstractTravisCIQueryExecutor {
 
         List<TravisBuildsInfo> allBuilds = getBuilds(projectNameWithOwner);
 
+        DateUtils dateUtils = new DateUtils();
+
         for (TravisBuildsInfo build : allBuilds) {
 
             if(build.started_at != null) {
 
                 LocalDateTime startBuild = LocalDateTime.parse(build.started_at, DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.ENGLISH));
 
-                if (startBuild.isAfter(start) && startBuild.isBefore(end)) { // this build is between dates
+                if(dateUtils.isBetweenDates(startBuild, start, end)){ // this build is between dates
+
                     builds.add(build);
                 }
             }

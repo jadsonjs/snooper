@@ -25,8 +25,10 @@
  */
 package br.com.jadson.snooper.github.operations;
 
+import br.com.jadson.snooper.github.data.issue.GitHubIssueInfo;
 import br.com.jadson.snooper.github.data.pull.GitHubPullRequestInfo;
 import br.com.jadson.snooper.github.data.pull.GitHubQTDPullRequestInfo;
+import br.com.jadson.snooper.utils.DateUtils;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -118,16 +120,14 @@ public class PullRequestQueryExecutor extends AbstractGitHubQueryExecutor {
         List<GitHubPullRequestInfo> pullRequests = new ArrayList();
         
         List<GitHubPullRequestInfo> allPullRequests = this.pullRequests(repoFullName);
-        
-        Iterator var6 = allPullRequests.iterator();
 
-        while(var6.hasNext()) {
-            
-            GitHubPullRequestInfo pr = (GitHubPullRequestInfo)var6.next();
-            
+        DateUtils dateUtils = new DateUtils();
+
+        for (GitHubPullRequestInfo pr : allPullRequests) {
+
             if (pr.created_at != null) {
-                LocalDateTime createdPR = LocalDateTime.ofInstant(pr.created_at.toInstant(), ZoneId.systemDefault());
-                if (createdPR.isAfter(start) && createdPR.isBefore(end)) {
+                LocalDateTime createdDate = LocalDateTime.ofInstant(pr.created_at.toInstant(), ZoneId.systemDefault());
+                if ( dateUtils.isBetweenDates(createdDate, start, end) ) {
                     pullRequests.add(pr);
                 }
             }
