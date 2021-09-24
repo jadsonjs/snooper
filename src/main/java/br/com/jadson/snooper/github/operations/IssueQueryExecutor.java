@@ -110,6 +110,33 @@ public class IssueQueryExecutor extends AbstractGitHubQueryExecutor{
     }
 
     /**
+     * Return a specific issue information. Here we can get more information about issue, as the use that close the issue
+     *
+     * @param repoFullName
+     * @return
+     */
+    public GitHubIssueInfo issue(String repoFullName, int issueNumber) {
+
+        validateRepoName(repoFullName);
+
+
+        ResponseEntity<GitHubIssueInfo> result;
+
+        String query = GIT_HUB_API_URL +"/repos/"+repoFullName+"/issues/"+issueNumber;
+
+        System.out.println("Getting Issues Info: "+query);
+
+        RestTemplate restTemplate = new RestTemplate();
+
+        HttpEntity entity = new HttpEntity(getDefaultHeaders());
+
+        result = restTemplate.exchange( query, HttpMethod.GET, entity, GitHubIssueInfo.class);
+
+        return result.getBody();
+
+    }
+
+    /**
      * Return all issues between dates.
      *
      * @param repoFullName

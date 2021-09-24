@@ -81,6 +81,20 @@ public class GitHubPullRequestInfo {
 
     public String author_association;
 
+    /**
+     * Use that merge this pull request
+     * There is no information of user that close the pull request
+     */
+    public GitHubPullRequestUserInfo merged_by;
+
+    public int comments = 0;
+    public int review_comments = 0;
+    public boolean maintainer_can_modify = false;
+    public int commits = 0;
+    public int additions = 0;
+    public int deletions = 0;
+    public int changed_files =  0;
+
     @Override
     public String toString() {
         return "GitHubPullRequestInfo{" + "id='" + id + '\'' + ", title='" + title + '\'' + ", number=" + number +
@@ -88,3 +102,4 @@ public class GitHubPullRequestInfo {
     }
 
 }
+

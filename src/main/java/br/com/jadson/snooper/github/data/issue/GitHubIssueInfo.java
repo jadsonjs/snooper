@@ -30,6 +30,7 @@
 package br.com.jadson.snooper.github.data.issue;
 
 import br.com.jadson.snooper.github.data.LabelInfo;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import java.util.Date;
 import java.util.List;
@@ -38,6 +39,7 @@ import java.util.List;
  *
  * Jadson Santos - jadsonjs@gmail.com
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class GitHubIssueInfo {
 
     public String url;
@@ -50,6 +52,7 @@ public class GitHubIssueInfo {
     public String node_id;
     public int number;
     public String title;
+    public String body;
     public GitHubIssueUserInfo user;
     public List<LabelInfo> labels;
     public String state;
@@ -58,13 +61,16 @@ public class GitHubIssueInfo {
     public List<Object> assignees;
     public Object milestone;
     public int comments;
+    public PullRequestIssueInfo pull_request;
+    public Date closed_at;
     public Date created_at;
     public Date updated_at;
-    public Date closed_at;
+
+    /**
+     * Use that closed this issues
+     */
+    public GitHubIssueUserInfo closed_by;
     public String author_association;
-    public Object active_lock_reason;
-    public PullRequestIssueInfo pull_request;
-    public String body;
-    public Object performed_via_github_app;
 
 }
+

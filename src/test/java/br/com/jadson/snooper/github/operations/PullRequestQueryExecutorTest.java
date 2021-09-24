@@ -147,4 +147,18 @@ class PullRequestQueryExecutorTest {
 
     }
 
+    /**
+     * Test the return o closed user data for a specific pull request
+     */
+    @Test
+    void testPullRequestClosedUser(){
+
+        PullRequestQueryExecutor executor = new PullRequestQueryExecutor();
+        executor.setTestEnvironment(true);
+        GitHubPullRequestInfo info =  executor.pullRequest("juicedata/juicefs", 1);
+
+        Assertions.assertTrue(info.merged_by != null);
+        Assertions.assertEquals("davies", info.merged_by.login);
+    }
+
 }

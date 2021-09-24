@@ -106,6 +106,32 @@ public class PullRequestQueryExecutor extends AbstractGitHubQueryExecutor {
 
         return allPull;
     }
+
+
+    /**
+     * Return a specific PR of a project
+     *
+     * @param repoFullName
+     * @return
+     */
+    public GitHubPullRequestInfo pullRequest(String repoFullName, int pullNumber) {
+
+        validateRepoName(repoFullName);
+
+        ResponseEntity<GitHubPullRequestInfo> result;
+
+        String query = GIT_HUB_API_URL +"/repos/"+repoFullName+"/pulls/"+pullNumber;
+
+        System.out.println("Getting Pull Info: "+query);
+
+        RestTemplate restTemplate = new RestTemplate();
+
+        HttpEntity entity = new HttpEntity(getDefaultHeaders());
+
+        result = restTemplate.exchange( query, HttpMethod.GET, entity, GitHubPullRequestInfo.class);
+
+        return result.getBody();
+    }
     
     /**
      * Return all PR between dates of a project

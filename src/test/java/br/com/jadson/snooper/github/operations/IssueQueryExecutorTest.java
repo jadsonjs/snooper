@@ -72,4 +72,20 @@ class IssueQueryExecutorTest {
         Assertions.assertTrue(createIssue.isAfter(start) && createIssue.isBefore(end));
 
     }
+
+    /**
+     * Test return of "closed by" field  of specific issue
+     */
+    @Test
+    void specificIssueClosedDataTest() {
+
+        IssueQueryExecutor executor = new IssueQueryExecutor();
+        executor.setTestEnvironment(true);
+        GitHubIssueInfo info =  executor.issue("juicedata/juicefs", 1);
+
+        Assertions.assertTrue(info.closed_by != null);
+        Assertions.assertEquals("davies", info.closed_by.login);
+    }
+
+
 }
