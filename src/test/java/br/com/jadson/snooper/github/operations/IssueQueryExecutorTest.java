@@ -62,7 +62,7 @@ class IssueQueryExecutorTest {
         LocalDateTime start = LocalDateTime.of(2021, 3, 1, 23, 59, 59);
         LocalDateTime end = LocalDateTime.of(2021, 3, 30, 23, 59, 59);
 
-        List<GitHubIssueInfo> list =  executor.issues("vuejs/vue", start, end);
+        List<GitHubIssueInfo> list =  executor.issuesCreatedInPeriod("vuejs/vue", start, end);
 
         Assertions.assertTrue(list.size() > 0);
 

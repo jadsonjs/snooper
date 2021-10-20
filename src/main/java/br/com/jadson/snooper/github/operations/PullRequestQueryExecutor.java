@@ -141,7 +141,7 @@ public class PullRequestQueryExecutor extends AbstractGitHubQueryExecutor {
      * @param end
      * @return
      */
-    public List<GitHubPullRequestInfo> pullRequests(String repoFullName, LocalDateTime start, LocalDateTime end) {
+    public List<GitHubPullRequestInfo> pullRequestsCreatedInPeriod(String repoFullName, LocalDateTime start, LocalDateTime end) {
         
         List<GitHubPullRequestInfo> pullRequests = new ArrayList();
         
@@ -162,61 +162,84 @@ public class PullRequestQueryExecutor extends AbstractGitHubQueryExecutor {
         return pullRequests;
     }
 
-    
-    /**
-     * Verify the minimum number of PR for a projects.
-     * 
-     * @deprecated  @see {@link this#getQtdPullRequests(String)}
-     *
-     * @param repoFullName
-     * @param limit
-     * @return
-     */
-    @Deprecated
-    public boolean hasMinimumPullRequest(String repoFullName, final int limit) {
 
-        validateRepoName(repoFullName);
+    public List<GitHubPullRequestInfo> pullRequestsClosedInPeriod(String repoFullName, LocalDateTime start, LocalDateTime end) {
 
-        System.out.println("Counting Pull Requests for : "+repoFullName);
+        List<GitHubPullRequestInfo> pullRequests = new ArrayList();
 
-        long totalPROfProject = 0l;
+        List<GitHubPullRequestInfo> allPullRequests = this.pullRequests(repoFullName);
 
-        int page = 1;
-        int perPage = 50;
+        DateUtils dateUtils = new DateUtils();
 
-        // IMPORTANTE state=all for bring all PR
-        // gitHubClient.setQueryParameters(new String[]{"state=all"});
-        String parameters = "";
+        for (GitHubPullRequestInfo pr : allPullRequests) {
 
-        ResponseEntity<GitHubPullRequestInfo[]> result;
+            if (pr.closed_at != null) {
+                LocalDateTime closedDate = LocalDateTime.ofInstant(pr.closed_at.toInstant(), ZoneId.systemDefault());
+                if ( dateUtils.isBetweenDates(closedDate, start, end) ) {
+                    pullRequests.add(pr);
+                }
+            }
+        }
 
-        do {
-
-            if(queryParameters != null && ! queryParameters.isEmpty())
-                parameters = "?"+queryParameters+"page="+page+"&per_page="+pageSize;
-            else
-                parameters = "?page="+page+"&per_page="+pageSize;
-
-            String query = GIT_HUB_API_URL +"/repos/"+repoFullName+"/pulls"+parameters;
-
-            System.out.println("Getting Next Pull Info: "+query);
-
-            RestTemplate restTemplate = new RestTemplate();
-
-            HttpEntity entity = new HttpEntity(getDefaultHeaders());
-
-            result = restTemplate.exchange( query, HttpMethod.GET, entity, GitHubPullRequestInfo[].class);
-
-            totalPROfProject += Arrays.asList(result.getBody()).size();
-
-            page++;
-
-        }while (result != null && result.getBody().length > 0 && totalPROfProject < limit );
-
-        System.out.println("project: "+repoFullName+" total of PR: "+totalPROfProject);
-
-        return totalPROfProject >= limit;
+        return pullRequests;
     }
+
+
+    
+//    /**
+//     * Verify the minimum number of PR for a projects.
+//     *
+//     * @deprecated  @see {@link this#getQtdPullRequests(String)}
+//     *
+//     * @param repoFullName
+//     * @param limit
+//     * @return
+//     */
+//    @Deprecated
+//    public boolean hasMinimumPullRequest(String repoFullName, final int limit) {
+//
+//        validateRepoName(repoFullName);
+//
+//        System.out.println("Counting Pull Requests for : "+repoFullName);
+//
+//        long totalPROfProject = 0l;
+//
+//        int page = 1;
+//        int perPage = 50;
+//
+//        // IMPORTANTE state=all for bring all PR
+//        // gitHubClient.setQueryParameters(new String[]{"state=all"});
+//        String parameters = "";
+//
+//        ResponseEntity<GitHubPullRequestInfo[]> result;
+//
+//        do {
+//
+//            if(queryParameters != null && ! queryParameters.isEmpty())
+//                parameters = "?"+queryParameters+"page="+page+"&per_page="+pageSize;
+//            else
+//                parameters = "?page="+page+"&per_page="+pageSize;
+//
+//            String query = GIT_HUB_API_URL +"/repos/"+repoFullName+"/pulls"+parameters;
+//
+//            System.out.println("Getting Next Pull Info: "+query);
+//
+//            RestTemplate restTemplate = new RestTemplate();
+//
+//            HttpEntity entity = new HttpEntity(getDefaultHeaders());
+//
+//            result = restTemplate.exchange( query, HttpMethod.GET, entity, GitHubPullRequestInfo[].class);
+//
+//            totalPROfProject += Arrays.asList(result.getBody()).size();
+//
+//            page++;
+//
+//        }while (result != null && result.getBody().length > 0 && totalPROfProject < limit );
+//
+//        System.out.println("project: "+repoFullName+" total of PR: "+totalPROfProject);
+//
+//        return totalPROfProject >= limit;
+//    }
 
     /**
      * Return the qtd of PULL Request of a project

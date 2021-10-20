@@ -44,7 +44,7 @@ abstract class AbstractGitHubQueryExecutor {
      * maximum 100
      * https://docs.github.com/en/free-pro-team@latest/rest/guides/traversing-with-pagination
      */
-    protected int pageSize = 50;
+    protected int pageSize = 10;
 
     /**
      * All to set fix parameters beyond of page and pageSize

@@ -49,7 +49,7 @@ class PullRequestQueryExecutorTest {
         LocalDateTime start = LocalDateTime.of(2021, 3, 1, 23, 59, 59);
         LocalDateTime end = LocalDateTime.of(2021, 3, 30, 23, 59, 59);
 
-        List<GitHubPullRequestInfo> list =  gitHubClient.pullRequests("octocat/hello-world", start, end);
+        List<GitHubPullRequestInfo> list =  gitHubClient.pullRequestsCreatedInPeriod("octocat/hello-world", start, end);
 
         Assertions.assertTrue(list.size() > 0);
 
@@ -110,19 +110,19 @@ class PullRequestQueryExecutorTest {
     }
 
 
-    /**
-     * Basic test
-     */
-    @Test
-    void testMinimumPullRequest(){
-
-        PullRequestQueryExecutor gitHubClient = new PullRequestQueryExecutor();
-        gitHubClient.setQueryParameters(new String[]{"state=all"});
-        gitHubClient.setPageSize(21);
-        boolean has = gitHubClient.hasMinimumPullRequest("webauthn4j/webauthn4j", 20);
-
-        Assertions.assertTrue(has);
-    }
+//    /**
+//     * Basic test
+//     */
+//    @Test
+//    void testMinimumPullRequest(){
+//
+//        PullRequestQueryExecutor gitHubClient = new PullRequestQueryExecutor();
+//        gitHubClient.setQueryParameters(new String[]{"state=all"});
+//        gitHubClient.setPageSize(21);
+//        boolean has = gitHubClient.hasMinimumPullRequest("webauthn4j/webauthn4j", 20);
+//
+//        Assertions.assertTrue(has);
+//    }
 
 
     @Test

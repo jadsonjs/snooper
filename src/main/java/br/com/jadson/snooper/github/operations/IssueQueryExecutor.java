@@ -144,7 +144,7 @@ public class IssueQueryExecutor extends AbstractGitHubQueryExecutor{
      * @param end
      * @return
      */
-    public List<GitHubIssueInfo> issues(String repoFullName, LocalDateTime start, LocalDateTime end) {
+    public List<GitHubIssueInfo> issuesCreatedInPeriod(String repoFullName, LocalDateTime start, LocalDateTime end) {
 
         List<GitHubIssueInfo> issues = new ArrayList();
 
@@ -157,6 +157,36 @@ public class IssueQueryExecutor extends AbstractGitHubQueryExecutor{
             if (issue.created_at != null) {
                 LocalDateTime startIssue = issue.created_at.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
                 if (dateUtils.isBetweenDates(startIssue, start, end)) {
+                    issues.add(issue);
+                }
+            }
+        }
+
+        return issues;
+    }
+
+
+    /**
+     * Return all issues between dates.
+     *
+     * @param repoFullName
+     * @param start
+     * @param end
+     * @return
+     */
+    public List<GitHubIssueInfo> issuesClosedInPeriod(String repoFullName, LocalDateTime start, LocalDateTime end) {
+
+        List<GitHubIssueInfo> issues = new ArrayList();
+
+        List<GitHubIssueInfo> allIssues = issues(repoFullName);
+
+        DateUtils dateUtils = new DateUtils();
+
+        for (GitHubIssueInfo issue : allIssues) {
+
+            if (issue.closed_at != null) {
+                LocalDateTime closedDate = issue.closed_at.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+                if (dateUtils.isBetweenDates(closedDate, start, end)) {
                     issues.add(issue);
                 }
             }
