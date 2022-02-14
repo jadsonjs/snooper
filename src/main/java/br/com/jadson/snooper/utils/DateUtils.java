@@ -12,6 +12,7 @@ package br.com.jadson.snooper.utils;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 /**
  * @author Jadson Santos - jadson.santos@ufrn.br
@@ -32,5 +33,9 @@ public class DateUtils {
         }else {
             return false;
         }
+    }
+
+    public String toString(LocalDateTime currentDateTime) {
+        return currentDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
     }
 }

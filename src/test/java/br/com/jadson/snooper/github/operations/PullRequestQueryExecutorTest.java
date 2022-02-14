@@ -44,12 +44,13 @@ class PullRequestQueryExecutorTest {
     void testPullRequestBetweenDatesWithToken(){
 
         PullRequestQueryExecutor gitHubClient = new PullRequestQueryExecutor();
+        gitHubClient.setQueryParameters(new String[]{"state=all"});
         gitHubClient.setTestEnvironment(true);
 
-        LocalDateTime start = LocalDateTime.of(2021, 3, 1, 23, 59, 59);
-        LocalDateTime end = LocalDateTime.of(2021, 3, 30, 23, 59, 59);
+        LocalDateTime start = LocalDateTime.of(2020, 3, 1, 23, 59, 59);
+        LocalDateTime end = LocalDateTime.of(2020, 5, 01, 23, 59, 59);
 
-        List<GitHubPullRequestInfo> list =  gitHubClient.pullRequestsCreatedInPeriod("octocat/hello-world", start, end);
+        List<GitHubPullRequestInfo> list =  gitHubClient.pullRequestsCreatedInPeriod("torvalds/linux", start, end);
 
         Assertions.assertTrue(list.size() > 0);
 

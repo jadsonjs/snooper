@@ -29,9 +29,12 @@
  */
 package br.com.jadson.snooper.github.data.issue;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 /**
  * Jadson Santos - jadsonjs@gmail.com
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class PullRequestIssueInfo {
 
     public String url;
