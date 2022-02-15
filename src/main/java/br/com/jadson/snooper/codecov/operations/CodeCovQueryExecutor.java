@@ -32,7 +32,7 @@ public class CodeCovQueryExecutor {
 
     DateUtils dateUtils = new DateUtils();
 
-    enum CODE_COV_BASE{ GITHUB("gh"), GITLAB("gl"), BITBUCKET("bb");
+    public enum CODE_COV_BASE{ GITHUB("gh"), GITLAB("gl"), BITBUCKET("bb");
 
         private String name;
 
@@ -101,5 +101,15 @@ public class CodeCovQueryExecutor {
 
         return commits;
 
+    }
+
+    public CodeCovQueryExecutor setLimit(int limit) {
+        this.limit = limit;
+        return this;
+    }
+
+    public CodeCovQueryExecutor setQueryParameters(String queryParameters) {
+        this.queryParameters = queryParameters;
+        return this;
     }
 }
