@@ -37,13 +37,15 @@ public class GitHubSearchExecutor extends AbstractGitHubQueryExecutor{
      *
      * https://github.com/search?l=&o=desc&q=stars%3A%3E%3D100+language%3AJava&s=stars&type=Repositories
      * https://github.com/search?l=&o=desc&q=language%3AJava&s=stars&type=Repositories
+     * https://github.com/search?l=&o=asc&q=stars%3A5000..10000+language%3AJava&type=Repositories&p=10
      * @param language
-     * @param stars
+     * @param starsInit
+     * @param starsEnd
      * @param sort
      * @param order
      * @return
      */
-    public List<GitHubRepoInfo> searchRepositories(String language, Integer stars, Integer size, String sort, String order) {
+    public List<GitHubRepoInfo> searchRepositories(String language, Integer starsInit, Integer starsEnd, Integer size, String sort, String order) {
 
         List<GitHubRepoInfo> projects = new ArrayList<>();
 
@@ -54,9 +56,9 @@ public class GitHubSearchExecutor extends AbstractGitHubQueryExecutor{
         pagination:
         for(int page = 1; page <= 100 ; page++) { // github allow just 100 pages
 
-            System.out.println(" Searching project on github ( page "+page+" of 100 )"+" q=  "+language+" "+stars+" "+size+" "+sort+" "+order);
+            System.out.println(" Searching project on github ( page "+page+" of 100 )"+" q=  language: "+language+" stars: "+starsInit+" to " +starsEnd+" size: "+size+" sort: "+sort+" order "+order);
 
-            StringBuilder urlBuffer = generateQuery(language, stars, size, sort, order, page);
+            StringBuilder urlBuffer = generateQuery(language, starsInit, starsEnd, size, sort, order, page);
 
             HttpURLConnection connection = null;
 
@@ -100,7 +102,7 @@ public class GitHubSearchExecutor extends AbstractGitHubQueryExecutor{
                 }else{
                     System.err.println( "["+code+"]"+"  ==>  "+connection.getResponseMessage());
 
-                    Thread.sleep(10000); // 20 per minute with github token
+                    Thread.sleep(10000); // 30 per minute with Basic OAuth ( github token )
                 }
             } catch (Exception e) {
                 System.err.println(e.getMessage());
@@ -112,6 +114,19 @@ public class GitHubSearchExecutor extends AbstractGitHubQueryExecutor{
 
 
         return projects;
+    }
+
+    /**
+     * Suport to interval of data
+     * @param language
+     * @param starsInit
+     * @param size
+     * @param sort
+     * @param order
+     * @return
+     */
+    public List<GitHubRepoInfo> searchRepositories(String language, Integer starsInit, Integer size, String sort, String order) {
+        return searchRepositories(language, starsInit, null, size, sort, order);
     }
 
 
@@ -143,7 +158,7 @@ public class GitHubSearchExecutor extends AbstractGitHubQueryExecutor{
     }
 
 
-    private StringBuilder generateQuery(String language, Integer stars, Integer size, String sort, String order, int page) {
+    private StringBuilder generateQuery(String language, Integer starsInit, Integer starsEnd, Integer size, String sort, String order, int page) {
 
         StringBuilder urlBuffer = new StringBuilder("https://github.com/search?l=&");
 
@@ -158,9 +173,14 @@ public class GitHubSearchExecutor extends AbstractGitHubQueryExecutor{
         final String GREATER_THAN_OR_EQUAL_TO = "%3A%3E%3D";
         final String EQUAL_TO = "%3A";
 
-        if(stars != null && stars > 0) {
-            urlBuffer.append("stars"+GREATER_THAN_OR_EQUAL_TO+ stars);
+        if(starsInit != null && starsInit > 0 && starsEnd != null && starsEnd > 0) {
+            urlBuffer.append("stars"+EQUAL_TO+starsInit+".."+starsEnd);
             plus = true;
+        }else {
+            if (starsInit != null && starsInit > 0) {
+                urlBuffer.append("stars" + GREATER_THAN_OR_EQUAL_TO + starsInit);
+                plus = true;
+            }
         }
 
         // size in KB

@@ -38,6 +38,26 @@ class GitHubSearchExecutorTest {
     }
 
     /**
+     * Test the search query
+     * https://github.com/search?l=&o=desc&q=stars%3A5000..10000+language%3AJava&s=stars&type=Repositories&p=1
+     */
+    @Test
+    void testURLRepositoriesStarInterval(){
+
+        GitHubSearchExecutor search = new GitHubSearchExecutor();
+        search.setTestEnvironment(true);
+
+        List<GitHubRepoInfo> listOfProjects = search.searchRepositories(null, 1000, 5000, 100000, "stars", "desc");
+
+        for (GitHubRepoInfo repo : listOfProjects){
+            System.out.println("["+repo.full_name+"] "+repo.url);
+        }
+        Assertions.assertTrue(listOfProjects.size() > 0);
+    }
+
+
+
+    /**
      * https://github.com/search?l=&o=desc&q=stars%3A%3E%3D100+size%3A%3E%3D1000+language%3AJava&s=stars&type=Repositories
      */
     @Test
