@@ -25,7 +25,6 @@
  */
 package br.com.jadson.snooper.github.operations;
 
-import br.com.jadson.snooper.github.data.issue.GitHubIssueInfo;
 import br.com.jadson.snooper.github.data.pull.GitHubPullRequestInfo;
 import br.com.jadson.snooper.github.data.pull.GitHubQTDPullRequestInfo;
 import br.com.jadson.snooper.utils.DateUtils;
@@ -38,11 +37,10 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Iterator;
-import java.time.ZoneId;
 
 /**
  * Queries about Pull Request

@@ -7,18 +7,25 @@
 package br.com.jadson.snooper.github.operations;
 
 import br.com.jadson.snooper.github.data.repo.GitHubRepoInfo;
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import br.com.jadson.snooper.github.data.repo.GitHubSearchRoot;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.client.RestTemplate;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -33,7 +40,83 @@ public class GitHubSearchExecutor extends AbstractGitHubQueryExecutor{
 
 
     /**
-     * Search of Github repositories
+     * Really use github api do search project with pagination and filter by language and stars
+     * https://docs.github.com/pt/rest/search#search-repositories
+     *
+     * Example of query:  https://api.github.com/search/repositories?q=language%3AJavaScript+stars%3A200..300+size%3A%3E%3D10000&sort=stars&order=desc&page=1&per_page=100
+     *                    https://api.github.com/search/repositories?q=language%3AJavaScript+stars%3A200..300+size%3A%3E%3D10000&sort=stars&order=desc&page=1&per_page=100
+     * "Repository Javascript  + 200 to 300 stars + size over 10.000(10MB), sort by stars order descedent , page 1, 10 results per_page"
+     *
+     * sortstring
+     *
+     *
+     * @param language
+     * @param starsInit
+     * @param starsEnd
+     * @param size  size:1000 identifica os repositórios que têm exatamente 1 MB.
+     *              size:>=30000 identifica os repositórios que têm no mínimo 30 MB.
+     *              size:<50 identifica os repositórios que têm menos de 50 KB.
+     *              size:50..120 identifica os repositórios que têm entre 50 KB e 120 KB.
+     * @param sort Pode ser uma das ações a seguir: stars, forks, help-wanted-issues, updated
+     * @param order Pode ser uma das ações a seguir: desc, asc
+     * @return
+     */
+    public List<GitHubRepoInfo> searchRepositoriesApi(String language, Integer starsInit, Integer starsEnd, Integer size, String sort, String order) {
+
+        List<GitHubRepoInfo> projects = new ArrayList<>();
+
+        if(! "asc".equals(order) && ! "desc".equals(order))
+            return projects;
+
+        int page = 1;
+
+        List<GitHubRepoInfo> allRepoInfo = new ArrayList<>();
+
+        ResponseEntity<GitHubSearchRoot> result;
+
+        do {
+
+            String query = generateApiQuery(language, starsInit, starsEnd, size, sort, order, page).toString();
+
+            System.out.println(" Searching project on github: "+query);
+
+            RestTemplate restTemplate = new RestTemplate();
+
+            HttpEntity entity = new HttpEntity(getDefaultHeaders());
+
+            // https://github.com/spring-projects/spring-framework/issues/10187
+            // encode %A3 and %3A%3E%3D in the URL
+            URI uri = null;
+            try {
+                uri = new URI(query);
+            } catch (URISyntaxException e) {
+                e.printStackTrace();
+                return projects;
+            }
+
+            result = restTemplate.exchange(uri, HttpMethod.GET,  entity,  GitHubSearchRoot.class );
+
+            allRepoInfo.addAll(  Arrays.asList( result.getBody().items ) );
+
+            page++;
+
+            // 30 per minute with Basic OAuth ( github token )
+            // 2s
+            if(! testEnvironment){
+                try { Thread.sleep(6000);} catch (InterruptedException e) { e.printStackTrace(); }
+            }
+
+                                                                             // Only the first 1000 search results are available
+        }while ( result != null   &&   result.getBody().items.length > 0  &&  (page * pageSize) <= 1000   &&   !testEnvironment);
+
+        return allRepoInfo;
+    }
+
+
+
+    /**
+     * Search of Github repositories access HTML page. Not recommended !!!!
+     *
      *
      * https://github.com/search?l=&o=desc&q=stars%3A%3E%3D100+language%3AJava&s=stars&type=Repositories
      * https://github.com/search?l=&o=desc&q=language%3AJava&s=stars&type=Repositories
@@ -44,7 +127,10 @@ public class GitHubSearchExecutor extends AbstractGitHubQueryExecutor{
      * @param sort
      * @param order
      * @return
+     *
+     * @Deprecated use api search
      */
+    @Deprecated
     public List<GitHubRepoInfo> searchRepositories(String language, Integer starsInit, Integer starsEnd, Integer size, String sort, String order) {
 
         List<GitHubRepoInfo> projects = new ArrayList<>();
@@ -56,9 +142,9 @@ public class GitHubSearchExecutor extends AbstractGitHubQueryExecutor{
         pagination:
         for(int page = 1; page <= 100 ; page++) { // github allow just 100 pages
 
-            System.out.println(" Searching project on github ( page "+page+" of 100 )"+" q=  language: "+language+" stars: "+starsInit+" to " +starsEnd+" size: "+size+" sort: "+sort+" order "+order);
+            StringBuilder urlBuffer = generateHTMLQuery(language, starsInit, starsEnd, size, sort, order, page);
 
-            StringBuilder urlBuffer = generateQuery(language, starsInit, starsEnd, size, sort, order, page);
+            System.out.println(" Searching project on github: "+urlBuffer);
 
             HttpURLConnection connection = null;
 
@@ -96,13 +182,16 @@ public class GitHubSearchExecutor extends AbstractGitHubQueryExecutor{
                     if(testEnvironment)
                         break pagination;
 
-                    // For unauthenticated requests, the rate limit allows you to make up to 10 requests per minute.
+                    // 30 per minute with Basic OAuth ( github token )
+                    // 6s
                     Thread.sleep(6000);
 
                 }else{
                     System.err.println( "["+code+"]"+"  ==>  "+connection.getResponseMessage());
 
-                    Thread.sleep(10000); // 30 per minute with Basic OAuth ( github token )
+                    // 30 per minute with Basic OAuth ( github token )
+                    // 12s
+                    Thread.sleep(2*6000);
                 }
             } catch (Exception e) {
                 System.err.println(e.getMessage());
@@ -125,9 +214,15 @@ public class GitHubSearchExecutor extends AbstractGitHubQueryExecutor{
      * @param order
      * @return
      */
+    @Deprecated
     public List<GitHubRepoInfo> searchRepositories(String language, Integer starsInit, Integer size, String sort, String order) {
         return searchRepositories(language, starsInit, null, size, sort, order);
     }
+
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
     private List<GitHubRepoInfo> extractRepositoriesInfo(String htmlCode) {
@@ -157,8 +252,103 @@ public class GitHubSearchExecutor extends AbstractGitHubQueryExecutor{
         return projects;
     }
 
+    /**
+     * https://docs.github.com/pt/rest/search#search-repositories
+     * https://docs.github.com/pt/rest/search#constructing-a-search-query
+     *
+     * https://docs.github.com/pt/search-github/searching-on-github/searching-for-repositories
+     *
+     * q=language:assembly+stars:10..20&sort=stars&order=desc
+     * q=language:assembly+stars:>=500&sort=stars&order=desc
+     *
+     *
+     * @param language
+     * @param starsInit
+     * @param starsEnd
+     * @param size
+     * @param sort
+     * @param order
+     * @param page
+     * @return
+     */
+    private StringBuilder generateApiQuery(String language, Integer starsInit, Integer starsEnd, Integer size, String sort, String order, int page) {
 
-    private StringBuilder generateQuery(String language, Integer starsInit, Integer starsEnd, Integer size, String sort, String order, int page) {
+        StringBuilder urlBuffer = new StringBuilder("https://api.github.com/search/repositories?");
+
+        // start the query
+        urlBuffer.append("q=");
+
+        boolean plus = false;
+        // https://www.w3schools.com/tags/ref_urlencode.asp
+        // https://docs.github.com/pt/search-github/searching-on-github/searching-for-repositories
+        // :>=
+        final String COLON_GREATER_THAN_OR_EQUAL_TO = "%3A%3E%3D";
+        // :
+        final String COLON = "%3A";
+
+        if(language != null && ! language.isEmpty() ) {
+            if(plus){
+                urlBuffer.append("+");
+            }
+            plus = true;
+
+            // # and ++ not allow in URL query
+            if(language.equals("C#") || language.equals("c#"))
+                language = "CSharp";
+
+            if(language.equals("C++") || language.equals("c++"))
+                language = "cpp";
+
+
+            urlBuffer.append("language"+COLON + language);
+        }
+
+        if(starsInit != null && starsInit > 0 && starsEnd != null && starsEnd > 0) {
+            if(plus){
+                urlBuffer.append("+");
+            }
+            plus = true;
+            urlBuffer.append("stars"+COLON+starsInit+".."+starsEnd);
+        }else {
+            if (starsInit != null && starsInit > 0) {
+                if(plus){
+                    urlBuffer.append("+");
+                }
+                plus = true;
+                urlBuffer.append("+stars" + COLON_GREATER_THAN_OR_EQUAL_TO + starsInit);
+
+            }
+        }
+
+        // size in KB
+        if(size != null && size > 0) {
+            if(plus){
+                urlBuffer.append("+");
+            }
+            plus = true;
+            urlBuffer.append("size"+COLON_GREATER_THAN_OR_EQUAL_TO+ size);
+        }
+
+
+        /////////////// end query ////////////////
+
+
+        if(sort != null && ! sort.isEmpty()) {
+            urlBuffer.append("&sort="+ sort);
+        }
+
+        urlBuffer.append("&order="+ order);
+
+        urlBuffer.append("&page="+ page +"");
+        urlBuffer.append("&per_page="+ pageSize +"");
+
+        return urlBuffer;
+    }
+
+
+
+
+    private StringBuilder generateHTMLQuery(String language, Integer starsInit, Integer starsEnd, Integer size, String sort, String order, int page) {
 
         StringBuilder urlBuffer = new StringBuilder("https://github.com/search?l=&");
 
@@ -170,15 +360,17 @@ public class GitHubSearchExecutor extends AbstractGitHubQueryExecutor{
 
         boolean plus = false;
 
-        final String GREATER_THAN_OR_EQUAL_TO = "%3A%3E%3D";
-        final String EQUAL_TO = "%3A";
+        // :>=
+        final String COLON_GREATER_THAN_OR_EQUAL_TO = "%3A%3E%3D";
+        // :
+        final String COLON = "%3A";
 
         if(starsInit != null && starsInit > 0 && starsEnd != null && starsEnd > 0) {
-            urlBuffer.append("stars"+EQUAL_TO+starsInit+".."+starsEnd);
+            urlBuffer.append("stars"+COLON+starsInit+".."+starsEnd);
             plus = true;
         }else {
             if (starsInit != null && starsInit > 0) {
-                urlBuffer.append("stars" + GREATER_THAN_OR_EQUAL_TO + starsInit);
+                urlBuffer.append("stars" + COLON_GREATER_THAN_OR_EQUAL_TO + starsInit);
                 plus = true;
             }
         }
@@ -189,7 +381,7 @@ public class GitHubSearchExecutor extends AbstractGitHubQueryExecutor{
                 urlBuffer.append("+");
             }
             plus = true;
-            urlBuffer.append("size"+GREATER_THAN_OR_EQUAL_TO+ size);
+            urlBuffer.append("size"+COLON_GREATER_THAN_OR_EQUAL_TO+ size);
         }
 
         if(language != null && ! language.isEmpty()) {
@@ -198,7 +390,7 @@ public class GitHubSearchExecutor extends AbstractGitHubQueryExecutor{
             }
             plus = true;
 
-            urlBuffer.append("language"+EQUAL_TO + language);
+            urlBuffer.append("language"+COLON + language);
         }
 
 

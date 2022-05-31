@@ -176,6 +176,7 @@ public class GitHubRepoInfo {
     public GitHubOwnerInfo owner;
     public String html_url;
     public String description;
+    /** If it is a fork or original project.  fork = false (Original), fork = true (is a copy )*/
     public boolean fork;
     public String url;
     public String forks_url;
@@ -230,6 +231,7 @@ public class GitHubRepoInfo {
     public String svn_url;
     public String homepage;
     public int size;
+    // number of stars of the project
     public int stargazers_count;
     public int watchers_count;
     public String language;
@@ -238,16 +240,26 @@ public class GitHubRepoInfo {
     public boolean has_downloads;
     public boolean has_wiki;
     public boolean has_pages;
+
+    // samething of forks
     public int forks_count;
     public Object mirror_url;
     public boolean archived;
     public boolean disabled;
     public int open_issues_count;
+
     public GitHubLicenseInfo license;
+    public  boolean allow_forking = true;
+    public  boolean is_template = false;
+    public  String[] topics;
+    public  String visibility =  "";
+    // number of fork of the repository
     public int forks;
     public int open_issues;
     public int watchers;
     public String default_branch;
+    public String score;
+
     public Object temp_clone_token;
     public GitHubOrganizationInfo organization;
     public int network_count;

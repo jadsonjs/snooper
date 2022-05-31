@@ -9,16 +9,11 @@
  */
 package br.com.jadson.snooper.github.operations;
 
-import br.com.jadson.snooper.github.data.issue.GitHubIssueInfo;
 import br.com.jadson.snooper.github.data.users.GitHubUserInfo;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 /**
  * Information about Github Users

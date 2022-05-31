@@ -9,6 +9,7 @@ import br.com.jadson.snooper.github.data.repo.GitHubRepoInfo;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import java.sql.SQLOutput;
 import java.util.List;
 
 /**
@@ -17,6 +18,29 @@ import java.util.List;
  * @author Jadson Santos - jadson.santos@ufrn.br
  */
 class GitHubSearchExecutorTest {
+
+    /**
+     * Test the search:
+     *
+     * https://api.github.com/search/repositories?q=language%3AJavaScript+stars%3A200..300+size%3A%3E%3D10000&sort=stars&order=desc&page=1&per_page=100
+     * https://api.github.com/search/repositories?q=language%3AJavaScript&sort=stars&order=desc&page=1&per_page=10
+     */
+    @Test
+    void testRepositoriesByApi(){
+
+        GitHubSearchExecutor search = new GitHubSearchExecutor();
+        search.setTestEnvironment(true);
+        search.setPageSize(10);
+
+        List<GitHubRepoInfo> listOfProjects = search.searchRepositoriesApi("JavaScript", 200, 300, 10000, "stars", "desc");
+
+        for (GitHubRepoInfo repo : listOfProjects){
+            System.out.println("["+repo.full_name+"] "+repo.url);
+        }
+        System.out.println(listOfProjects.size());
+        Assertions.assertTrue(listOfProjects.size() > 0);
+    }
+
 
     /***
      * Test the search:
@@ -54,6 +78,7 @@ class GitHubSearchExecutorTest {
         }
         Assertions.assertTrue(listOfProjects.size() > 0);
     }
+
 
 
 

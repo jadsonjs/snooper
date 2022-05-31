@@ -13,8 +13,6 @@ import br.com.jadson.snooper.github.data.users.GitHubUserInfo;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 
 /**
  * Exest user information
