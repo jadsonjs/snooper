@@ -36,11 +36,15 @@ jobs:
         
         
   unit-test:
+  
     needs: build
     runs-on: ubuntu-latest
+    
     steps:
-      - uses: actions/checkout@v2
-      - run: gradle test
+      - name: Build with Gradle
+      - uses: gradle/gradle-build-action@0d13054264b0bb894ded474f08ebb30921341cee
+        with:
+          arguments: test
       
       
       
