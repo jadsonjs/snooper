@@ -1,7 +1,5 @@
 package br.com.jadson.snooper.github.data.repo;
 
-import java.util.List;
-
 public class GitHubSearchRoot {
 
     public int total_count;

@@ -9,7 +9,6 @@ import br.com.jadson.snooper.github.data.repo.GitHubRepoInfo;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import java.sql.SQLOutput;
 import java.util.List;
 
 /**

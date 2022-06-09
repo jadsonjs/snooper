@@ -33,7 +33,7 @@ import org.springframework.http.HttpHeaders;
  *
  * Jadson Santos - jadsonjs@gmail.com
  */
-abstract class AbstractGitHubQueryExecutor {
+public abstract class AbstractGitHubQueryExecutor {
 
     public static final String GIT_HUB_API_URL = "https://api.github.com";
 
