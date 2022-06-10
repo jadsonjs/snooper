@@ -8,7 +8,7 @@ import java.util.List;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class WorkflowRunsInfo {
 
-    public Object id;
+    public Long id;
     public String name;
     public String node_id;
     public String head_branch;

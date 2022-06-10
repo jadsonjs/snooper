@@ -22,38 +22,16 @@ import java.util.List;
  * The company helps thousands of development teams confidently deliver stable and bug-free code with highly
  * integrated tools to surface coverage insights where they are needed.
  */
-public class CodeCovQueryExecutor {
+public class CodeCovCommitsQueryExecutor extends AbstractCodeCovQueryExecutor {
 
-    public static final String CODE_COV_API_URL = "https://codecov.io/api";
 
-    protected int limit = 250;
-
-    protected String queryParameters = "";
-
-    DateUtils dateUtils = new DateUtils();
-
-    public enum CODE_COV_BASE{ GITHUB("gh"), GITLAB("gl"), BITBUCKET("bb");
-
-        private String name;
-
-        CODE_COV_BASE(String name) {
-            this.name = name;
-        }
-
-        public String getName(){
-            return this.name;
-        }
-    }
-
-    public List<CodeCovCommit> getCommits(String projectName, CODE_COV_BASE base, LocalDateTime init, LocalDateTime end){
-        /**
-         * from	any date and/or time string in yyyy-MM-dd HH:mm:ss format	Only query commits starting from this date
-         * to	any date and/or time string in yyyy-MM-dd HH:mm:ss format	Only query commits up to this date
-         */
-        queryParameters = "from="+dateUtils.toString(init)+"&to="+dateUtils.toString(end);
-        return getAllCommits(projectName, base);
-    }
-
+    /**
+     * Commit return information about coverage associated with the commit
+     *
+     * @param projectName
+     * @param base
+     * @return
+     */
     public List<CodeCovCommit> getAllCommits(String projectName, CODE_COV_BASE base){
 
         List<CodeCovCommit> commits = new ArrayList<>();
@@ -103,12 +81,31 @@ public class CodeCovQueryExecutor {
 
     }
 
-    public CodeCovQueryExecutor setLimit(int limit) {
+    /**
+     * Get commits between specific dates
+     *
+     * @param projectName
+     * @param base
+     * @param init
+     * @param end
+     * @return
+     */
+    public List<CodeCovCommit> getCommits(String projectName, CODE_COV_BASE base, LocalDateTime init, LocalDateTime end){
+        /**
+         * from	any date and/or time string in yyyy-MM-dd HH:mm:ss format	Only query commits starting from this date
+         * to	any date and/or time string in yyyy-MM-dd HH:mm:ss format	Only query commits up to this date
+         */
+        queryParameters = "from="+dateUtils.toString(init)+"&to="+dateUtils.toString(end);
+        return getAllCommits(projectName, base);
+    }
+
+
+    public CodeCovCommitsQueryExecutor setLimit(int limit) {
         this.limit = limit;
         return this;
     }
 
-    public CodeCovQueryExecutor setQueryParameters(String queryParameters) {
+    public CodeCovCommitsQueryExecutor setQueryParameters(String queryParameters) {
         this.queryParameters = queryParameters;
         return this;
     }
