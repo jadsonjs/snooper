@@ -9,8 +9,9 @@ This tool supports the tools
   - **Sonar Cloud API**
   - **CodeCov API**
 
-![snooper image](https://github.com/jadsonjs/snooper/blob/master/snooper-and-blabber.png | width=500 )
+![snooper image](https://github.com/jadsonjs/snooper/blob/master/snooper-and-blabber.png|width=500 )
 
+<img src="https://github.com/jadsonjs/snooper/blob/master/snooper-and-blabber.png" width="500">
 @copyright hanna barbera
 
 #### Versions: 
