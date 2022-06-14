@@ -66,8 +66,8 @@ public class GHActionWorkflowsExecutor extends AbstractGitHubQueryExecutor {
 
             page++;
 
-
-        }while ( result != null && result.getBody().workflows.size() > 0   && !testEnvironment);
+        // while has results AND qty results complete AND is not a test
+        }while ( result != null &&  result.getBody().workflows.size() > 0 && result.getBody().workflows.size() == pageSize   && !testEnvironment);
 
         return all;
     }

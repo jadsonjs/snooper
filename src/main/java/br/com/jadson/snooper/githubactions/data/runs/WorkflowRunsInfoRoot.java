@@ -7,5 +7,5 @@ import java.util.List;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class WorkflowRunsInfoRoot {
     public int total_count;
-    public List<WorkflowRunsInfo> workflow_runs;
+    public List<RunsInfo> workflow_runs;
 }

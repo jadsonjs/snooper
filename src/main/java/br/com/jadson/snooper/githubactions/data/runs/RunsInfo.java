@@ -6,7 +6,7 @@ import java.util.Date;
 import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class WorkflowRunsInfo {
+public class RunsInfo {
 
     public Long id;
     public String name;
