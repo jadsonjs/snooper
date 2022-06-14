@@ -15,7 +15,7 @@ class WorkflowsGithubActionsExecutorTest {
         workFlows.setPageSize(1);
         workFlows.setTestEnvironment(true);
 
-        List<WorkflowInfo> list =  workFlows.workflows("jadsonjs/snooper");
+        List<WorkflowInfo> list =  workFlows.getWorkflows("jadsonjs/snooper");
 
         Assertions.assertTrue(list.size() > 0);
         Assertions.assertTrue(list.get(0).id > 0);

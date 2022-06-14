@@ -2,12 +2,13 @@
 
 Snooper is a project to collect data from repositories like GitHub, TravisCI and Sonar.
 
-This tool supports the tools
+This tools supports by Snooper
   - **GitHub API**
   - **TravisCI API** 
   - **GitHub Actions API**
   - **Sonar Cloud API**
   - **CodeCov API**
+  - **CodveAll API**
 
 
 <img src="https://github.com/jadsonjs/snooper/blob/master/snooper-and-blabber.png" width="800">
@@ -17,6 +18,7 @@ This tool supports the tools
 
  - 1.0 - Github Search
  - 1.8 - CodeCov Support
+ - 2.0 - Github Actions and CoveAll Support
 
 #### Authors:
 

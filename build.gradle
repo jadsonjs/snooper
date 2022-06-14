@@ -3,7 +3,7 @@ plugins {
 }
 
 group = 'br.com.jadson'
-version = '1.8'
+version = '2.0'
 sourceCompatibility = '11'
 
 configurations {
@@ -25,9 +25,9 @@ dependencies {
 	compile group: 'org.springframework', name: 'org.springframework.web', version: '3.2.2.RELEASE'
 
 	// json processing
-	compile group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.11.3'
-	compile group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.11.3'
-	compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.11.3'
+	implementation group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.13.3'
+	implementation group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.13.3'
+	implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.13.3'
 
 	// file manipulation
 	implementation 'commons-io:commons-io:2.6'
@@ -35,8 +35,8 @@ dependencies {
 	// jsoup is a Java library for working with real-world HTML.
 	implementation group: 'org.jsoup', name: 'jsoup', version: '1.13.1'
 
-	compileOnly 'org.projectlombok:lombok:1.18.16'
-	annotationProcessor 'org.projectlombok:lombok:1.18.16'
+	compileOnly group: 'org.projectlombok', name: 'lombok', version: '1.18.24'
+	annotationProcessor group: 'org.projectlombok', name: 'lombok', version: '1.18.24'
 
 	// This is a GraphQL Java implementation
 	implementation 'com.graphql-java:graphql-java:14.0'

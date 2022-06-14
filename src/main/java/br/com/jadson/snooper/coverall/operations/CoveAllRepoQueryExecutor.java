@@ -14,11 +14,6 @@ import java.net.URI;
  */
 public class CoveAllRepoQueryExecutor extends AbstractCoveAllQueryExecutor{
 
-//    protected int limit = 250;
-//
-//    protected String queryParameters = "";
-//
-
     public CoveAllRepoQueryExecutor(){ }
 
     public CoveAllRepoQueryExecutor(String token){

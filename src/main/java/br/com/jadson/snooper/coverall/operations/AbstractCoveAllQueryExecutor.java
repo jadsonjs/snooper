@@ -73,4 +73,8 @@ public class AbstractCoveAllQueryExecutor {
             this.queryParameters += p+"&";
         }
     }
+
+    public void setTestEnvironment(boolean testEnvironment) {
+        this.testEnvironment = testEnvironment;
+    }
 }

@@ -2,7 +2,6 @@ package br.com.jadson.snooper.codecov.operations;
 
 import br.com.jadson.snooper.codecov.data.CodeCovCommit;
 import br.com.jadson.snooper.codecov.data.CodeCovRootInfo;
-import br.com.jadson.snooper.utils.DateUtils;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;

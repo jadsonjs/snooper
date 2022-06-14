@@ -26,12 +26,14 @@ public class WorkflowsGithubActionsExecutor extends AbstractGitHubQueryExecutor 
 
 
     /**
-     * Return all workflows of a project
+     * Return all workflows of a project.
+     *
+     * If workflows.lenght == 0, project do not use GH Actions.
      *
      * @param repoFullName
      * @return
      */
-    public List<WorkflowInfo> workflows(String repoFullName) {
+    public List<WorkflowInfo> getWorkflows(String repoFullName) {
 
         validateRepoName(repoFullName);
 

@@ -9,7 +9,8 @@
  */
 package br.com.jadson.snooper.utils;
 
-import org.springframework.stereotype.Component;
+
+//import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -17,7 +18,7 @@ import java.time.format.DateTimeFormatter;
 /**
  * @author Jadson Santos - jadson.santos@ufrn.br
  */
-@Component
+//@Component
 public class DateUtils {
 
     public boolean isBetweenDates(LocalDateTime date,  LocalDateTime start,  LocalDateTime end){
