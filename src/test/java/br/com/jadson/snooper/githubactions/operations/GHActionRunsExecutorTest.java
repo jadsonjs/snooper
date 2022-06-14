@@ -6,12 +6,12 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-class RunsGithubActionsExecutorTest {
+class GHActionRunsExecutorTest {
 
     @Test
     void testRuns(){
 
-        RunsGithubActionsExecutor runs = new RunsGithubActionsExecutor();
+        GHActionRunsExecutor runs = new GHActionRunsExecutor();
         runs.setPageSize(1);
         runs.setTestEnvironment(true);
 

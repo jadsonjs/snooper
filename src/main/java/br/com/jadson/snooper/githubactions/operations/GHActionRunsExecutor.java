@@ -17,11 +17,11 @@ import java.util.List;
  * Runs represent an execution of a workflow.
  *
  */
-public class RunsGithubActionsExecutor extends AbstractGitHubQueryExecutor {
+public class GHActionRunsExecutor extends AbstractGitHubQueryExecutor {
 
-    public RunsGithubActionsExecutor(){ }
+    public GHActionRunsExecutor(){ }
 
-    public RunsGithubActionsExecutor(String githubToken){
+    public GHActionRunsExecutor(String githubToken){
         super(githubToken);
     }
 

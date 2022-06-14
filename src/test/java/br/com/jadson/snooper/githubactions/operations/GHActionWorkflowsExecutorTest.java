@@ -6,12 +6,12 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-class WorkflowsGithubActionsExecutorTest {
+class GHActionWorkflowsExecutorTest {
 
     @Test
     void testWorkFlow(){
 
-        WorkflowsGithubActionsExecutor workFlows = new WorkflowsGithubActionsExecutor();
+        GHActionWorkflowsExecutor workFlows = new GHActionWorkflowsExecutor();
         workFlows.setPageSize(1);
         workFlows.setTestEnvironment(true);
 

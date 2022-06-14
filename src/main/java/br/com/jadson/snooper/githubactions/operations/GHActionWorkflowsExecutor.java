@@ -16,11 +16,11 @@ import java.util.List;
  *
  * @Author Jadson Santos - jadsonjs@gmail.com
  */
-public class WorkflowsGithubActionsExecutor extends AbstractGitHubQueryExecutor {
+public class GHActionWorkflowsExecutor extends AbstractGitHubQueryExecutor {
 
-    public WorkflowsGithubActionsExecutor(){ }
+    public GHActionWorkflowsExecutor(){ }
 
-    public WorkflowsGithubActionsExecutor(String githubToken){
+    public GHActionWorkflowsExecutor(String githubToken){
         super(githubToken);
     }
 
