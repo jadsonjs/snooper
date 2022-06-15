@@ -67,6 +67,8 @@ public class TravisCIQueryExecutor extends AbstractTravisCIQueryExecutor {
 
         String searchUrl = TRAVIS_CI_API_URL+"/repos/" + projectNameWithOwner;
 
+        System.out.println("Getting Next Travis Repo Info: "+searchUrl);
+
         RestTemplate restTemplate = new RestTemplate();
         HttpEntity entity = new HttpEntity(getDefaultHeaders());
 
@@ -99,6 +101,8 @@ public class TravisCIQueryExecutor extends AbstractTravisCIQueryExecutor {
         do {
 
             String searchUrl = TRAVIS_CI_API_URL + "/repos/" + projectNameWithOwner + "/builds" + (afterBuildNumber != null ? "?after_number=" + afterBuildNumber : "" );
+
+            System.out.println("Getting Next Travis Build Info: "+searchUrl);
 
             RestTemplate restTemplate = new RestTemplate();
             HttpEntity entity = new HttpEntity(getDefaultHeaders());
@@ -177,6 +181,8 @@ public class TravisCIQueryExecutor extends AbstractTravisCIQueryExecutor {
         do {
 
             String searchUrl = TRAVIS_CI_API_URL + "/repos/" + projectNameWithOwner + "/builds" + (afterBuildNumber != null ? "?after_number=" + afterBuildNumber : "" );
+
+            System.out.println("Getting Next Travis Build Info: "+searchUrl);
 
             RestTemplate restTemplate = new RestTemplate();
             HttpEntity entity = new HttpEntity(getDefaultHeaders());
