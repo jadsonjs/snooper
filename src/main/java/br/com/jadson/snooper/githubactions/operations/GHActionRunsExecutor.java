@@ -10,7 +10,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -107,6 +106,62 @@ public class GHActionRunsExecutor extends AbstractGitHubQueryExecutor {
     }
 
 
+    /**
+     * Return information about the first runs of a repository
+     *
+     * @param repoFullName
+     * @return
+     */
+    public RunsInfo firstRun(String repoFullName) {
+
+        validateRepoName(repoFullName);
+
+        GHActionWorkflowsExecutor workFlowExecutor = new GHActionWorkflowsExecutor();
+        if(githubToken != null && ! githubToken.trim().equals(""))
+            workFlowExecutor.setGithubToken(githubToken);
+
+        List<WorkflowInfo> workflowInfos = workFlowExecutor.getWorkflows(repoFullName);
+
+        RunsInfo firstRunInfo = null;
+
+        for (WorkflowInfo wflow : workflowInfos){
+            RunsInfo runInfoTemp =  this.firstRun(repoFullName, wflow.id);
+
+            if( firstRunInfo == null || ( runInfoTemp != null && runInfoTemp.run_started_at.before(firstRunInfo.run_started_at) )  ){
+                firstRunInfo = runInfoTemp;
+            }
+
+        }
+        return firstRunInfo;
+    }
+
+
+
+    /**
+     * Return information about the first runs of a workflow
+     *
+     * @param repoFullName
+     * @param workflowId  if of a workflow. A project can have several workflows.
+     * @return
+     */
+    public RunsInfo firstRun(String repoFullName, long workflowId) {
+
+        validateRepoName(repoFullName);
+
+        // see how many run have, take the last one, because the api came in descending order
+        WorkflowRunsInfoRoot root = getWorkflowRun(repoFullName, 1, workflowId);
+        int page = root.total_count;
+        pageSize = 1;
+
+        if(root.total_count > 0) {
+            WorkflowRunsInfoRoot root2 = getWorkflowRun(repoFullName, page, workflowId);
+
+            return root2.workflow_runs.get(0);
+        }
+        return null;
+    }
+
+
 
     /**
      * Return information about the last runs of a workflow
@@ -135,7 +190,7 @@ public class GHActionRunsExecutor extends AbstractGitHubQueryExecutor {
 
         String query = GIT_HUB_API_URL +"/repos/"+repoFullName+"/actions/workflows/"+workflowId+"/runs"+parameters;
 
-        System.out.println("Getting Next workflow Info: "+query);
+        System.out.println("Getting Next run Info: "+query);
 
         RestTemplate restTemplate = new RestTemplate();
 
@@ -148,5 +203,44 @@ public class GHActionRunsExecutor extends AbstractGitHubQueryExecutor {
 
         return all;
     }
+
+
+    //////////////////////////////////////////////////////////////
+
+    /**
+     * Return information about the one specific run of a workflow
+     *
+     * @param repoFullName
+     * @param workflowId  if of a workflow. A project can have several workflows.
+     * @return
+     */
+    private WorkflowRunsInfoRoot getWorkflowRun(String repoFullName, int page, long workflowId) {
+
+        pageSize = 1;
+
+        String parameters = "";
+
+        RunsInfo all = null;
+
+        ResponseEntity<WorkflowRunsInfoRoot> result;
+
+        if(queryParameters != null && ! queryParameters.isEmpty())
+            parameters = "?"+queryParameters+"page="+page+"&per_page="+pageSize;
+        else
+            parameters = "?page="+page+"&per_page="+pageSize;
+
+        String query = GIT_HUB_API_URL +"/repos/"+repoFullName+"/actions/workflows/"+workflowId+"/runs"+parameters;
+
+
+        RestTemplate restTemplate = new RestTemplate();
+
+        HttpEntity entity = new HttpEntity(getDefaultHeaders());
+
+        result = restTemplate.exchange( query, HttpMethod.GET, entity, WorkflowRunsInfoRoot.class);
+
+        return result.getBody();
+    }
+
+
 
 }

@@ -7,21 +7,12 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-class TravisCIQueryExecutorTest {
-
-    @Test
-    void getRepoInfoTest() {
-
-        TravisCIQueryExecutor executor = new TravisCIQueryExecutor();
-        TravisRepoInfo info = executor.getRepoInfo("jadsonjs/continuous-delivery");
-
-        Assertions.assertTrue(info != null && info.id > 0 );
-    }
+class TravisCIBuildsQueryExecutorTest {
 
     @Test
     void getBuildsInfoTest() {
 
-        TravisCIQueryExecutor executor = new TravisCIQueryExecutor();
+        TravisCIBuildsQueryExecutor executor = new TravisCIBuildsQueryExecutor();
         List<TravisBuildsInfo> builds = executor.getBuilds("JodaOrg/joda-time");
 
         Assertions.assertTrue(builds != null && builds.size() > 0 );
@@ -30,8 +21,20 @@ class TravisCIQueryExecutorTest {
     @Test
     void hasMinimumBuildsTest() {
 
-        TravisCIQueryExecutor executor = new TravisCIQueryExecutor();
+        TravisCIBuildsQueryExecutor executor = new TravisCIBuildsQueryExecutor();
         Assertions.assertTrue(executor.hasMinimumBuilds("JodaOrg/joda-time", 20) );
+    }
+
+
+    @Test
+    void getFisrtBuildsInfoTest() {
+
+        TravisCIBuildsQueryExecutor executor = new TravisCIBuildsQueryExecutor();
+        TravisBuildsInfo build = executor.getFirstBuild("JodaOrg/joda-time");
+
+        System.out.println(" First build date: "+build.started_at);
+
+        Assertions.assertTrue(build != null && build.duration > 0 && build.started_at != null );
     }
 
 }

@@ -52,30 +52,10 @@ import java.util.Locale;
  *
  * Jadson Santos - jadsonjs@gmail.com
  */
-public class TravisCIQueryExecutor extends AbstractTravisCIQueryExecutor {
+public class TravisCIBuildsQueryExecutor extends AbstractTravisCIQueryExecutor {
 
 
-    /**
-     * Return information about a repository on travis CI
-     *
-     * https://docs.travis-ci.com/api/?http#repositories
-     *
-     * @param projectNameWithOwner
-     * @return
-     */
-    public TravisRepoInfo getRepoInfo(String projectNameWithOwner ) {
 
-        String searchUrl = TRAVIS_CI_API_URL+"/repos/" + projectNameWithOwner;
-
-        System.out.println("Getting Next Travis Repo Info: "+searchUrl);
-
-        RestTemplate restTemplate = new RestTemplate();
-        HttpEntity entity = new HttpEntity(getDefaultHeaders());
-
-        ResponseEntity<TravisRepoRoot> result = restTemplate.exchange(searchUrl, HttpMethod.GET, entity, TravisRepoRoot.class);
-
-        return result.getBody().repo;
-    }
 
 
     /**
@@ -174,7 +154,7 @@ public class TravisCIQueryExecutor extends AbstractTravisCIQueryExecutor {
         if(testEnvironment)
             afterBuildNumber = 2; // just last 2 builds
 
-        System.out.println("Counting Pull Requests for : "+projectNameWithOwner);
+        System.out.println("Counting Builds for : "+projectNameWithOwner);
 
         long totalbuilds = 0l;
 
@@ -208,6 +188,43 @@ public class TravisCIQueryExecutor extends AbstractTravisCIQueryExecutor {
         return totalbuilds >= limit;
     }
 
+
+
+
+
+    /**
+     * Return information about the first builds of project. Build with the number 1. https://developer.travis-ci.com/
+     *
+     * Example: https://api.travis-ci.org/repos/JodaOrg/joda-time/builds?after_number=2
+     *
+     * where JodaOrg/joda-time is the github project user with name
+     *
+     * @param projectNameWithOwner
+     * @return
+     */
+    public TravisBuildsInfo getFirstBuild(String projectNameWithOwner) {
+
+
+        TravisBuildsInfo firstBuild = null;
+
+        Integer  afterBuildNumber = 2; // just last 1 build
+
+        String searchUrl = TRAVIS_CI_API_URL + "/repos/" + projectNameWithOwner + "/builds" + (afterBuildNumber != null ? "?after_number=" + afterBuildNumber : "" );
+
+        System.out.println("Getting Next Travis Build Info: "+searchUrl);
+
+        RestTemplate restTemplate = new RestTemplate();
+        HttpEntity entity = new HttpEntity(getDefaultHeaders());
+
+        ResponseEntity<TravisBuildsRoot> resp = restTemplate.exchange(searchUrl, HttpMethod.GET, entity, TravisBuildsRoot.class);
+
+        if(resp.getBody().builds.size() > 0){
+            firstBuild = resp.getBody().builds.get(0);
+        }
+
+
+        return firstBuild;
+    }
 
 
 

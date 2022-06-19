@@ -73,4 +73,21 @@ class GHActionRunsExecutorTest {
 
     }
 
+
+    @Test
+    void testFirstRuns(){
+
+        GHActionRunsExecutor executor = new GHActionRunsExecutor();
+        executor.setTestEnvironment(true);
+
+        RunsInfo firstRunInfo =  executor.firstRun("jadsonjs/snooper");
+
+        System.out.println("name: "+firstRunInfo.name);
+        System.out.println("run_started_at: "+firstRunInfo.run_started_at);
+
+        Assertions.assertTrue( firstRunInfo != null );
+        Assertions.assertTrue(firstRunInfo.id > 0);
+
+    }
+
 }
