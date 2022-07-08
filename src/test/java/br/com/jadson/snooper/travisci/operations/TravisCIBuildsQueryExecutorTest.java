@@ -1,7 +1,6 @@
 package br.com.jadson.snooper.travisci.operations;
 
 import br.com.jadson.snooper.travisci.data.builds.TravisBuildsInfo;
-import br.com.jadson.snooper.travisci.data.repo.TravisRepoInfo;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

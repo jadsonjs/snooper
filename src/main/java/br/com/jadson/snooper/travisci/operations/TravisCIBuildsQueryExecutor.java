@@ -32,8 +32,6 @@ package br.com.jadson.snooper.travisci.operations;
 
 import br.com.jadson.snooper.travisci.data.builds.TravisBuildsInfo;
 import br.com.jadson.snooper.travisci.data.builds.TravisBuildsRoot;
-import br.com.jadson.snooper.travisci.data.repo.TravisRepoInfo;
-import br.com.jadson.snooper.travisci.data.repo.TravisRepoRoot;
 import br.com.jadson.snooper.utils.DateUtils;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
