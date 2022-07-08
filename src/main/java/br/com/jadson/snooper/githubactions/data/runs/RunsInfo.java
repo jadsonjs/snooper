@@ -1,6 +1,10 @@
 package br.com.jadson.snooper.githubactions.data.runs;
 
+import br.com.jadson.snooper.utils.CustomDateDeserializer;
+import br.com.jadson.snooper.utils.CustomDateSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import java.util.Date;
 import java.util.List;
@@ -36,12 +40,20 @@ public class RunsInfo {
     /**
      * Build Duration = updated_at - created_at
      */
+    @JsonSerialize(using = CustomDateSerializer.class)
+    @JsonDeserialize(using = CustomDateDeserializer.class)
     public Date created_at;
+
+    @JsonSerialize(using = CustomDateSerializer.class)
+    @JsonDeserialize(using = CustomDateDeserializer.class)
     public Date updated_at;
 
     public ActorInfo actor;
     public int run_attempt;
     public List<Object> referenced_workflows;
+
+    @JsonSerialize(using = CustomDateSerializer.class)
+    @JsonDeserialize(using = CustomDateDeserializer.class)
     public Date run_started_at;
     public TriggeringActorInfo triggering_actor;
     public String jobs_url;

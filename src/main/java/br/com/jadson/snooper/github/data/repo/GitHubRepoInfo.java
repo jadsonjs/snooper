@@ -29,9 +29,13 @@
  */
 package br.com.jadson.snooper.github.data.repo;
 
+import br.com.jadson.snooper.utils.CustomDateDeserializer;
+import br.com.jadson.snooper.utils.CustomDateSerializer;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import java.util.Date;
 
@@ -217,12 +221,18 @@ public class GitHubRepoInfo {
     public String deployments_url;
 
     @JsonFormat(pattern="yyyy-MM-dd'T'HH:mm:ss'Z'")
+    @JsonSerialize(using = CustomDateSerializer.class)
+    @JsonDeserialize(using = CustomDateDeserializer.class)
     public Date created_at;
 
     @JsonFormat(pattern="yyyy-MM-dd'T'HH:mm:ss'Z'")
+    @JsonSerialize(using = CustomDateSerializer.class)
+    @JsonDeserialize(using = CustomDateDeserializer.class)
     public Date updated_at;
 
     @JsonFormat(pattern="yyyy-MM-dd'T'HH:mm:ss'Z'")
+    @JsonSerialize(using = CustomDateSerializer.class)
+    @JsonDeserialize(using = CustomDateDeserializer.class)
     public Date pushed_at;
 
     public String git_url;

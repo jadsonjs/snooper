@@ -26,8 +26,12 @@
  */
 package br.com.jadson.snooper.github.data.release;
 
+import br.com.jadson.snooper.utils.CustomDateDeserializer;
+import br.com.jadson.snooper.utils.CustomDateSerializer;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import java.util.Date;
 
@@ -53,9 +57,13 @@ public class GitHubReleaseInfo {
 
     public boolean prerelease;
 
+    @JsonSerialize(using = CustomDateSerializer.class)
+    @JsonDeserialize(using = CustomDateDeserializer.class)
     @JsonFormat(pattern="yyyy-MM-dd'T'HH:mm:ss'Z'")
     public Date created_at;
 
+    @JsonSerialize(using = CustomDateSerializer.class)
+    @JsonDeserialize(using = CustomDateDeserializer.class)
     @JsonFormat(pattern="yyyy-MM-dd'T'HH:mm:ss'Z'")
     public Date published_at;
 

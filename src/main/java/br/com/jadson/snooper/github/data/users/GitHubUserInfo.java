@@ -9,6 +9,11 @@
  */
 package br.com.jadson.snooper.github.data.users;
 
+import br.com.jadson.snooper.utils.CustomDateDeserializer;
+import br.com.jadson.snooper.utils.CustomDateSerializer;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
 import java.util.Date;
 
 /**
@@ -47,7 +52,11 @@ public class GitHubUserInfo {
     public int public_gists;
     public int followers;
     public int following;
+    @JsonSerialize(using = CustomDateSerializer.class)
+    @JsonDeserialize(using = CustomDateDeserializer.class)
     public Date created_at;
+    @JsonSerialize(using = CustomDateSerializer.class)
+    @JsonDeserialize(using = CustomDateDeserializer.class)
     public Date updated_at;
 
 }

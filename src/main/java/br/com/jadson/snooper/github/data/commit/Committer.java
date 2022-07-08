@@ -29,7 +29,11 @@
  */
 package br.com.jadson.snooper.github.data.commit;
 
+import br.com.jadson.snooper.utils.CustomDateDeserializer;
+import br.com.jadson.snooper.utils.CustomDateSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import java.util.Date;
 
@@ -42,6 +46,9 @@ public class Committer {
 
     public String name;
     public String email;
+
+    @JsonSerialize(using = CustomDateSerializer.class)
+    @JsonDeserialize(using = CustomDateDeserializer.class)
     public Date date;
     public String login;
     public int id;

@@ -42,6 +42,24 @@ class GHActionRunsExecutorTest {
 
     }
 
+    @Test
+    void testLastRunsWithOutStartDate(){
+
+        GHActionRunsExecutor executor = new GHActionRunsExecutor();
+        executor.setTestEnvironment(true);
+
+        RunsInfo lastRunInfo =  executor.lastRun("PGMDev/PGM");
+
+        System.out.println("name: "+lastRunInfo.name);
+        System.out.println("created_at: "+lastRunInfo.created_at);
+        System.out.println("run_started_at: "+lastRunInfo.run_started_at);
+
+        Assertions.assertTrue( lastRunInfo != null );
+        Assertions.assertTrue(lastRunInfo.id > 0);
+        Assertions.assertTrue(lastRunInfo.created_at != null);
+
+    }
+
     /**
      * REturn the last run of all workflows
      */
@@ -89,5 +107,29 @@ class GHActionRunsExecutorTest {
         Assertions.assertTrue(firstRunInfo.id > 0);
 
     }
+
+    /**
+     * workflow 455721  "created_at": "2020-01-28T19:37:11Z"
+     * workflow 1446  "created_at": *** "2019-12-19T01:00:22Z", ***
+     */
+    @Test
+    void testFirstRunsWithOutRunDate(){
+
+        GHActionRunsExecutor executor = new GHActionRunsExecutor();
+        executor.setTestEnvironment(true);
+
+        RunsInfo firstRunInfo =  executor.firstRun("PGMDev/PGM");
+
+        System.out.println("name: "+firstRunInfo.name);
+        System.out.println("created_at: "+firstRunInfo.created_at);
+        System.out.println("run_started_at: "+firstRunInfo.run_started_at);
+
+        Assertions.assertTrue( firstRunInfo != null );
+        Assertions.assertTrue(firstRunInfo.id > 0);
+        Assertions.assertTrue(firstRunInfo.created_at != null);
+
+    }
+
+
 
 }

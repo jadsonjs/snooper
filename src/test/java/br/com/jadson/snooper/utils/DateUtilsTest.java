@@ -110,4 +110,17 @@ class DateUtilsTest {
         Assertions.assertTrue(new DateUtils().isBetweenDates(date, start, end));
 
     }
+
+    @Test
+    void fromIso8601Test() {
+        DateUtils util = new DateUtils();
+        Assertions.assertEquals( LocalDateTime.of(2019, 12, 19, 1, 00, 22), util.fromIso8601("2019-12-19T01:00:22Z"));
+    }
+
+
+    @Test
+    void toIso8601Test() {
+        DateUtils util = new DateUtils();
+        Assertions.assertEquals("2019-12-19T01:00:22Z" , util.toIso8601(LocalDateTime.of(2019, 12, 19, 1, 00, 22)));
+    }
 }

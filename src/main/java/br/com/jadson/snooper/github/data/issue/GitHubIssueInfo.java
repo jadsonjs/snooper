@@ -30,7 +30,11 @@
 package br.com.jadson.snooper.github.data.issue;
 
 import br.com.jadson.snooper.github.data.LabelInfo;
+import br.com.jadson.snooper.utils.CustomDateDeserializer;
+import br.com.jadson.snooper.utils.CustomDateSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import java.util.Date;
 import java.util.List;
@@ -62,8 +66,17 @@ public class GitHubIssueInfo {
     public Object milestone;
     public int comments;
     public PullRequestIssueInfo pull_request;
+
+    @JsonSerialize(using = CustomDateSerializer.class)
+    @JsonDeserialize(using = CustomDateDeserializer.class)
     public Date closed_at;
+
+    @JsonSerialize(using = CustomDateSerializer.class)
+    @JsonDeserialize(using = CustomDateDeserializer.class)
     public Date created_at;
+
+    @JsonSerialize(using = CustomDateSerializer.class)
+    @JsonDeserialize(using = CustomDateDeserializer.class)
     public Date updated_at;
 
     /**
