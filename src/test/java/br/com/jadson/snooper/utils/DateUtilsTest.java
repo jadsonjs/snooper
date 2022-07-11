@@ -119,6 +119,14 @@ class DateUtilsTest {
 
 
     @Test
+    void fromIso8601Test2() {
+        DateUtils util = new DateUtils();
+        Assertions.assertEquals( LocalDateTime.of(2022, 06, 8, 20, 15, 32), util.fromIso8601("2022-06-08T20:15:32.000Z"));
+    }
+
+
+
+    @Test
     void toIso8601Test() {
         DateUtils util = new DateUtils();
         Assertions.assertEquals("2019-12-19T01:00:22Z" , util.toIso8601(LocalDateTime.of(2019, 12, 19, 1, 00, 22)));

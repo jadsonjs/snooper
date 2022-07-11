@@ -15,6 +15,7 @@ package br.com.jadson.snooper.utils;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.Date;
 
 /**
@@ -39,13 +40,31 @@ public class DateUtils {
     }
 
     public String toIso8601(LocalDateTime date) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'");
-        return formatter.format(date);
+        try {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'");
+            return formatter.format(date);
+        } catch (DateTimeParseException ignored) {
+        }
+        try {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.000'Z'");
+            return formatter.format(date);
+        } catch (DateTimeParseException ignored) {
+        }
+        return null;
     }
 
     public LocalDateTime fromIso8601(String dateStr) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'").withZone(ZoneId.of("UTC"));
-        LocalDateTime date = LocalDateTime.parse(dateStr, formatter);
+        LocalDateTime date = null;
+        try {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'").withZone( ZoneId.of("UTC") ) ;
+            date= LocalDateTime.parse(dateStr, formatter);
+        } catch (DateTimeParseException ignored) {
+        }
+        try {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.000'Z'").withZone( ZoneId.of("UTC") ) ;
+            date= LocalDateTime.parse(dateStr, formatter);
+        } catch (DateTimeParseException ignored) {
+        }
         return date;
     }
 
