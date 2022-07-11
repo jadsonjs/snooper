@@ -2,6 +2,7 @@ package br.com.jadson.snooper.githubactions.operations;
 
 import br.com.jadson.snooper.githubactions.data.runs.RunsInfo;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -42,6 +43,7 @@ class GHActionRunsExecutorTest {
 
     }
 
+    @Disabled // 403 rate limit exceeded
     @Test
     void testLastRunsWithOutStartDate(){
 
@@ -63,6 +65,7 @@ class GHActionRunsExecutorTest {
     /**
      * REturn the last run of all workflows
      */
+    @Disabled // 403 rate limit exceeded
     @Test
     void testLastRunsRelevantProject(){
 
@@ -79,6 +82,7 @@ class GHActionRunsExecutorTest {
 
     }
 
+    @Disabled // 403 rate limit exceeded
     @Test
     void testLastRunsNotExist(){
 
@@ -92,6 +96,7 @@ class GHActionRunsExecutorTest {
     }
 
 
+    @Disabled // 403 rate limit exceeded
     @Test
     void testFirstRuns(){
 
@@ -112,6 +117,7 @@ class GHActionRunsExecutorTest {
      * workflow 455721  "created_at": "2020-01-28T19:37:11Z"
      * workflow 1446  "created_at": *** "2019-12-19T01:00:22Z", ***
      */
+    @Disabled // 403 rate limit exceeded
     @Test
     void testFirstRunsWithOutRunDate(){
 
@@ -131,5 +137,31 @@ class GHActionRunsExecutorTest {
     }
 
 
+    @Disabled // 403 rate limit exceeded
+    @Test
+    void firstRunNotExistTest() {
 
+        GHActionRunsExecutor executor = new GHActionRunsExecutor();
+        executor.setTestEnvironment(true);
+
+        RunsInfo firstRunInfo =  executor.firstRun("amplication/amplication", 15004493);
+
+        System.out.println("firstRunInfo: "+firstRunInfo);
+
+        Assertions.assertTrue( firstRunInfo == null );
+    }
+
+    @Disabled // 403 rate limit exceeded
+    @Test
+    void firstRunNotExistTest2() {
+
+        GHActionRunsExecutor executor = new GHActionRunsExecutor();
+        executor.setTestEnvironment(true);
+
+        RunsInfo firstRunInfo =  executor.firstRun("amplication/amplication");
+
+        System.out.println("firstRunInfo: "+firstRunInfo);
+
+        Assertions.assertTrue( firstRunInfo != null );
+    }
 }

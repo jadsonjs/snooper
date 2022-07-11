@@ -23,6 +23,8 @@ public class CustomDateDeserializer extends StdDeserializer<Date> {
     @Override
     public Date deserialize(JsonParser jsonparser, DeserializationContext context) throws IOException, JsonProcessingException {
         String dateStr = jsonparser.getText();
-        return dateUtils.toDate(dateUtils.fromIso8601(dateStr));
+        if(dateStr != null && ! dateStr.isEmpty())
+            return dateUtils.toDate(dateUtils.fromIso8601(dateStr));
+        return null;
     }
 }

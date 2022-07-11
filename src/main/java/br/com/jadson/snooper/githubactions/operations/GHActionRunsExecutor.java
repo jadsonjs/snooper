@@ -102,7 +102,7 @@ public class GHActionRunsExecutor extends AbstractGitHubQueryExecutor {
             RunsInfo runInfoTemp =  this.lastRun(repoFullName, wflow.id);
 
             // run_started_at can be null, so we use always created_at
-            if( lastRunInfo == null || ( runInfoTemp != null && runInfoTemp.created_at != null
+            if( lastRunInfo == null || ( lastRunInfo != null && lastRunInfo.created_at != null && runInfoTemp != null && runInfoTemp.created_at != null
                     && runInfoTemp.created_at.after(lastRunInfo.created_at) )  ){
                 lastRunInfo = runInfoTemp;
             }
@@ -182,7 +182,7 @@ public class GHActionRunsExecutor extends AbstractGitHubQueryExecutor {
             // run_started_at can be null, so we use the created_at
             // if is null or if before the first of previous workflow.
             if( firstRunInfo == null ||
-                    (runInfoTemp.created_at != null && firstRunInfo.created_at != null && runInfoTemp.created_at.before(firstRunInfo.created_at) )  ){
+                    (firstRunInfo != null && runInfoTemp != null && runInfoTemp.created_at != null && firstRunInfo.created_at != null && runInfoTemp.created_at.before(firstRunInfo.created_at) )  ){
                 firstRunInfo = runInfoTemp;
             }
 

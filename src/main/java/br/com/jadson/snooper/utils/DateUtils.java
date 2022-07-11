@@ -69,11 +69,15 @@ public class DateUtils {
     }
 
     public LocalDateTime toLocalDateTime(Date dateToConvert) {
-        return dateToConvert.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+        if(dateToConvert != null)
+            return dateToConvert.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+        return null;
     }
 
     public Date toDate(LocalDateTime dateToConvert) {
-        return java.util.Date.from(dateToConvert.atZone(ZoneId.systemDefault()).toInstant());
+        if(dateToConvert != null)
+            return java.util.Date.from(dateToConvert.atZone(ZoneId.systemDefault()).toInstant());
+        return null;
     }
 
     public String toString(LocalDateTime currentDateTime) {
