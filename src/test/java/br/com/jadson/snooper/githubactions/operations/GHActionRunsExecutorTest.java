@@ -1,13 +1,33 @@
 package br.com.jadson.snooper.githubactions.operations;
 
 import br.com.jadson.snooper.githubactions.data.runs.RunsInfo;
+import br.com.jadson.snooper.utils.DateUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 class GHActionRunsExecutorTest {
+
+
+    @Test
+    void testAllRunsRepository(){
+
+        GHActionRunsExecutor runs = new GHActionRunsExecutor();
+        LocalDateTime startCIDate = LocalDateTime.of(2022, 7, 1, 0, 0, 0);
+        LocalDateTime endCIDate = LocalDateTime.of(2022, 7, 30, 23, 59, 59);
+        // created=2022-07-01..2022-07-30
+        runs.setQueryParameters(new String[]{ "created=" + new DateUtils().toIso8601(startCIDate)+".."+new DateUtils().toIso8601(endCIDate) });
+        runs.setPageSize(10);
+        runs.setTestEnvironment(true);
+
+        List<RunsInfo> list =  runs.runs("jadsonjs/snooper");
+
+        Assertions.assertTrue(list.size() == 4);
+
+    }
 
     @Test
     void testRuns(){

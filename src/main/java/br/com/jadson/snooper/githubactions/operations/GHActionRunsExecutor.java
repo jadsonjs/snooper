@@ -29,6 +29,62 @@ public class GHActionRunsExecutor extends AbstractGitHubQueryExecutor {
 
 
     /**
+     * Lists all workflow runs for a repository. You can use parameters to narrow the list of results.
+     *
+     * curl \
+     *   -H "Accept: application/vnd.github+json" \
+     *   -H "Authorization: Bearer <YOUR-TOKEN>" \
+     *   https://HOSTNAME/api/v3/repos/OWNER/REPO/actions/runs
+     *
+     *  To return run os specific date, use a parameter.
+     *  Example:
+     *      https://api.github.com/repos/jadsonjs/snooper/actions/runs?created=2022-07-01..2022-07-30&status=timed_out&page=1&per_page=10
+     *
+     *  https://docs.github.com/pt/github-ae@latest/rest/actions/workflow-runs#list-workflow-runs-for-a-repository
+     *
+     * @param repoFullName
+     * @return
+     */
+    public List<RunsInfo> runs(String repoFullName) {
+
+        validateRepoName(repoFullName);
+
+        int page = 1;
+
+        String parameters = "";
+
+        List<RunsInfo> all = new ArrayList<>();
+
+        ResponseEntity<RunsInfoRoot> result;
+
+        do {
+
+            if(queryParameters != null && ! queryParameters.isEmpty())
+                parameters = "?"+queryParameters+"page="+page+"&per_page="+pageSize;
+            else
+                parameters = "?page="+page+"&per_page="+pageSize;
+
+            String query = GIT_HUB_API_URL +"/repos/"+repoFullName+"/actions/runs"+parameters;
+
+            System.out.println("Getting Next workflow Info: "+query);
+
+            RestTemplate restTemplate = new RestTemplate();
+
+            HttpEntity entity = new HttpEntity(getDefaultHeaders());
+
+            result = restTemplate.exchange( query, HttpMethod.GET, entity, RunsInfoRoot.class);
+
+            all.addAll(  result.getBody().workflow_runs );
+
+            page++;
+
+
+        }while ( result != null && result.getBody().workflow_runs.size() > 0   && !testEnvironment);
+
+        return all;
+    }
+
+    /**
      * Return information about all runs of a workflow
      *
      * @param repoFullName
@@ -188,10 +244,6 @@ public class GHActionRunsExecutor extends AbstractGitHubQueryExecutor {
 
         }
         return firstRunInfo;
-    }
-
-    public static void main(String[] args) {
-        System.out.println(new Date().before(null));
     }
 
 
