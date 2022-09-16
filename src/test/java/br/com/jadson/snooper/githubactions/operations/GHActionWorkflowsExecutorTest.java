@@ -12,11 +12,11 @@ class GHActionWorkflowsExecutorTest {
     @Test
     void testWorkFlow(){
 
-        GHActionWorkflowsExecutor workFlows = new GHActionWorkflowsExecutor();
-        workFlows.setPageSize(1);
-        workFlows.setTestEnvironment(true);
+        GHActionWorkflowsExecutor executor = new GHActionWorkflowsExecutor();
+        executor.setPageSize(1);
+        executor.setTestEnvironment(true);
 
-        List<WorkflowInfo> list =  workFlows.getWorkflows("jadsonjs/snooper");
+        List<WorkflowInfo> list =  executor.getWorkflows("jadsonjs/snooper");
 
         Assertions.assertTrue(list.size() > 0);
         Assertions.assertTrue(list.get(0).id > 0);
@@ -27,11 +27,11 @@ class GHActionWorkflowsExecutorTest {
     @Test
     void testWorkFlowRealProject(){
 
-        GHActionWorkflowsExecutor workFlows = new GHActionWorkflowsExecutor();
-        workFlows.setPageSize(100);
-        workFlows.setTestEnvironment(true);
+        GHActionWorkflowsExecutor executor = new GHActionWorkflowsExecutor();
+        executor.setPageSize(100);
+        executor.setTestEnvironment(true);
 
-        List<WorkflowInfo> list =  workFlows.getWorkflows("amplication/amplication");
+        List<WorkflowInfo> list =  executor.getWorkflows("amplication/amplication");
 
         System.out.println(list.size());
 

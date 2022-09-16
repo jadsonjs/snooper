@@ -16,7 +16,13 @@ public class CodeCovParentTotals {
     public int h;
     @JsonProperty("M")
     public int M;
+
+    /**
+     * This information is the coverage
+     * "c": "83.52222"
+     */
     public String c;
+
     @JsonProperty("N")
     public int N;
     public int p;

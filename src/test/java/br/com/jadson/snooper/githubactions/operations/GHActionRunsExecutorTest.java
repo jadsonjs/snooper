@@ -15,15 +15,15 @@ class GHActionRunsExecutorTest {
     @Test
     void testAllRunsRepository(){
 
-        GHActionRunsExecutor runs = new GHActionRunsExecutor();
+        GHActionRunsExecutor executor = new GHActionRunsExecutor();
         LocalDateTime startCIDate = LocalDateTime.of(2022, 7, 1, 0, 0, 0);
         LocalDateTime endCIDate = LocalDateTime.of(2022, 7, 30, 23, 59, 59);
         // created=2022-07-01..2022-07-30
-        runs.setQueryParameters(new String[]{ "created=" + new DateUtils().toIso8601(startCIDate)+".."+new DateUtils().toIso8601(endCIDate) });
-        runs.setPageSize(10);
-        runs.setTestEnvironment(true);
+        executor.setQueryParameters(new String[]{ "created=" + new DateUtils().toIso8601(startCIDate)+".."+new DateUtils().toIso8601(endCIDate) });
+        executor.setPageSize(10);
+        executor.setTestEnvironment(true);
 
-        List<RunsInfo> list =  runs.runs("jadsonjs/snooper");
+        List<RunsInfo> list =  executor.runs("jadsonjs/snooper");
 
         Assertions.assertTrue(list.size() == 4);
 
@@ -32,11 +32,11 @@ class GHActionRunsExecutorTest {
     @Test
     void testRuns(){
 
-        GHActionRunsExecutor runs = new GHActionRunsExecutor();
-        runs.setPageSize(1);
-        runs.setTestEnvironment(true);
+        GHActionRunsExecutor executor = new GHActionRunsExecutor();
+        executor.setPageSize(1);
+        executor.setTestEnvironment(true);
 
-        List<RunsInfo> list =  runs.runs("jadsonjs/snooper", 27792816);
+        List<RunsInfo> list =  executor.runs("jadsonjs/snooper", 27792816);
 
         Assertions.assertTrue(list.size() > 0);
         Assertions.assertTrue(list.get(0).id > 0);

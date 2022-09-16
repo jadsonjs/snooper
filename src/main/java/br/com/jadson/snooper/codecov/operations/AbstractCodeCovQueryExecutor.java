@@ -2,6 +2,9 @@ package br.com.jadson.snooper.codecov.operations;
 
 import br.com.jadson.snooper.utils.DateUtils;
 
+/**
+ * https://docs.codecov.com/reference/authorization
+ */
 public abstract class AbstractCodeCovQueryExecutor {
 
     public static final String CODE_COV_API_URL = "https://codecov.io/api";
