@@ -1,6 +1,6 @@
-package br.com.jadson.snooper.coverall.operations;
+package br.com.jadson.snooper.coveralls.operations;
 
-import br.com.jadson.snooper.coverall.data.CoveAllBuildInfo;
+import br.com.jadson.snooper.coveralls.data.CoverallsBuildInfo;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -14,10 +14,10 @@ class CoveAllBuildsQueryExecutorTest {
         // On intellij: edit configuration -> environment variable -> COVEALL_TOKEN=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
         String token = System.getenv("COVEALL_TOKEN");
 
-        CoveAllBuildsQueryExecutor executor = new CoveAllBuildsQueryExecutor(token);
+        CoverallsBuildsQueryExecutor executor = new CoverallsBuildsQueryExecutor(token);
         executor.setTestEnvironment(true);
 
-        List<CoveAllBuildInfo> builds =  executor.getBuildsInfo("microsoft/msphpsql", AbstractCoveAllQueryExecutor.CODE_ALL_SERVICE.GITHUB);
+        List<CoverallsBuildInfo> builds =  executor.getBuildsInfo("microsoft/msphpsql", AbstractCoverallsQueryExecutor.CODE_ALL_SERVICE.GITHUB);
 
         Assertions.assertTrue(builds != null && builds.size() > 0);
         Assertions.assertEquals("microsoft/msphpsql", builds.get(0).repo_name);
@@ -29,10 +29,10 @@ class CoveAllBuildsQueryExecutorTest {
         // On intellij: edit configuration -> environment variable -> COVEALL_TOKEN=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
         String token = System.getenv("COVEALL_TOKEN");
 
-        CoveAllBuildsQueryExecutor executor = new CoveAllBuildsQueryExecutor(token);
+        CoverallsBuildsQueryExecutor executor = new CoverallsBuildsQueryExecutor(token);
         executor.setTestEnvironment(true);
 
-        CoveAllBuildInfo build =  executor.getLastBuildsInfo("microsoft/msphpsql", AbstractCoveAllQueryExecutor.CODE_ALL_SERVICE.GITHUB);
+        CoverallsBuildInfo build =  executor.getLastBuildsInfo("microsoft/msphpsql", AbstractCoverallsQueryExecutor.CODE_ALL_SERVICE.GITHUB);
 
         Assertions.assertTrue(build != null);
         Assertions.assertEquals("microsoft/msphpsql", build.repo_name);

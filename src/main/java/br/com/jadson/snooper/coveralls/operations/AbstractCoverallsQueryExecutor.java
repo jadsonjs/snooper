@@ -1,8 +1,8 @@
-package br.com.jadson.snooper.coverall.operations;
+package br.com.jadson.snooper.coveralls.operations;
 
 import org.springframework.http.HttpHeaders;
 
-public class AbstractCoveAllQueryExecutor {
+public class AbstractCoverallsQueryExecutor {
 
     public static final String CODE_ALL_API_URL = "https://coveralls.io";
 

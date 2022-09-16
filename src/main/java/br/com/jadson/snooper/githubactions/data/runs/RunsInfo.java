@@ -30,7 +30,7 @@ public class RunsInfo {
      * success or failure
      */
     public String conclusion;
-    public int workflow_id;
+    public Long workflow_id;
     public Object check_suite_id;
     public String check_suite_node_id;
     public String url;

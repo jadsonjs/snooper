@@ -1,11 +1,11 @@
-package br.com.jadson.snooper.coverall.data;
+package br.com.jadson.snooper.coveralls.data;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import java.util.Date;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class CoveAllBuildInfo {
+public class CoverallsBuildInfo {
 
     public Date created_at;
     public Object url;

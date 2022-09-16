@@ -1,7 +1,7 @@
-package br.com.jadson.snooper.coverall.operations;
+package br.com.jadson.snooper.coveralls.operations;
 
-import br.com.jadson.snooper.coverall.data.CoveAllBuildInfo;
-import br.com.jadson.snooper.coverall.data.CoveAllBuildRootInfo;
+import br.com.jadson.snooper.coveralls.data.CoverallsBuildInfo;
+import br.com.jadson.snooper.coveralls.data.CoverallsBuildRootInfo;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
@@ -13,11 +13,11 @@ import java.util.List;
 /**
  * Return information of build in the CoveAll, build is the struct that have caverage information.
  */
-public class CoveAllBuildsQueryExecutor extends AbstractCoveAllQueryExecutor{
+public class CoverallsBuildsQueryExecutor extends AbstractCoverallsQueryExecutor {
 
-    public CoveAllBuildsQueryExecutor(){ }
+    public CoverallsBuildsQueryExecutor(){ }
 
-    public CoveAllBuildsQueryExecutor(String token){
+    public CoverallsBuildsQueryExecutor(String token){
         if(token == null || token.trim().equals(""))
             throw new RuntimeException("Invalid Token: "+token);
 
@@ -31,15 +31,15 @@ public class CoveAllBuildsQueryExecutor extends AbstractCoveAllQueryExecutor{
      * @param service
      * @return
      */
-    public List<CoveAllBuildInfo> getBuildsInfo(String projectName, CODE_ALL_SERVICE service){
+    public List<CoverallsBuildInfo> getBuildsInfo(String projectName, CODE_ALL_SERVICE service){
 
         int page = 1;
 
         String parameters = "";
 
-        List<CoveAllBuildInfo> all = new ArrayList<>();
+        List<CoverallsBuildInfo> all = new ArrayList<>();
 
-        ResponseEntity<CoveAllBuildRootInfo> result;
+        ResponseEntity<CoverallsBuildRootInfo> result;
 
         do {
 
@@ -62,7 +62,7 @@ public class CoveAllBuildsQueryExecutor extends AbstractCoveAllQueryExecutor{
 
             HttpEntity entity = new HttpEntity(getDefaultHeaders());
 
-            result = restTemplate.exchange( query, HttpMethod.GET, entity, CoveAllBuildRootInfo.class);
+            result = restTemplate.exchange( query, HttpMethod.GET, entity, CoverallsBuildRootInfo.class);
 
             all.addAll(  result.getBody().builds );
 
@@ -81,9 +81,9 @@ public class CoveAllBuildsQueryExecutor extends AbstractCoveAllQueryExecutor{
      * @param service
      * @return
      */
-    public CoveAllBuildInfo getLastBuildsInfo(String projectName, CODE_ALL_SERVICE service){
+    public CoverallsBuildInfo getLastBuildsInfo(String projectName, CODE_ALL_SERVICE service){
 
-        ResponseEntity<CoveAllBuildInfo> result;
+        ResponseEntity<CoverallsBuildInfo> result;
 
         try {
 
@@ -101,7 +101,7 @@ public class CoveAllBuildsQueryExecutor extends AbstractCoveAllQueryExecutor{
 
             HttpEntity entity = new HttpEntity(getDefaultHeaders());
 
-            result = restTemplate.exchange(query, HttpMethod.GET, entity, CoveAllBuildInfo.class);
+            result = restTemplate.exchange(query, HttpMethod.GET, entity, CoverallsBuildInfo.class);
 
             return result.getBody();
 

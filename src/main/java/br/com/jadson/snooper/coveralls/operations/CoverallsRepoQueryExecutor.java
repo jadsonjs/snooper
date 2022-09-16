@@ -1,6 +1,6 @@
-package br.com.jadson.snooper.coverall.operations;
+package br.com.jadson.snooper.coveralls.operations;
 
-import br.com.jadson.snooper.coverall.data.CoveAllRepositoryInfo;
+import br.com.jadson.snooper.coveralls.data.CoverallsRepositoryInfo;
 import org.springframework.http.*;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -12,11 +12,11 @@ import java.net.URI;
  *
  * https://coveralls.io/api/docs
  */
-public class CoveAllRepoQueryExecutor extends AbstractCoveAllQueryExecutor{
+public class CoverallsRepoQueryExecutor extends AbstractCoverallsQueryExecutor {
 
-    public CoveAllRepoQueryExecutor(){ }
+    public CoverallsRepoQueryExecutor(){ }
 
-    public CoveAllRepoQueryExecutor(String token){
+    public CoverallsRepoQueryExecutor(String token){
         if(token == null || token.trim().equals(""))
             throw new RuntimeException("Invalid Token: "+token);
 
@@ -30,10 +30,10 @@ public class CoveAllRepoQueryExecutor extends AbstractCoveAllQueryExecutor{
      * @param service
      * @return
      */
-    public CoveAllRepositoryInfo getRepoInfo(String projectName, CODE_ALL_SERVICE service){
+    public CoverallsRepositoryInfo getRepoInfo(String projectName, CODE_ALL_SERVICE service){
 
 
-        ResponseEntity<CoveAllRepositoryInfo> result;
+        ResponseEntity<CoverallsRepositoryInfo> result;
 
         /****************************************************************************
          * ENDPOINT
@@ -54,7 +54,7 @@ public class CoveAllRepoQueryExecutor extends AbstractCoveAllQueryExecutor{
             URI uri = builder.build(false).toUri();
 
             HttpEntity entity = new HttpEntity<>(headers);
-            result = restTemplate.exchange(uri, HttpMethod.GET, entity, CoveAllRepositoryInfo.class);
+            result = restTemplate.exchange(uri, HttpMethod.GET, entity, CoverallsRepositoryInfo.class);
 
             if (result.getStatusCode() == HttpStatus.OK)
                 return result.getBody();
