@@ -1,8 +1,8 @@
 # Snooper
 
-Snooper is a project to miner data from repositories like GitHub, TravisCI and Sonar.
+Snooper is a project to miner data from APIs of repositories like GitHub.
 
-These tools are supported by Snooper
+Until the moment, these APIs are supported by Snooper
   - **GitHub API**: https://docs.github.com/pt/rest
   - **GitHub Actions API**: https://docs.github.com/en/rest/actions
   - **Sonar Cloud API**: https://sonarcloud.io/web_api
