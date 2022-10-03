@@ -35,4 +35,26 @@ class PullRequestCommentsQueryExecutorTest {
         }
         Assertions.assertTrue(commentsInfoList.size() > 0);
     }
+
+    /**
+     * Get comments and review comments of a PULL REQUEST
+     */
+    @Test
+    void getAllPullCommentsInfo() {
+
+        PullRequestCommentsQueryExecutor executor = new PullRequestCommentsQueryExecutor();
+        executor.setGithubToken(token);
+        executor.setTestEnvironment(true);
+        executor.setPageSize(1);
+        List<GithubCommentsInfo> commentsInfoList =  executor.getPullCommentsInfo("microsoft/terminal");
+
+        System.out.println(commentsInfoList.size());
+        for (GithubCommentsInfo info : commentsInfoList){
+            System.out.println("-------------------------");
+            System.out.println(info.body);
+            System.out.println(info.pull_request_url);
+            System.out.println("-------------------------");
+        }
+        Assertions.assertTrue(commentsInfoList.size() > 0);
+    }
 }

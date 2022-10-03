@@ -19,8 +19,61 @@ public class PullRequestCommentsQueryExecutor extends AbstractGitHubQueryExecuto
         super(githubToken);
     }
 
+
     /**
-     * Return all PR comments of a project
+     * Return all PR review comments of a repository
+     *
+     * curl \
+     *   -H "Accept: application/vnd.github+json" \
+     *   -H "Authorization: Bearer <YOUR-TOKEN>" \
+     *   https://api.github.com/repos/OWNER/REPO/pulls/comments
+     *
+     * @param repoFullName
+     * @return
+     */
+    public List<GithubCommentsInfo> getPullCommentsInfo(String repoFullName) {
+
+        int page = 1;
+
+        List<GithubCommentsInfo> allComments = new ArrayList<>();
+
+        ResponseEntity<GithubCommentsInfo[]> result;
+
+        do {
+
+            /**
+             * GET ***REVIEWS*** COMMENTS
+             *
+             * https://stackoverflow.com/questions/16198351/get-list-of-comments-from-github-pull-request
+             *
+             * curl \
+             *   -H "Accept: application/vnd.github+json" \
+             *   -H "Authorization: Bearer <YOUR-TOKEN>" \
+             *   https://api.github.com/repos/OWNER/REPO/pulls/PULL_NUMBER/comments
+             */
+            String query = GIT_HUB_API_URL +"/repos/"+repoFullName+"/pulls/comments"+"?page="+page+"&per_page="+pageSize;
+
+            System.out.println("Getting Review Comments of PR: "+query);
+
+            RestTemplate restTemplate = new RestTemplate();
+
+            HttpEntity entity = new HttpEntity(getDefaultHeaders());
+
+            result = restTemplate.exchange( query, HttpMethod.GET, entity, GithubCommentsInfo[].class);
+
+            allComments.addAll(  Arrays.asList(result.getBody()) );
+
+            page++;
+
+
+        }while ( result != null && result.getBody().length > 0 && ! testEnvironment);
+
+
+        return allComments;
+    }
+
+    /**
+     * Return all PR review comments of a PR
      *
      * @param repoFullName
      * @return
@@ -60,34 +113,11 @@ public class PullRequestCommentsQueryExecutor extends AbstractGitHubQueryExecuto
             page++;
 
 
-        }while ( result != null && result.getBody().length > 0);
+        }while ( result != null && result.getBody().length > 0 && ! testEnvironment);
 
-
-        page = 1;
-
-        do {
-
-            /**
-             * GET COMMENTS
-             */
-            String query = GIT_HUB_API_URL +"/repos/"+repoFullName+"/issues/"+prNumber+"/comments"+"?page="+page+"&per_page="+pageSize;
-
-            System.out.println("Getting Comments of PR (using issue API): "+query);
-
-            RestTemplate restTemplate = new RestTemplate();
-
-            HttpEntity entity = new HttpEntity(getDefaultHeaders());
-
-            result = restTemplate.exchange( query, HttpMethod.GET, entity, GithubCommentsInfo[].class);
-
-            allComments.addAll(  Arrays.asList(result.getBody()) );
-
-            page++;
-
-
-        }while ( result != null && result.getBody().length > 0);
 
         return allComments;
+
     }
 
 }
