@@ -30,7 +30,7 @@ class PullRequestCommentsQueryExecutorTest {
         System.out.println(commentsInfoList.size());
         for (GithubCommentsInfo info : commentsInfoList){
             System.out.println("-------------------------");
-            System.out.println(info.getBody());
+            System.out.println(info.body);
             System.out.println("-------------------------");
         }
         Assertions.assertTrue(commentsInfoList.size() > 0);
