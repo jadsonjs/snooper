@@ -96,7 +96,7 @@ public abstract class AbstractGitHubQueryExecutor {
     protected HttpHeaders getDefaultHeaders(){
         HttpHeaders headers = new HttpHeaders();
         headers.set("Accept", "application/json");
-        if(! githubToken.isEmpty())
+        if(githubToken != null && ! githubToken.isEmpty())
             headers.set("Authorization", "token "+githubToken+"");
         return headers;
     }

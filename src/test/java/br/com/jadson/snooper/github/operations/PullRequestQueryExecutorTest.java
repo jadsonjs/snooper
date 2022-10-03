@@ -10,6 +10,11 @@ import java.util.List;
 
 class PullRequestQueryExecutorTest {
 
+
+    // To Execute this code
+    // On intellij: edit configuration -> environment variable -> GITHUB_TOKEN=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+    String token = System.getenv("GITHUB_TOKEN");
+
     /**
      * Basic test
      */
@@ -18,6 +23,7 @@ class PullRequestQueryExecutorTest {
 
         PullRequestQueryExecutor executor = new PullRequestQueryExecutor();
         executor.setTestEnvironment(true);
+        executor.setGithubToken(token);
         List<GitHubPullRequestInfo> list =  executor.pullRequests("octocat/hello-world");
 
         Assertions.assertTrue(list.size() > 0);
@@ -31,6 +37,7 @@ class PullRequestQueryExecutorTest {
 
         PullRequestQueryExecutor gitHubClient = new PullRequestQueryExecutor();
         gitHubClient.setTestEnvironment(true);
+        gitHubClient.setGithubToken(token);
 
         List<GitHubPullRequestInfo> list =  gitHubClient.pullRequests("octocat/hello-world");
 
@@ -46,6 +53,7 @@ class PullRequestQueryExecutorTest {
         PullRequestQueryExecutor gitHubClient = new PullRequestQueryExecutor();
         gitHubClient.setQueryParameters(new String[]{"state=all"});
         gitHubClient.setTestEnvironment(true);
+        gitHubClient.setGithubToken(token);
 
         LocalDateTime start = LocalDateTime.of(2020, 3, 1, 23, 59, 59);
         LocalDateTime end = LocalDateTime.of(2020, 5, 01, 23, 59, 59);
@@ -68,6 +76,7 @@ class PullRequestQueryExecutorTest {
 
         PullRequestQueryExecutor gitHubClient = new PullRequestQueryExecutor();
         gitHubClient.setTestEnvironment(true);
+        gitHubClient.setGithubToken(token);
 
         List<GitHubPullRequestInfo> list =  gitHubClient.pullRequests("octocat", "hello-world");
 
@@ -84,6 +93,7 @@ class PullRequestQueryExecutorTest {
         PullRequestQueryExecutor gitHubClient = new PullRequestQueryExecutor();
         gitHubClient.setTestEnvironment(true);
         gitHubClient.setPageSize(10);
+        gitHubClient.setGithubToken(token);
 
         List<GitHubPullRequestInfo> list =  gitHubClient.pullRequests("octocat/hello-world");
 
@@ -99,6 +109,7 @@ class PullRequestQueryExecutorTest {
         PullRequestQueryExecutor gitHubClient = new PullRequestQueryExecutor();
         gitHubClient.setTestEnvironment(true);
         gitHubClient.setPageSize(10);
+        gitHubClient.setGithubToken(token);
         gitHubClient.setQueryParameters(new String[]{"state=all"});
 
         List<GitHubPullRequestInfo> list =  gitHubClient.pullRequests("webauthn4j/webauthn4j");
@@ -111,24 +122,12 @@ class PullRequestQueryExecutorTest {
     }
 
 
-//    /**
-//     * Basic test
-//     */
-//    @Test
-//    void testMinimumPullRequest(){
-//
-//        PullRequestQueryExecutor gitHubClient = new PullRequestQueryExecutor();
-//        gitHubClient.setQueryParameters(new String[]{"state=all"});
-//        gitHubClient.setPageSize(21);
-//        boolean has = gitHubClient.hasMinimumPullRequest("webauthn4j/webauthn4j", 20);
-//
-//        Assertions.assertTrue(has);
-//    }
-
 
     @Test
     void getQtdPullRequests() {
         PullRequestQueryExecutor gitHubExecutor = new PullRequestQueryExecutor();
+        gitHubExecutor.setGithubToken(token);
+        gitHubExecutor.setTestEnvironment(true);
         int qtd = gitHubExecutor.getQtdPullRequests("atomix/atomix");
         System.out.println("QTD PR: "+qtd);
         Assertions.assertTrue(qtd > 0);
@@ -140,6 +139,7 @@ class PullRequestQueryExecutorTest {
 
         PullRequestQueryExecutor gitHubClient = new PullRequestQueryExecutor();
         gitHubClient.setTestEnvironment(true);
+        gitHubClient.setGithubToken(token);
         gitHubClient.setPageSize(10);
         gitHubClient.setQueryParameters(new String[]{"state=all"});
 
@@ -156,6 +156,7 @@ class PullRequestQueryExecutorTest {
 
         PullRequestQueryExecutor executor = new PullRequestQueryExecutor();
         executor.setTestEnvironment(true);
+        executor.setGithubToken(token);
         GitHubPullRequestInfo info =  executor.pullRequest("juicedata/juicefs", 1);
 
         Assertions.assertTrue(info.merged_by != null);

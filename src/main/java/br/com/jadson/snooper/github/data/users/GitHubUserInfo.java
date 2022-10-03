@@ -11,6 +11,7 @@ package br.com.jadson.snooper.github.data.users;
 
 import br.com.jadson.snooper.utils.CustomDateDeserializer;
 import br.com.jadson.snooper.utils.CustomDateSerializer;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
@@ -20,6 +21,7 @@ import java.util.Date;
  *
  * @author Jadson Santos - jadson.santos@ufrn.br
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class GitHubUserInfo {
 
     public String login;

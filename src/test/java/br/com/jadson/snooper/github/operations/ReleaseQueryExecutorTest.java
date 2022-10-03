@@ -8,6 +8,10 @@ import java.util.List;
 
 class ReleaseQueryExecutorTest {
 
+    // To Execute this code
+    // On intellij: edit configuration -> environment variable -> GITHUB_TOKEN=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+    String token = System.getenv("GITHUB_TOKEN");
+
     /**
      * Basic test
      */
@@ -16,6 +20,7 @@ class ReleaseQueryExecutorTest {
 
         ReleaseQueryExecutor executor = new ReleaseQueryExecutor();
         executor.setTestEnvironment(true);
+        executor.setGithubToken(token);
         executor.setQueryParameters(new String[]{"state=all"});
 
         List<GitHubReleaseInfo> list =  executor.releases("unbounce/iidy");

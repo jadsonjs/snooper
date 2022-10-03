@@ -7,6 +7,10 @@ import org.junit.jupiter.api.Test;
 
 class PullRequestDiffQueryExecutorTest {
 
+    // To Execute this code
+    // On intellij: edit configuration -> environment variable -> GITHUB_TOKEN=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+    String token = System.getenv("GITHUB_TOKEN");
+
     /**
      * Basic test
      */
@@ -15,6 +19,7 @@ class PullRequestDiffQueryExecutorTest {
 
         PullRequestDiffQueryExecutor gitHub = new PullRequestDiffQueryExecutor();
         gitHub.setTestEnvironment(true);
+        gitHub.setGithubToken(token);
 
         GitHubPullRequestDiffInfo info =  gitHub.pullRequestsDiff("vuejs/vue-cli", 5356l);
 

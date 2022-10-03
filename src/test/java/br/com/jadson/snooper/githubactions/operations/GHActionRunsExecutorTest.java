@@ -11,6 +11,10 @@ import java.util.List;
 
 class GHActionRunsExecutorTest {
 
+    // To Execute this code
+    // On intellij: edit configuration -> environment variable -> GITHUB_TOKEN=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+    String token = System.getenv("GITHUB_TOKEN");
+
 
     @Test
     void testAllRunsRepository(){
@@ -22,6 +26,7 @@ class GHActionRunsExecutorTest {
         executor.setQueryParameters(new String[]{ "created=" + new DateUtils().toIso8601(startCIDate)+".."+new DateUtils().toIso8601(endCIDate) });
         executor.setPageSize(10);
         executor.setTestEnvironment(true);
+        executor.setGithubToken(token);
 
         List<RunsInfo> list =  executor.runs("jadsonjs/snooper");
 
@@ -35,6 +40,7 @@ class GHActionRunsExecutorTest {
         GHActionRunsExecutor executor = new GHActionRunsExecutor();
         executor.setPageSize(1);
         executor.setTestEnvironment(true);
+        executor.setGithubToken(token);
 
         List<RunsInfo> list =  executor.runs("jadsonjs/snooper", 27792816);
 
@@ -52,6 +58,7 @@ class GHActionRunsExecutorTest {
 
         GHActionRunsExecutor executor = new GHActionRunsExecutor();
         executor.setTestEnvironment(true);
+        executor.setGithubToken(token);
 
         RunsInfo lastRunInfo =  executor.lastRun("jadsonjs/snooper");
 
@@ -63,12 +70,12 @@ class GHActionRunsExecutorTest {
 
     }
 
-    @Disabled // 403 rate limit exceeded
     @Test
     void testLastRunsWithOutStartDate(){
 
         GHActionRunsExecutor executor = new GHActionRunsExecutor();
         executor.setTestEnvironment(true);
+        executor.setGithubToken(token);
 
         RunsInfo lastRunInfo =  executor.lastRun("PGMDev/PGM");
 
@@ -85,12 +92,12 @@ class GHActionRunsExecutorTest {
     /**
      * REturn the last run of all workflows
      */
-    @Disabled // 403 rate limit exceeded
     @Test
     void testLastRunsRelevantProject(){
 
         GHActionRunsExecutor executor = new GHActionRunsExecutor();
         executor.setTestEnvironment(true);
+        executor.setGithubToken(token);
 
         RunsInfo lastRunInfo =  executor.lastRun("vuejs/vue"); // java-diff-utils/java-diff-utils
 
@@ -102,12 +109,13 @@ class GHActionRunsExecutorTest {
 
     }
 
-    @Disabled // 403 rate limit exceeded
+
     @Test
     void testLastRunsNotExist(){
 
         GHActionRunsExecutor executor = new GHActionRunsExecutor();
         executor.setTestEnvironment(true);
+        executor.setGithubToken(token);
 
         RunsInfo lastRunInfo =  executor.lastRun("torvalds/linux");
 
@@ -116,12 +124,12 @@ class GHActionRunsExecutorTest {
     }
 
 
-    @Disabled // 403 rate limit exceeded
     @Test
     void testFirstRuns(){
 
         GHActionRunsExecutor executor = new GHActionRunsExecutor();
         executor.setTestEnvironment(true);
+        executor.setGithubToken(token);
 
         RunsInfo firstRunInfo =  executor.firstRun("jadsonjs/snooper");
 
@@ -137,14 +145,14 @@ class GHActionRunsExecutorTest {
      * workflow 455721  "created_at": "2020-01-28T19:37:11Z"
      * workflow 1446  "created_at": *** "2019-12-19T01:00:22Z", ***
      */
-    @Disabled // 403 rate limit exceeded
     @Test
     void testFirstRunsWithOutRunDate(){
 
         GHActionRunsExecutor executor = new GHActionRunsExecutor();
         executor.setTestEnvironment(true);
+        executor.setGithubToken(token);
 
-        RunsInfo firstRunInfo =  executor.firstRun("PGMDev/PGM");
+        RunsInfo firstRunInfo =  executor.firstRun("jadsonjs/snooper");
 
         System.out.println("name: "+firstRunInfo.name);
         System.out.println("created_at: "+firstRunInfo.created_at);
@@ -157,26 +165,27 @@ class GHActionRunsExecutorTest {
     }
 
 
-    @Disabled // 403 rate limit exceeded
-    @Test
-    void firstRunNotExistTest() {
+    // new exist run
+//    @Test
+//    void firstRunNotExistTest() {
+//
+//        GHActionRunsExecutor executor = new GHActionRunsExecutor();
+//        executor.setTestEnvironment(true);
+//        executor.setGithubToken(token);
+//
+//        RunsInfo firstRunInfo =  executor.firstRun("amplication/amplication", 4497880);
+//
+//        System.out.println("firstRunInfo: "+firstRunInfo);
+//
+//        Assertions.assertTrue( firstRunInfo == null );
+//    }
 
-        GHActionRunsExecutor executor = new GHActionRunsExecutor();
-        executor.setTestEnvironment(true);
-
-        RunsInfo firstRunInfo =  executor.firstRun("amplication/amplication", 15004493);
-
-        System.out.println("firstRunInfo: "+firstRunInfo);
-
-        Assertions.assertTrue( firstRunInfo == null );
-    }
-
-    @Disabled // 403 rate limit exceeded
     @Test
     void firstRunNotExistTest2() {
 
         GHActionRunsExecutor executor = new GHActionRunsExecutor();
         executor.setTestEnvironment(true);
+        executor.setGithubToken(token);
 
         RunsInfo firstRunInfo =  executor.firstRun("amplication/amplication");
 
@@ -184,4 +193,5 @@ class GHActionRunsExecutorTest {
 
         Assertions.assertTrue( firstRunInfo != null );
     }
+
 }

@@ -18,6 +18,10 @@ import java.util.List;
  */
 class GitHubSearchExecutorTest {
 
+    // To Execute this code
+    // On intellij: edit configuration -> environment variable -> GITHUB_TOKEN=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+    String token = System.getenv("GITHUB_TOKEN");
+
     /**
      * Test the search:
      *
@@ -30,6 +34,7 @@ class GitHubSearchExecutorTest {
         GitHubSearchExecutor search = new GitHubSearchExecutor();
         search.setTestEnvironment(true);
         search.setPageSize(10);
+        search.setGithubToken(token);
 
         List<GitHubRepoInfo> listOfProjects = search.searchRepositoriesApi("JavaScript", 200, 300, 10000, "stars", "desc");
 
@@ -51,6 +56,7 @@ class GitHubSearchExecutorTest {
 
         GitHubSearchExecutor search = new GitHubSearchExecutor();
         search.setTestEnvironment(true);
+        search.setGithubToken(token);
 
         List<GitHubRepoInfo> listOfProjects = search.searchRepositories(null, 100000, 100000, "stars", "desc");
 
@@ -69,6 +75,7 @@ class GitHubSearchExecutorTest {
 
         GitHubSearchExecutor search = new GitHubSearchExecutor();
         search.setTestEnvironment(true);
+        search.setGithubToken(token);
 
         List<GitHubRepoInfo> listOfProjects = search.searchRepositories(null, 1000, 5000, 100000, "stars", "desc");
 
@@ -89,6 +96,7 @@ class GitHubSearchExecutorTest {
 
         GitHubSearchExecutor search = new GitHubSearchExecutor();
         search.setTestEnvironment(true);
+        search.setGithubToken(token);
 
         // java projects with more the 100 stars and 1MB
         List<GitHubRepoInfo> listOfProjects = search.searchRepositories("Java", 100, 1000, "stars", "desc");

@@ -10,11 +10,17 @@ import java.util.List;
 
 class IssueQueryExecutorTest {
 
+    // To Execute this code
+    // On intellij: edit configuration -> environment variable -> GITHUB_TOKEN=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+    String token = System.getenv("GITHUB_TOKEN");
+
+
     @Test
     void issuesTest() {
 
         IssueQueryExecutor executor = new IssueQueryExecutor();
         executor.setTestEnvironment(true);
+        executor.setGithubToken(token);
         executor.setQueryParameters(new String[]{"stage=all"});
         List<GitHubIssueInfo> list =  executor.issues("octocat/hello-world");
 
@@ -27,6 +33,7 @@ class IssueQueryExecutorTest {
 
         IssueQueryExecutor executor = new IssueQueryExecutor();
         executor.setTestEnvironment(true);
+        executor.setGithubToken(token);
         int qtd =  executor.getQtdIssues("octocat/hello-world");
         System.out.println("QTD ISSUES: "+qtd);
         Assertions.assertTrue(qtd > 0);
@@ -41,6 +48,7 @@ class IssueQueryExecutorTest {
 
         IssueQueryExecutor executor = new IssueQueryExecutor();
         executor.setTestEnvironment(true);
+        executor.setGithubToken(token);
         executor.setQueryParameters(new String[]{"stage=all", "labels=bug"});
 
 
@@ -57,6 +65,7 @@ class IssueQueryExecutorTest {
 
         IssueQueryExecutor executor = new IssueQueryExecutor();
         executor.setTestEnvironment(true);
+        executor.setGithubToken(token);
         executor.setQueryParameters(new String[]{"stage=all", "labels=bug"});
 
         LocalDateTime start = LocalDateTime.of(2021, 3, 1, 23, 59, 59);
@@ -81,6 +90,7 @@ class IssueQueryExecutorTest {
 
         IssueQueryExecutor executor = new IssueQueryExecutor();
         executor.setTestEnvironment(true);
+        executor.setGithubToken(token);
         GitHubIssueInfo info =  executor.issue("juicedata/juicefs", 1);
 
         Assertions.assertTrue(info.closed_by != null);
