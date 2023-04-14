@@ -10,6 +10,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * This returns the Pull request review comments
+ *
+ * Pull request review comments are comments made on a portion of the unified diff during a pull request review. These are different from commit comments and issue comments in a pull request.
+ */
 public class PullRequestCommentsQueryExecutor extends AbstractGitHubQueryExecutor{
 
 

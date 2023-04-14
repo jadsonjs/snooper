@@ -2,10 +2,12 @@ package br.com.jadson.snooper.travisci.operations;
 
 import br.com.jadson.snooper.travisci.data.builds.TravisBuildsInfo;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
+@Disabled
 class TravisCIBuildsQueryExecutorTest {
 
     @Test

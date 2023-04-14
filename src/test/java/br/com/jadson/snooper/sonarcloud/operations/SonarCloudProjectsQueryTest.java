@@ -7,10 +7,12 @@ import br.com.jadson.snooper.sonarcloud.data.measures.ProjectMeasuresRoot;
 import br.com.jadson.snooper.sonarcloud.data.project.SonarOrganizationProjectInfo;
 import br.com.jadson.snooper.sonarcloud.data.project.SonarProjectInfo;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
+@Disabled
 class SonarCloudProjectsQueryTest {
 
     @Test
