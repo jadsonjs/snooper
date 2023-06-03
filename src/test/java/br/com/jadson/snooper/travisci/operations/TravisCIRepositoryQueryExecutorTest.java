@@ -9,7 +9,6 @@ import org.junit.jupiter.api.Test;
 public class TravisCIRepositoryQueryExecutorTest {
 
     @Test
-
     void getRepoInfoTest() {
 
         TravisCIRepositoryQueryExecutor executor = new TravisCIRepositoryQueryExecutor();
