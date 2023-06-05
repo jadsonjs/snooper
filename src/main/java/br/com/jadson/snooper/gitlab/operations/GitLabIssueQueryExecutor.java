@@ -7,11 +7,12 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
 
 public class GitLabIssueQueryExecutor extends AbstractGitLabQueryExecutor {
@@ -19,6 +20,11 @@ public class GitLabIssueQueryExecutor extends AbstractGitLabQueryExecutor {
     public GitLabIssueQueryExecutor() {
     }
 
+    /**
+     * Return the issues of a project
+     * @param repoFullName
+     * @return
+     */
     public List<GitLabIssueInfo> issues(String repoFullName) {
         int page = 1;
         String parameters = "";
@@ -32,11 +38,21 @@ public class GitLabIssueQueryExecutor extends AbstractGitLabQueryExecutor {
                 parameters = "?page=" + page + "&per_page=" + this.pageSize;
             }
 
-            String query = "https://gitlab.com/api/v4/projects/" + repoFullName + "/issues" + parameters;
+            String query = getGitLabAPIURL() + encodeProjectName(repoFullName) + "/issues" + parameters;
+
+            // encode "/" in "%2F" supported
+            URI uri = null;
+            try {
+                uri = new URI(query);
+            } catch (URISyntaxException e) {
+                e.printStackTrace();
+            }
+
+
             System.out.println("Getting Next Issues Info: " + query);
             RestTemplate restTemplate = new RestTemplate();
             HttpEntity entity = new HttpEntity(this.getDefaultHeaders());
-            result = restTemplate.exchange(query, HttpMethod.GET, entity, GitLabIssueInfo[].class, new Object[0]);
+            result = restTemplate.exchange(uri, HttpMethod.GET, entity, GitLabIssueInfo[].class);
             all.addAll(Arrays.asList((GitLabIssueInfo[])result.getBody()));
             ++page;
         } while(result != null && ((GitLabIssueInfo[])result.getBody()).length > 0 && !this.testEnvironment);
@@ -45,16 +61,18 @@ public class GitLabIssueQueryExecutor extends AbstractGitLabQueryExecutor {
     }
 
     public List<GitLabIssueInfo> issuesClosedInPeriod(String repoFullName, LocalDateTime start, LocalDateTime end) {
-        List<GitLabIssueInfo> issues = new ArrayList();
-        List<GitLabIssueInfo> allIssues = this.issues(repoFullName);
-        DateUtils dateUtils = new DateUtils();
-        Iterator var7 = allIssues.iterator();
 
-        while(var7.hasNext()) {
-            GitLabIssueInfo issue = (GitLabIssueInfo)var7.next();
-            if (issue.closed_at != null) {
-                LocalDateTime closedDate = issue.closed_at.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
-                if (dateUtils.isBetweenDates(closedDate, start, end)) {
+        List<GitLabIssueInfo> issues = new ArrayList();
+
+        List<GitLabIssueInfo> allIssues = issues(repoFullName);
+
+        DateUtils dateUtils = new DateUtils();
+
+        for (GitLabIssueInfo issue : allIssues) {
+
+            if (issue.created_at != null) {
+                LocalDateTime startIssue = issue.created_at.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+                if (dateUtils.isBetweenDates(startIssue, start, end)) {
                     issues.add(issue);
                 }
             }

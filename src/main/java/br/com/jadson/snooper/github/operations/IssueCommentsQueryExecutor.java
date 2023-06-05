@@ -1,6 +1,5 @@
 package br.com.jadson.snooper.github.operations;
 
-import br.com.jadson.snooper.github.data.comments.GithubCommentsInfo;
 import br.com.jadson.snooper.github.data.comments.GithubIssueCommentsInfo;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;

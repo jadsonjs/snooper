@@ -1,8 +1,11 @@
 package br.com.jadson.snooper.gitlab.data.merge;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import java.util.Date;
 import java.util.List;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class GitLabMergeRequestInfo {
     public int id;
     public int iid;

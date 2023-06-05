@@ -2,7 +2,6 @@ package br.com.jadson.snooper.githubactions.operations;
 
 import br.com.jadson.snooper.githubactions.data.workflow.WorkflowInfo;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;

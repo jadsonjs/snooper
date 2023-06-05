@@ -7,11 +7,12 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
 
 public class GitLabMergeRequestQueryExecutor extends AbstractGitLabQueryExecutor {
@@ -19,6 +20,14 @@ public class GitLabMergeRequestQueryExecutor extends AbstractGitLabQueryExecutor
     public GitLabMergeRequestQueryExecutor() {
     }
 
+    /**
+     * Return merge request of a project
+     *
+     * ?state=all = recovery all
+     *
+     * @param repoFullName
+     * @return
+     */
     public List<GitLabMergeRequestInfo> mergeRequests(String repoFullName) {
         int page = 1;
         String parameters = "";
@@ -32,11 +41,20 @@ public class GitLabMergeRequestQueryExecutor extends AbstractGitLabQueryExecutor
                 parameters = "?page=" + page + "&per_page=" + this.pageSize;
             }
 
-            String query = "https://gitlab.com/api/v4/projects/" + repoFullName + "/merge_requests" + parameters;
+            String query = getGitLabAPIURL() + encodeProjectName(repoFullName) + "/merge_requests" + parameters;
+
+            // encode "/" in "%2F" supported
+            URI uri = null;
+            try {
+                uri = new URI(query);
+            } catch (URISyntaxException e) {
+                e.printStackTrace();
+            }
+
             System.out.println("Getting Next Merge Info: " + query);
             RestTemplate restTemplate = new RestTemplate();
             HttpEntity entity = new HttpEntity(this.getDefaultHeaders());
-            result = restTemplate.exchange(query, HttpMethod.GET, entity, GitLabMergeRequestInfo[].class, new Object[0]);
+            result = restTemplate.exchange(uri, HttpMethod.GET, entity, GitLabMergeRequestInfo[].class);
             allPull.addAll(Arrays.asList((GitLabMergeRequestInfo[])result.getBody()));
             ++page;
         } while(result != null && ((GitLabMergeRequestInfo[])result.getBody()).length > 0 && !this.testEnvironment);
@@ -44,23 +62,32 @@ public class GitLabMergeRequestQueryExecutor extends AbstractGitLabQueryExecutor
         return allPull;
     }
 
+    /**
+     * Return the merge request created in specific period
+     * @param repoFullName
+     * @param start
+     * @param end
+     * @return
+     */
     public List<GitLabMergeRequestInfo> mergeRequestsCreatedInPeriod(String repoFullName, LocalDateTime start, LocalDateTime end) {
-        List<GitLabMergeRequestInfo> mergeRequests = new ArrayList();
-        List<GitLabMergeRequestInfo> allMergeRequests = this.mergeRequests(repoFullName);
-        DateUtils dateUtils = new DateUtils();
-        Iterator var7 = allMergeRequests.iterator();
 
-        while(var7.hasNext()) {
-            GitLabMergeRequestInfo mr = (GitLabMergeRequestInfo)var7.next();
-            if (mr.created_at != null) {
-                LocalDateTime createdDate = LocalDateTime.ofInstant(mr.created_at.toInstant(), ZoneId.systemDefault());
-                if (dateUtils.isBetweenDates(createdDate, start, end)) {
-                    mergeRequests.add(mr);
+        List<GitLabMergeRequestInfo> issues = new ArrayList();
+
+        List<GitLabMergeRequestInfo> allIssues = mergeRequests(repoFullName);
+
+        DateUtils dateUtils = new DateUtils();
+
+        for (GitLabMergeRequestInfo issue : allIssues) {
+
+            if (issue.created_at != null) {
+                LocalDateTime startIssue = issue.created_at.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+                if (dateUtils.isBetweenDates(startIssue, start, end)) {
+                    issues.add(issue);
                 }
             }
         }
 
-        return mergeRequests;
+        return issues;
     }
 
 

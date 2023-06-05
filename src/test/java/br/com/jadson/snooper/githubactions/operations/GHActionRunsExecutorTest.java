@@ -3,7 +3,6 @@ package br.com.jadson.snooper.githubactions.operations;
 import br.com.jadson.snooper.githubactions.data.runs.RunsInfo;
 import br.com.jadson.snooper.utils.DateUtils;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;

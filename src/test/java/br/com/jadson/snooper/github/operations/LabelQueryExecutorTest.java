@@ -1,13 +1,10 @@
 package br.com.jadson.snooper.github.operations;
 
 import br.com.jadson.snooper.github.data.LabelInfo;
-import br.com.jadson.snooper.github.data.issue.GitHubIssueInfo;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class LabelQueryExecutorTest {
 

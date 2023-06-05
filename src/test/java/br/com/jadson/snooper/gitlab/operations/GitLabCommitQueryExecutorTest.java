@@ -1,14 +1,10 @@
 package br.com.jadson.snooper.gitlab.operations;
 
-import br.com.jadson.snooper.github.data.commit.GitHubCommitInfo;
-import br.com.jadson.snooper.github.operations.CommitQueryExecutor;
 import br.com.jadson.snooper.gitlab.data.commit.GitLabCommitInfo;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class GitLabCommitQueryExecutorTest {
 
