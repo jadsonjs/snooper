@@ -96,7 +96,7 @@ public class GitHubPullRequestInfo {
 
     public String author_association;
 
-    GitHubPullRequestBaseInfo base;
+    public GitHubPullRequestBaseInfo base;
 
     /**
      * Use that merge this pull request
