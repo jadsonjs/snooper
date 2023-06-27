@@ -53,6 +53,8 @@ public class GitHubPullRequestInfo {
 
     public String title;
 
+    public String body;
+
     public long number;
 
     public String state;
@@ -77,6 +79,7 @@ public class GitHubPullRequestInfo {
     @JsonFormat(pattern="yyyy-MM-dd'T'HH:mm:ss'Z'")
     public Date merged_at;
 
+
     public String merge_commit_sha;
 
     public List<LabelInfo> labels;
@@ -92,6 +95,8 @@ public class GitHubPullRequestInfo {
     public String statuses_url;
 
     public String author_association;
+
+    GitHubPullRequestBaseInfo base;
 
     /**
      * Use that merge this pull request
@@ -110,7 +115,7 @@ public class GitHubPullRequestInfo {
     @Override
     public String toString() {
         return "GitHubPullRequestInfo{" + "id='" + id + '\'' + ", title='" + title + '\'' + ", number=" + number +
-                ", state='" + state + '\'' + ", created_at=" + created_at + ", closed_at=" + closed_at + '}';
+                ", state='" + state + '\'' + ", created_at=" + created_at + ", closed_at=" + closed_at + ", merged_at=" + merged_at + '}';
     }
 
 }

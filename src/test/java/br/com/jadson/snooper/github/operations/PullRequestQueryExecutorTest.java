@@ -29,6 +29,21 @@ class PullRequestQueryExecutorTest {
         Assertions.assertTrue(list.size() > 0);
     }
 
+
+    @Test
+    void testListPullRequestsAssociatedwithCommit(){
+
+        PullRequestQueryExecutor executor = new PullRequestQueryExecutor();
+        executor.setTestEnvironment(true);
+        executor.setGithubToken(token);
+        List<GitHubPullRequestInfo> list =  executor.listPullRequestsAssociatedwithCommit("traPtitech/traQ", "43b707020d19fe6bc8dce8b3fdb0e2e0f367b6c7");
+
+        System.out.println(list.get(0));
+
+        Assertions.assertTrue(list.size() > 0);
+    }
+
+
     /**
      * Basic test with token
      */

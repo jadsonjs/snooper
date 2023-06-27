@@ -103,6 +103,60 @@ public class CommitQueryExecutor extends AbstractGitHubQueryExecutor {
         return allPull;
     }
 
+
+
+    /**
+     * Return all commits of a reference (can be a branch or tag)
+     *
+     * More information at: https://docs.github.com/en/rest/commits/commits?apiVersion=2022-11-28#get-a-commit
+     *
+     * Exemple:
+     * https://api.github.com/repos/traPtitech/traQ/commits/master?page=1&per_page=1
+     *
+     * @param repoFullName
+     * @param ref a branch or a tag name
+     * @return all commits form a branch or tag
+     */
+    public GitHubCommitInfo getCommitsOfReference(String repoFullName, String ref) {
+
+        validateRepoName(repoFullName);
+
+        int page = 1;
+
+        String parameters = "";
+
+        GitHubCommitInfo commitInfo = null;
+
+        ResponseEntity<GitHubCommitInfo> result;
+
+       // do {
+
+            if(queryParameters != null && ! queryParameters.isEmpty())
+                parameters = "?"+queryParameters+"page="+page+"&per_page="+pageSize;
+            else
+                parameters = "?page="+page+"&per_page="+pageSize;
+
+            String query = GIT_HUB_API_URL +"/repos/"+repoFullName+"/commits"+"/"+ref+parameters;
+
+            System.out.println("Getting Next Commit: "+query);
+
+            RestTemplate restTemplate = new RestTemplate();
+
+            HttpEntity entity = new HttpEntity(getDefaultHeaders());
+
+            result = restTemplate.exchange( query, HttpMethod.GET, entity, GitHubCommitInfo.class);
+
+            commitInfo = result.getBody();
+
+            page++;
+
+
+      //  }while ( result != null && result.getBody() != null   && !testEnvironment);
+
+        return commitInfo;
+    }
+
+
     /**
      * Return all commits associated with the PR
      *

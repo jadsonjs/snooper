@@ -32,6 +32,22 @@ class CommitQueryExecutorTest {
 
     }
 
+
+    @Test
+    void testCommitsOfReferemce(){
+
+        CommitQueryExecutor commitExecutor = new CommitQueryExecutor();
+        commitExecutor.setPageSize(1);
+        commitExecutor.setGithubToken(token);
+        commitExecutor.setTestEnvironment(true);
+        GitHubCommitInfo commitsInfo = commitExecutor.getCommitsOfReference("traPtitech/traQ/", "master");
+
+        // Assertions.assertTrue(commitsInfo.size() == 1);
+        Assertions.assertNotNull(commitsInfo.sha);
+
+    }
+
+
     /**
      * Basic test
      */
