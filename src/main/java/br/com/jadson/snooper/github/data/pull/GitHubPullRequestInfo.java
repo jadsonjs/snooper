@@ -47,7 +47,7 @@ public class GitHubPullRequestInfo {
 
     public String url;
 
-    public String id;
+    public Long id;
 
     public GitHubPullRequestUserInfo user;
 

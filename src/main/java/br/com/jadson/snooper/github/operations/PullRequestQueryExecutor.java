@@ -207,6 +207,9 @@ public class PullRequestQueryExecutor extends AbstractGitHubQueryExecutor {
 
         ResponseEntity<GitHubPullRequestInfo[]> result;
 
+        List<Long> idsPullsResult = new ArrayList<>();
+
+        whileloop:
         do {
 
             if(queryParameters != null && ! queryParameters.isEmpty())
@@ -224,7 +227,17 @@ public class PullRequestQueryExecutor extends AbstractGitHubQueryExecutor {
 
             result = restTemplate.exchange( query, HttpMethod.GET, entity, GitHubPullRequestInfo[].class);
 
-            allPull.addAll(  Arrays.asList(result.getBody()) );
+            List<GitHubPullRequestInfo> tempList = Arrays.asList(result.getBody());
+
+            for (GitHubPullRequestInfo info : tempList) {
+                if( ! idsPullsResult.contains(info.id)) {
+                    idsPullsResult.add(info.id);
+                }else{
+                    break whileloop;
+                }
+            }
+
+            allPull.addAll(  tempList );
 
             page++;
 
