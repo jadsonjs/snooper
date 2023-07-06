@@ -1,5 +1,6 @@
 package br.com.jadson.snooper.gitlab.data.issue;
 
+import br.com.jadson.snooper.gitlab.data.basic.GitLabAuthorInfo;
 import br.com.jadson.snooper.gitlab.data.merge.*;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
@@ -10,7 +11,7 @@ import java.util.List;
 public class GitLabIssueInfo {
         public String state;
         public String description;
-        public Author author;
+        public GitLabAuthorInfo author;
         public Milestone milestone;
         public int project_id;
         public List<Assignee> assignees;
@@ -18,7 +19,7 @@ public class GitLabIssueInfo {
         public String type;
         public Date updated_at;
         public Date closed_at;
-        public Author closed_by;
+        public GitLabAuthorInfo closed_by;
         public int id;
         public String title;
         public Date created_at;

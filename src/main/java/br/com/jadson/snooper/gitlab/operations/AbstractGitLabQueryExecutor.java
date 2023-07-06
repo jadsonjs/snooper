@@ -20,20 +20,7 @@ abstract class AbstractGitLabQueryExecutor {
     protected String queryParameters;
     protected boolean testEnvironment = false;
 
-    public AbstractGitLabQueryExecutor() {
-    }
 
-    public AbstractGitLabQueryExecutor(String gitlabDomain, String gitlabToken) {
-        if (gitlabToken == null || gitlabToken.trim().equals("") ) {
-            throw new RuntimeException("Invalid GitLab Token: " + gitlabToken);
-        }
-        if (gitlabDomain == null || gitlabDomain.trim().equals("") ) {
-            throw new RuntimeException("Invalid GitLab Domain: " + gitlabDomain);
-        }
-
-        this.gitlabDomain = gitlabDomain;
-        this.gitlabToken = gitlabToken;
-    }
 
     public void setPageSize(int pageSize) {
         if (pageSize >= 0 && pageSize <= 100) {
@@ -97,17 +84,26 @@ abstract class AbstractGitLabQueryExecutor {
     }
 
 
-    public void setGitlabToken(String gitlabToken) {
+    public AbstractGitLabQueryExecutor setGitlabToken(String gitlabToken) {
         this.gitlabToken = gitlabToken;
+        return this;
     }
 
-    public void setTestEnvironment(boolean testEnvironment) {
+    public AbstractGitLabQueryExecutor setGitlabDomain(String gitlabDomain) {
+        this.gitlabDomain = gitlabDomain;
+        return this;
+    }
+
+    public AbstractGitLabQueryExecutor setTestEnvironment(boolean testEnvironment) {
         this.testEnvironment = testEnvironment;
+        return this;
     }
 
     public String getQueryParameters() {
         return this.queryParameters;
     }
+
+
 
     /**
      * Return the Gitlab URL to specific gitlab instance.

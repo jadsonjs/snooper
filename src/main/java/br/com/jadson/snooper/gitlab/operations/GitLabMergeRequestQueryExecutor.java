@@ -20,6 +20,18 @@ public class GitLabMergeRequestQueryExecutor extends AbstractGitLabQueryExecutor
     public GitLabMergeRequestQueryExecutor() {
     }
 
+    public GitLabMergeRequestQueryExecutor(String gitlabDomain, String gitlabToken) {
+        if (gitlabToken == null || gitlabToken.trim().equals("") ) {
+            throw new RuntimeException("Invalid GitLab Token: " + gitlabToken);
+        }
+        if (gitlabDomain == null || gitlabDomain.trim().equals("") ) {
+            throw new RuntimeException("Invalid GitLab URL: " + gitlabDomain);
+        }
+
+        this.gitlabDomain = gitlabDomain;
+        this.gitlabToken = gitlabToken;
+    }
+
     /**
      * Return merge request of a project
      *
@@ -69,15 +81,15 @@ public class GitLabMergeRequestQueryExecutor extends AbstractGitLabQueryExecutor
      * @param end
      * @return
      */
-    public List<GitLabMergeRequestInfo> mergeRequestsCreatedInPeriod(String repoFullName, LocalDateTime start, LocalDateTime end) {
+    public List<GitLabMergeRequestInfo> mergeRequestsInPeriod(String repoFullName, LocalDateTime start, LocalDateTime end) {
 
         List<GitLabMergeRequestInfo> issues = new ArrayList();
 
-        List<GitLabMergeRequestInfo> allIssues = mergeRequests(repoFullName);
+        List<GitLabMergeRequestInfo> allMergesRequests = mergeRequests(repoFullName);
 
         DateUtils dateUtils = new DateUtils();
 
-        for (GitLabMergeRequestInfo issue : allIssues) {
+        for (GitLabMergeRequestInfo issue : allMergesRequests) {
 
             if (issue.created_at != null) {
                 LocalDateTime startIssue = issue.created_at.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();

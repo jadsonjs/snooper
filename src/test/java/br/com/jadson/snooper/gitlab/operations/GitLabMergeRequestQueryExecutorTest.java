@@ -30,14 +30,14 @@ class GitLabMergeRequestQueryExecutorTest {
 
 
     @Test
-    void mergeRequestsCreatedInPeriodTest() {
+    void mergeRequestsInPeriodTest() {
 
         GitLabMergeRequestQueryExecutor commitExecutor = new GitLabMergeRequestQueryExecutor();
         commitExecutor.setQueryParameters(new String[]{"state=all"});
         commitExecutor.setPageSize(100);
         commitExecutor.setGitlabToken(token);
         commitExecutor.setTestEnvironment(true);
-        List<GitLabMergeRequestInfo> mergeRequests = commitExecutor.mergeRequestsCreatedInPeriod("jadsonjs/holter-ci",
+        List<GitLabMergeRequestInfo> mergeRequests = commitExecutor.mergeRequestsInPeriod("jadsonjs/holter-ci",
                 LocalDateTime.of(2023, 6, 1, 0,0,0),
                 LocalDateTime.of(2023, 6, 10, 0,0,0) );
 

@@ -20,6 +20,18 @@ public class GitLabIssueQueryExecutor extends AbstractGitLabQueryExecutor {
     public GitLabIssueQueryExecutor() {
     }
 
+    public GitLabIssueQueryExecutor(String gitlabDomain, String gitlabToken) {
+        if (gitlabToken == null || gitlabToken.trim().equals("") ) {
+            throw new RuntimeException("Invalid GitLab Token: " + gitlabToken);
+        }
+        if (gitlabDomain == null || gitlabDomain.trim().equals("") ) {
+            throw new RuntimeException("Invalid GitLab URL: " + gitlabDomain);
+        }
+
+        this.gitlabDomain = gitlabDomain;
+        this.gitlabToken = gitlabToken;
+    }
+
     /**
      * Return the issues of a project
      * @param repoFullName
@@ -60,7 +72,7 @@ public class GitLabIssueQueryExecutor extends AbstractGitLabQueryExecutor {
         return all;
     }
 
-    public List<GitLabIssueInfo> issuesClosedInPeriod(String repoFullName, LocalDateTime start, LocalDateTime end) {
+    public List<GitLabIssueInfo> issuesInPeriod(String repoFullName, LocalDateTime start, LocalDateTime end) {
 
         List<GitLabIssueInfo> issues = new ArrayList();
 

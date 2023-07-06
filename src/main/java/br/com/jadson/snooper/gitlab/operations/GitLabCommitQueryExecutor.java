@@ -15,6 +15,19 @@ import java.util.List;
 public class GitLabCommitQueryExecutor extends AbstractGitLabQueryExecutor {
 
     public GitLabCommitQueryExecutor() {
+
+    }
+
+    public GitLabCommitQueryExecutor(String gitlabDomain, String gitlabToken) {
+        if (gitlabToken == null || gitlabToken.trim().equals("") ) {
+            throw new RuntimeException("Invalid GitLab Token: " + gitlabToken);
+        }
+        if (gitlabDomain == null || gitlabDomain.trim().equals("") ) {
+            throw new RuntimeException("Invalid GitLab URL: " + gitlabDomain);
+        }
+
+        this.gitlabDomain = gitlabDomain;
+        this.gitlabToken = gitlabToken;
     }
 
     /**

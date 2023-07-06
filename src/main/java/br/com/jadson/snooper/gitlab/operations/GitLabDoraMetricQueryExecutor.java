@@ -23,6 +23,21 @@ import java.util.List;
 @Deprecated
 public class GitLabDoraMetricQueryExecutor extends AbstractGitLabQueryExecutor{
 
+    public GitLabDoraMetricQueryExecutor(){
+
+    }
+
+    public GitLabDoraMetricQueryExecutor(String gitlabDomain, String gitlabToken) {
+        if (gitlabToken == null || gitlabToken.trim().equals("") ) {
+            throw new RuntimeException("Invalid GitLab Token: " + gitlabToken);
+        }
+        if (gitlabDomain == null || gitlabDomain.trim().equals("") ) {
+            throw new RuntimeException("Invalid GitLab URL: " + gitlabDomain);
+        }
+
+        this.gitlabDomain = gitlabDomain;
+        this.gitlabToken = gitlabToken;
+    }
 
     /**
      * How deployment frequency is calculated

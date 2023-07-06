@@ -1,5 +1,6 @@
 package br.com.jadson.snooper.gitlab.data.merge;
 
+import br.com.jadson.snooper.gitlab.data.basic.GitLabAuthorInfo;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import java.util.Date;
@@ -15,7 +16,7 @@ public class GitLabMergeRequestInfo {
     public String state;
     public MergeUser merge_user;
     public Date merged_at;
-    public Author closed_by;
+    public GitLabAuthorInfo closed_by;
     public Date closed_at;
     public Date created_at;
     public Date updated_at;
@@ -23,7 +24,7 @@ public class GitLabMergeRequestInfo {
     public String source_branch;
     public int upvotes;
     public int downvotes;
-    public Author author;
+    public GitLabAuthorInfo author;
     public Assignee assignee;
     public List<Assignee> assignees;
     public List<Reviewer> reviewers;
