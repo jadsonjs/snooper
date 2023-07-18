@@ -43,7 +43,7 @@ public class GitLabMergeRequestQueryExecutor extends AbstractGitLabQueryExecutor
     public List<GitLabMergeRequestInfo> mergeRequests(String repoFullName) {
         int page = 1;
         String parameters = "";
-        ArrayList allPull = new ArrayList();
+        ArrayList allMerge = new ArrayList();
 
         ResponseEntity result;
         do {
@@ -67,11 +67,11 @@ public class GitLabMergeRequestQueryExecutor extends AbstractGitLabQueryExecutor
             RestTemplate restTemplate = new RestTemplate();
             HttpEntity entity = new HttpEntity(this.getDefaultHeaders());
             result = restTemplate.exchange(uri, HttpMethod.GET, entity, GitLabMergeRequestInfo[].class);
-            allPull.addAll(Arrays.asList((GitLabMergeRequestInfo[])result.getBody()));
+            allMerge.addAll(Arrays.asList((GitLabMergeRequestInfo[])result.getBody()));
             ++page;
         } while(result != null && ((GitLabMergeRequestInfo[])result.getBody()).length > 0 && !this.testEnvironment);
 
-        return allPull;
+        return allMerge;
     }
 
     /**
@@ -101,6 +101,51 @@ public class GitLabMergeRequestQueryExecutor extends AbstractGitLabQueryExecutor
 
         return issues;
     }
+
+    /**
+     * Return the list of all merge request associated to a commmit.
+     *
+     * https://projetos.imd.ufrn.br/api/v4/projects/:ID/repository/commits/SHA/merge_requests
+     *
+     * @param repoFullName
+     * @param commitSHA
+     * @return
+     */
+    public List<GitLabMergeRequestInfo> listMergeRequestsAssociatedwithCommit(String repoFullName, String commitSHA) {
+        int page = 1;
+        String parameters = "";
+        ArrayList allMerges = new ArrayList();
+
+        ResponseEntity result;
+        do {
+            if (this.queryParameters != null && !this.queryParameters.isEmpty()) {
+                parameters = "?" + this.queryParameters + "page=" + page + "&per_page=" + this.pageSize;
+            } else {
+                parameters = "?page=" + page + "&per_page=" + this.pageSize;
+            }
+
+            // https://projetos.imd.ufrn.br/api/v4/projects + "group/project" + /commits/   SHA
+            String query = getGitLabAPIURL() + encodeProjectName(repoFullName) + "/commits/" +commitSHA+ "/merge_requests" + parameters;
+
+            // encode "/" in "%2F" supported
+            URI uri = null;
+            try {
+                uri = new URI(query);
+            } catch (URISyntaxException e) {
+                e.printStackTrace();
+            }
+
+            System.out.println("Getting Next Merge Info: " + query);
+            RestTemplate restTemplate = new RestTemplate();
+            HttpEntity entity = new HttpEntity(this.getDefaultHeaders());
+            result = restTemplate.exchange(uri, HttpMethod.GET, entity, GitLabMergeRequestInfo[].class);
+            allMerges.addAll(Arrays.asList((GitLabMergeRequestInfo[])result.getBody()));
+            ++page;
+        } while(result != null && ((GitLabMergeRequestInfo[])result.getBody()).length > 0 && !this.testEnvironment);
+
+        return allMerges;
+    }
+
 
 
 }

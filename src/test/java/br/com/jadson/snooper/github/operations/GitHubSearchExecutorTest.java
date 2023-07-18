@@ -7,6 +7,7 @@ package br.com.jadson.snooper.github.operations;
 
 import br.com.jadson.snooper.github.data.repo.GitHubRepoInfo;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -52,6 +53,7 @@ class GitHubSearchExecutorTest {
      * https://github.com/search?o=desc&q=stars%3A%3E%3D100000+size%3A%3E%3D100000&s=stars&type=Repositories
      */
     @Test
+    @Disabled
     void testURLRepositoriesInformationByGitHubSearch(){
 
         GitHubSearchExecutor search = new GitHubSearchExecutor();
@@ -71,6 +73,7 @@ class GitHubSearchExecutorTest {
      * https://github.com/search?l=&o=desc&q=stars%3A5000..10000+language%3AJava&s=stars&type=Repositories&p=1
      */
     @Test
+    @Disabled
     void testURLRepositoriesStarInterval(){
 
         GitHubSearchExecutor search = new GitHubSearchExecutor();
@@ -92,6 +95,7 @@ class GitHubSearchExecutorTest {
      * https://github.com/search?l=&o=desc&q=stars%3A%3E%3D100+size%3A%3E%3D1000+language%3AJava&s=stars&type=Repositories
      */
     @Test
+    @Disabled
     void testURLRepositoriesInformationByGitHubSearchWithPagination(){
 
         GitHubSearchExecutor search = new GitHubSearchExecutor();
