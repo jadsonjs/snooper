@@ -124,8 +124,8 @@ public class GitLabMergeRequestQueryExecutor extends AbstractGitLabQueryExecutor
                 parameters = "?page=" + page + "&per_page=" + this.pageSize;
             }
 
-            // https://projetos.imd.ufrn.br/api/v4/projects + "group/project" + /commits/   SHA
-            String query = getGitLabAPIURL() + encodeProjectName(repoFullName) + "/commits/" +commitSHA+ "/merge_requests" + parameters;
+            // https://projetos.imd.ufrn.br/api/v4/projects + "group/project" + /repository/commits/   SHA
+            String query = getGitLabAPIURL() + encodeProjectName(repoFullName) + "/repository/commits/" +commitSHA+ "/merge_requests" + parameters;
 
             // encode "/" in "%2F" supported
             URI uri = null;
