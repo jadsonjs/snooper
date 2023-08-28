@@ -33,7 +33,6 @@ import br.com.jadson.snooper.sonarcloud.data.history.MeasureHistoryInfo;
 import br.com.jadson.snooper.sonarcloud.data.history.SonarHistoryEntry;
 import br.com.jadson.snooper.sonarcloud.data.history.SonarMetricHistoryRoot;
 import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
@@ -50,21 +49,39 @@ import java.util.List;
  * 
  * Jadson Santos - jadsonjs@gmail.com
  */
-public class SonarCloudMetricHistoryQueryExecutor extends AbstractSonarCloudQueryExecutor{
+public class SonarMetricHistoryQueryExecutor extends AbstractSonarCloudQueryExecutor{
 
+
+    public SonarMetricHistoryQueryExecutor() {
+
+    }
+
+    public SonarMetricHistoryQueryExecutor(String sonarDomain, String sonarToken) {
+        if (sonarToken == null || sonarToken.trim().equals("") ) {
+            throw new RuntimeException("Invalid GitLab Token: " + sonarToken);
+        }
+        if (sonarDomain == null || sonarDomain.trim().equals("") ) {
+            throw new RuntimeException("Invalid GitLab URL: " + sonarDomain);
+        }
+
+        this.sonarDomain = sonarDomain;
+        this.sonarToken = sonarToken;
+    }
 
     /**
-     * Get the history of metric in a period of time.
+     * !!!! Get the history of metric in a period of time !!!!!
      *
      * https://stackoverflow.com/questions/45157407/sonarqube-6-0-get-code-coverage-for-a-specific-version-of-a-project
      *
-     * @param componentKey
+     * http://localhost:9000/api/measures/search_history?component=br.ufrn.imd:base-imd&metrics=coverage&from=2023-01-05T00:00:00%2B0200&to=2023-09-06T23:59:59%2B0200
+     *
+     * @param projectKey
      * @param metric
      * @param fromDate
      * @param toDate
      * @return
      */
-    public List<SonarHistoryEntry> getProjectMetricHistory(String componentKey, String metric, LocalDateTime fromDate, LocalDateTime toDate){
+    public List<SonarHistoryEntry> getProjectMetricHistory(String projectKey, String metric, LocalDateTime fromDate, LocalDateTime toDate){
 
         int page = 1;
 
@@ -111,10 +128,10 @@ public class SonarCloudMetricHistoryQueryExecutor extends AbstractSonarCloudQuer
             * }
             *
             */
-            parameters = "?component="+componentKey+"&metrics="+metric+"&from="+formatter.format(fromDate)+timeZone+"&to="+formatter.format(toDate)+timeZone+"&p="+page+"&ps="+pageSize;
+            parameters = "?component="+encodeProjectName(projectKey)+"&metrics="+metric+"&from="+formatter.format(fromDate)+timeZone+"&to="+formatter.format(toDate)+timeZone+"&p="+page+"&ps="+pageSize;
 
 
-            String query = SONAR_CLOUD_API_URL +"/measures/search_history"+parameters;
+            String query = getSonarAPIURL()  + "/measures/search_history" + parameters;
 
             System.out.println(query);
 
@@ -124,12 +141,7 @@ public class SonarCloudMetricHistoryQueryExecutor extends AbstractSonarCloudQuer
 
             RestTemplate restTemplate = new RestTemplate();
 
-            HttpHeaders headers = new HttpHeaders();
-            headers.set("Accept", "application/json");
-            if(! sonarCloudAPIToken.isEmpty())
-                headers.set("Authorization", "token "+sonarCloudAPIToken+"");
-
-            HttpEntity entity = new HttpEntity<>(headers);
+            HttpEntity entity = new HttpEntity<>(this.getDefaultHeaders());
 
             result = restTemplate.exchange( uri, HttpMethod.GET, entity, SonarMetricHistoryRoot.class);
 

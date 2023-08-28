@@ -29,6 +29,8 @@
  */
 package br.com.jadson.snooper.sonarcloud.operations;
 
+import org.springframework.http.HttpHeaders;
+
 /**
  * Information to connect to SonarCloud API.
  *
@@ -36,9 +38,23 @@ package br.com.jadson.snooper.sonarcloud.operations;
  */
 abstract class AbstractSonarCloudQueryExecutor {
 
-    public static final String SONAR_CLOUD_API_URL = "https://sonarcloud.io/api";
+    /**
+     * We can consult sonar in different instances, in the cloud or local, so this need to be configured.
+     */
+    protected String sonarDomain = "sonarcloud.io";
 
-    protected String sonarCloudAPIToken = "";
+    /**
+     * Return the Sonar  URL to specific gitlab instance.
+     *
+     * @return
+     */
+    public final String getSonarAPIURL() {
+        return "https://"+sonarDomain+"/api";
+    }
+
+
+
+    protected String sonarToken = "";
 
     /** Default page size of pagination*/
     protected int pageSize = 50;
@@ -58,15 +74,49 @@ abstract class AbstractSonarCloudQueryExecutor {
     }
 
 
-    public void setSonarCloudAPIToken(String sonarCloudAPIToken) {
-        if(sonarCloudAPIToken == null || sonarCloudAPIToken.trim().isEmpty())
-            throw new IllegalArgumentException("invalid Sonar Cloud API Token: "+sonarCloudAPIToken);
-        this.sonarCloudAPIToken = sonarCloudAPIToken;
+    public void setSonarToken(String sonarToken) {
+        if(sonarToken == null || sonarToken.trim().isEmpty())
+            throw new IllegalArgumentException("invalid Sonar Cloud API Token: "+sonarToken);
+        this.sonarToken = sonarToken;
     }
 
     public void setPageSize(int pageSize) {
         if(pageSize <= 0 || pageSize > 10000)
             throw new IllegalArgumentException("page size should be between 1 and 10.000");
         this.pageSize = pageSize;
+    }
+
+
+    /**
+     * https://docs.sonarsource.com/sonarqube/latest/extension-guide/web-api/#authentication
+     * @return
+     */
+    protected HttpHeaders getDefaultHeaders() {
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Accept", "application/json");
+        if (this.sonarToken != null && ! this.sonarToken.isEmpty() ) {
+            // -> preferences -> Access Tokens
+            // Authorization: Bearer <your_access_token>
+            headers.set("Authorization", "Bearer "+this.sonarToken);
+        }
+
+        return headers;
+    }
+
+    public AbstractSonarCloudQueryExecutor setSonarDomain(String sonarDomain) {
+        this.sonarDomain = sonarDomain;
+        return this;
+    }
+
+
+    /*
+     * If using namespaced API requests, make sure that the NAMESPACE/PROJECT_PATH is URL-encoded.
+     * For example, '/' is represented by %2F:
+     * http://localhost:9000/project/settings?id=br.ufrn.imd%3Abase-imd
+     */
+    protected static String encodeProjectName(String repoFullName) {
+
+        repoFullName = repoFullName.replace("/", "%2F").replace(":", "%3A");
+        return repoFullName;
     }
 }

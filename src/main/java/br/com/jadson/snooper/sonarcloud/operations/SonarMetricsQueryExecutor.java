@@ -41,13 +41,43 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * Return the metrics in the instance of sonar.
+ * Sonar metric search
  * Jadson Santos - jadsonjs@gmail.com
  */
-public class SonarCloudMetricQueryExecutor extends AbstractSonarCloudQueryExecutor {
+public class SonarMetricsQueryExecutor extends AbstractSonarCloudQueryExecutor {
 
 
-    public List<SonarMetricInfo> getMetrics(){
+    public SonarMetricsQueryExecutor() {
+
+    }
+
+    public SonarMetricsQueryExecutor(String sonarDomain, String sonarToken) {
+        if (sonarToken == null || sonarToken.trim().equals("") ) {
+            throw new RuntimeException("Invalid GitLab Token: " + sonarToken);
+        }
+        if (sonarDomain == null || sonarDomain.trim().equals("") ) {
+            throw new RuntimeException("Invalid GitLab URL: " + sonarDomain);
+        }
+
+        this.sonarDomain = sonarDomain;
+        this.sonarToken = sonarToken;
+    }
+
+    /**
+     * Return all metric supported by intance of sonar.
+     *
+     * You can access a local instance
+     * --header 'Authorization: Bearer MY_TOKEN'
+     * http://localhost:9000/api/metrics/search
+     *
+     * or the cloud instance
+     *
+     * https://sonarqube.com/api/metrics/search
+     *
+     * @return
+     */
+
+    public List<SonarMetricInfo> searchMetrics(){
 
         int page = 1;
 
@@ -60,16 +90,11 @@ public class SonarCloudMetricQueryExecutor extends AbstractSonarCloudQueryExecut
         do {
             parameters = "?p="+page+"&ps="+pageSize;
 
-            String query = SONAR_CLOUD_API_URL +"/metrics/search"+parameters;
+            String query = getSonarAPIURL()  + "/metrics/search" + parameters;
 
             RestTemplate restTemplate = new RestTemplate();
 
-            HttpHeaders headers = new HttpHeaders();
-            headers.set("Accept", "application/json");
-            if(! sonarCloudAPIToken.isEmpty())
-                headers.set("Authorization", "token "+sonarCloudAPIToken+"");
-
-            HttpEntity entity = new HttpEntity<>(headers);
+            HttpEntity entity = new HttpEntity<>(this.getDefaultHeaders());
 
             result = restTemplate.exchange( query, HttpMethod.GET, entity, SonarMetricInfo[].class);
 

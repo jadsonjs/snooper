@@ -3,7 +3,7 @@ plugins {
 }
 
 group = 'br.com.jadson'
-version = '2.10'
+version = '2.11'
 sourceCompatibility = '11'
 
 configurations {

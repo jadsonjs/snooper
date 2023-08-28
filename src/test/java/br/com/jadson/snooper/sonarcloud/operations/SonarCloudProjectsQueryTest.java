@@ -18,7 +18,7 @@ class SonarCloudProjectsQueryTest {
     @Test
     void getSonarProjectsTest() {
 
-        SonarCloudProjectsQueryExecutor query = new SonarCloudProjectsQueryExecutor();
+        SonarProjectsQueryExecutor query = new SonarProjectsQueryExecutor();
         query.setTestEnvironment(true);
         query.pageSize = 1;
 
@@ -30,7 +30,7 @@ class SonarCloudProjectsQueryTest {
     @Test
     void getProjectsOfOrganization() {
 
-        SonarCloudProjectsQueryExecutor query = new SonarCloudProjectsQueryExecutor();
+        SonarProjectsQueryExecutor query = new SonarProjectsQueryExecutor();
         query.setTestEnvironment(true);
 
         List<SonarOrganizationProjectInfo> projects = query.getProjectsOfOrganization("microsoft");
@@ -49,7 +49,7 @@ class SonarCloudProjectsQueryTest {
     @Test
     void testGetProjectsOfOrganization() {
 
-        SonarCloudProjectsQueryExecutor query = new SonarCloudProjectsQueryExecutor();
+        SonarProjectsQueryExecutor query = new SonarProjectsQueryExecutor();
         query.setTestEnvironment(true);
 
         List<SonarOrganizationProjectInfo> list = query.getProjectsOfOrganization("jadsonjs");
@@ -66,7 +66,7 @@ class SonarCloudProjectsQueryTest {
     @Test
     void getProjectMeasure() {
 
-        SonarCloudProjectsQueryExecutor query = new SonarCloudProjectsQueryExecutor();
+        SonarProjectsQueryExecutor query = new SonarProjectsQueryExecutor();
         query.setTestEnvironment(true);
 
         ProjectMeasuresRoot data = query.getProjectMeasure("pipe-line-demo", "coverage");
@@ -79,7 +79,7 @@ class SonarCloudProjectsQueryTest {
     @Test
     void getProjectAnalysesTest() {
 
-        SonarCloudProjectsQueryExecutor query = new SonarCloudProjectsQueryExecutor();
+        SonarProjectsQueryExecutor query = new SonarProjectsQueryExecutor();
         query.setTestEnvironment(true);
 
         List<SonarAnalysesInfo> list = query.getProjectAnalyses("pipe-line-demo", null);
@@ -97,7 +97,7 @@ class SonarCloudProjectsQueryTest {
     @Test
     void getTotalAnalysesOfProject() {
 
-        SonarCloudProjectsQueryExecutor query = new SonarCloudProjectsQueryExecutor();
+        SonarProjectsQueryExecutor query = new SonarProjectsQueryExecutor();
         query.setTestEnvironment(true);
 
         int analyses = query.getTotalAnalysesOfProject("pipe-line-demo", null);
@@ -108,7 +108,7 @@ class SonarCloudProjectsQueryTest {
     @Test
     void getProjectLinkTeste() {
 
-        SonarCloudProjectsQueryExecutor query = new SonarCloudProjectsQueryExecutor();
+        SonarProjectsQueryExecutor query = new SonarProjectsQueryExecutor();
         query.setTestEnvironment(true);
 
         List<ProjectsLinks> links = query.getProjectLinks("jbosstools_jbosstools-integration-tests");

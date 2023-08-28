@@ -7,12 +7,12 @@ import org.junit.jupiter.api.Test;
 import java.time.LocalDateTime;
 import java.util.List;
 
-class SonarCloudMetricHistoryQueryExecutorTest {
+class SonarMetricHistoryQueryExecutorTest {
 
     @Test
     void getProjectMetricHistoryTest() {
 
-        SonarCloudMetricHistoryQueryExecutor query = new SonarCloudMetricHistoryQueryExecutor();
+        SonarMetricHistoryQueryExecutor query = new SonarMetricHistoryQueryExecutor();
         query.setTestEnvironment(true);
         LocalDateTime from = LocalDateTime.of(2021,01,05,00,00,00);
         LocalDateTime to = LocalDateTime.of(2021,01,06,23,59,59);
@@ -26,7 +26,7 @@ class SonarCloudMetricHistoryQueryExecutorTest {
     @Test
     void getProjectMetricHistoryTest2() {
 
-        SonarCloudMetricHistoryQueryExecutor query = new SonarCloudMetricHistoryQueryExecutor();
+        SonarMetricHistoryQueryExecutor query = new SonarMetricHistoryQueryExecutor();
         query.setTestEnvironment(true);
         LocalDateTime from = LocalDateTime.of(2020,11,12,13,46,11);
         LocalDateTime to = LocalDateTime.of(2020,11,12,17,50,05);

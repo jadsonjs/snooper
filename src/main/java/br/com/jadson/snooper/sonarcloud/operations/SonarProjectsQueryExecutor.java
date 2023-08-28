@@ -39,7 +39,6 @@ import br.com.jadson.snooper.sonarcloud.data.project.SonarProjectInfo;
 import br.com.jadson.snooper.sonarcloud.data.project.SonarProjectRoot;
 import br.com.jadson.snooper.sonarcloud.data.project.SonarProjectSearchRoot;
 import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
@@ -48,11 +47,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Sonar Cloud Project informations
+ * Sonar Cloud Project information queries
  *
  * Jadson Santos - jadsonjs@gmail.com
  */
-public class SonarCloudProjectsQueryExecutor extends AbstractSonarCloudQueryExecutor {
+public class SonarProjectsQueryExecutor extends AbstractSonarCloudQueryExecutor {
 
     /**
      * it's not possible to browse more than 10.000 issues. We need to refine your search.
@@ -60,9 +59,21 @@ public class SonarCloudProjectsQueryExecutor extends AbstractSonarCloudQueryExec
      */
     public final int LIMIT_SONAR_CLOUD_API = 10000;
 
-    public SonarCloudProjectsQueryExecutor(){}
+    public SonarProjectsQueryExecutor(){}
 
-    public SonarCloudProjectsQueryExecutor(int pageSize){
+    public SonarProjectsQueryExecutor(String sonarDomain, String sonarToken) {
+        if (sonarToken == null || sonarToken.trim().equals("") ) {
+            throw new RuntimeException("Invalid GitLab Token: " + sonarToken);
+        }
+        if (sonarDomain == null || sonarDomain.trim().equals("") ) {
+            throw new RuntimeException("Invalid GitLab URL: " + sonarDomain);
+        }
+
+        this.sonarDomain = sonarDomain;
+        this.sonarToken = sonarToken;
+    }
+
+    public SonarProjectsQueryExecutor(int pageSize){
         this.setPageSize(pageSize);
     }
 
@@ -103,7 +114,8 @@ public class SonarCloudProjectsQueryExecutor extends AbstractSonarCloudQueryExec
 
             parameters = "?boostNewProjects=false&facets=ncloc,languages&filter=languages="+languages+"&s="+sortBy+"&asc=false"+"&p="+page+"&ps="+pageSize;
 
-            String query = SONAR_CLOUD_API_URL +"/components/search_projects"+parameters;
+
+            String query = getSonarAPIURL()  + "/components/search_history" + parameters;
 
             System.out.println("Recovering: "+(page*pageSize)+" elements of: "+total);
             System.out.println("page: "+page);
@@ -113,12 +125,7 @@ public class SonarCloudProjectsQueryExecutor extends AbstractSonarCloudQueryExec
 
             RestTemplate restTemplate = new RestTemplate();
 
-            HttpHeaders headers = new HttpHeaders();
-            headers.set("Accept", "application/json");
-            if(! sonarCloudAPIToken.isEmpty())
-                headers.set("Authorization", "token "+sonarCloudAPIToken+"");
-
-            HttpEntity entity = new HttpEntity<>(headers);
+            HttpEntity entity = new HttpEntity<>(this.getDefaultHeaders());
 
             result = restTemplate.exchange( query, HttpMethod.GET, entity, SonarProjectSearchRoot.class);
 
@@ -159,16 +166,12 @@ public class SonarCloudProjectsQueryExecutor extends AbstractSonarCloudQueryExec
         do {
             parameters = "?organization="+organization+"&qualifiers=TRK"+"&p="+page+"&ps="+pageSize;
 
-            String query = SONAR_CLOUD_API_URL +"/components/search"+parameters;
+
+            String query = getSonarAPIURL()  + "/components/search" + parameters;
 
             RestTemplate restTemplate = new RestTemplate();
 
-            HttpHeaders headers = new HttpHeaders();
-            headers.set("Accept", "application/json");
-            if(! sonarCloudAPIToken.isEmpty())
-                headers.set("Authorization", "token "+sonarCloudAPIToken+"");
-
-            HttpEntity entity = new HttpEntity<>(headers);
+            HttpEntity entity = new HttpEntity<>(this.getDefaultHeaders());
 
             result = restTemplate.exchange( query, HttpMethod.GET, entity, SonarProjectRoot.class);
 
@@ -202,16 +205,11 @@ public class SonarCloudProjectsQueryExecutor extends AbstractSonarCloudQueryExec
 
         String parameters = "?componentKey="+projectKey+"&metricKeys="+metrics;
 
-        String query = SONAR_CLOUD_API_URL +"/measures/component"+parameters;
+        String query = getSonarAPIURL()  + "/measures/component" + parameters;
 
         RestTemplate restTemplate = new RestTemplate();
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.set("Accept", "application/json");
-        if(! sonarCloudAPIToken.isEmpty())
-            headers.set("Authorization", "token "+sonarCloudAPIToken+"");
-
-        HttpEntity entity = new HttpEntity<>(headers);
+        HttpEntity entity = new HttpEntity<>(this.getDefaultHeaders());
 
         result = restTemplate.exchange( query, HttpMethod.GET, entity, ProjectMeasuresRoot.class);
 
@@ -245,16 +243,11 @@ public class SonarCloudProjectsQueryExecutor extends AbstractSonarCloudQueryExec
 
             parameters +="&p="+page+"&ps="+pageSize;
 
-            String query = SONAR_CLOUD_API_URL +"/project_analyses/search"+parameters;
+            String query = getSonarAPIURL()  + "/project_analyses/search" + parameters;
 
             RestTemplate restTemplate = new RestTemplate();
 
-            HttpHeaders headers = new HttpHeaders();
-            headers.set("Accept", "application/json");
-            if(! sonarCloudAPIToken.isEmpty())
-                headers.set("Authorization", "token "+sonarCloudAPIToken+"");
-
-            HttpEntity entity = new HttpEntity<>(headers);
+            HttpEntity entity = new HttpEntity<>(this.getDefaultHeaders());
 
             result = restTemplate.exchange( query, HttpMethod.GET, entity, SonarAnalysesRoot.class);
 
@@ -288,16 +281,12 @@ public class SonarCloudProjectsQueryExecutor extends AbstractSonarCloudQueryExec
         if(category != null && ! category.trim().equals(""))
             parameters += "&category="+category;
 
-        String query = SONAR_CLOUD_API_URL +"/project_analyses/search"+parameters;
+
+        String query = getSonarAPIURL()  + "/project_analyses/search" + parameters;
 
         RestTemplate restTemplate = new RestTemplate();
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.set("Accept", "application/json");
-        if(! sonarCloudAPIToken.isEmpty())
-            headers.set("Authorization", "token "+sonarCloudAPIToken+"");
-
-        HttpEntity entity = new HttpEntity<>(headers);
+        HttpEntity entity = new HttpEntity<>(this.getDefaultHeaders());
 
         result = restTemplate.exchange( query, HttpMethod.GET, entity, SonarAnalysesRoot.class);
 
@@ -318,16 +307,11 @@ public class SonarCloudProjectsQueryExecutor extends AbstractSonarCloudQueryExec
 
         String parameters = "?projectKey="+projectKey;
 
-        String query = SONAR_CLOUD_API_URL +"/project_links/search"+parameters;
+        String query = getSonarAPIURL()  + "/project_links/search" + parameters;
 
         RestTemplate restTemplate = new RestTemplate();
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.set("Accept", "application/json");
-        if(! sonarCloudAPIToken.isEmpty())
-            headers.set("Authorization", "token "+sonarCloudAPIToken+"");
-
-        HttpEntity entity = new HttpEntity<>(headers);
+        HttpEntity entity = new HttpEntity<>(this.getDefaultHeaders());
 
         result = restTemplate.exchange( query, HttpMethod.GET, entity, ProjectLinkRoot.class);
 
