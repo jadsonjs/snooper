@@ -21,6 +21,24 @@ abstract class AbstractGitLabQueryExecutor {
     protected boolean testEnvironment = false;
 
 
+    protected boolean useHttps = true;
+
+
+    public void setUseHttps(boolean useHttps) {
+        this.useHttps = useHttps;
+    }
+
+    /**
+     * Return the Gitlab URL to specific gitlab instance.
+     *
+     * The following is a basic example of a request to the fictional gitlab.example.com endpoint:
+     * "https://gitlab.example.com/api/v4/projects"
+     *
+     * @return
+     */
+    public final String getGitLabAPIURL() {
+        return (useHttps ? "https://" : "http://" )+gitlabDomain+"/api/v4/projects/";
+    }
 
     public void setPageSize(int pageSize) {
         if (pageSize >= 0 && pageSize <= 100) {
@@ -105,15 +123,5 @@ abstract class AbstractGitLabQueryExecutor {
 
 
 
-    /**
-     * Return the Gitlab URL to specific gitlab instance.
-     *
-     * The following is a basic example of a request to the fictional gitlab.example.com endpoint:
-     * "https://gitlab.example.com/api/v4/projects"
-     *
-     * @return
-     */
-    public final String getGitLabAPIURL() {
-        return "https://"+gitlabDomain+"/api/v4/projects/";
-    }
+
 }

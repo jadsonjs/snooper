@@ -49,7 +49,7 @@ abstract class AbstractSonarCloudQueryExecutor {
      * @return
      */
     public final String getSonarAPIURL() {
-        return "https://"+sonarDomain+"/api";
+        return (useHttps ? "https://" : "http://" )+sonarDomain+"/api";
     }
 
 
@@ -62,6 +62,9 @@ abstract class AbstractSonarCloudQueryExecutor {
     /** if is executing a test, or ir real query. */
     protected boolean testEnvironment = false;
 
+
+    protected boolean useHttps = true;
+
     /**
      * it's not possible to browse more than 10.000 issues. We need to refine your search.
      * https://community.sonarsource.com/t/cannot-get-more-than-10000-results-through-web-api/3662/2
@@ -71,6 +74,10 @@ abstract class AbstractSonarCloudQueryExecutor {
 
     public void setTestEnvironment(boolean testEnvironment) {
         this.testEnvironment = testEnvironment;
+    }
+
+    public void setUseHttps(boolean useHttps) {
+        this.useHttps = useHttps;
     }
 
 
