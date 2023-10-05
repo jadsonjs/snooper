@@ -58,13 +58,13 @@ public class SonarMetricHistoryQueryExecutor extends AbstractSonarCloudQueryExec
 
     public SonarMetricHistoryQueryExecutor(String sonarDomain, String sonarToken) {
         if (sonarToken == null || sonarToken.trim().equals("") ) {
-            throw new RuntimeException("Invalid GitLab Token: " + sonarToken);
+            throw new RuntimeException("Invalid Sonar Token: " + sonarToken);
         }
         if (sonarDomain == null || sonarDomain.trim().equals("") ) {
-            throw new RuntimeException("Invalid GitLab URL: " + sonarDomain);
+            throw new RuntimeException("Invalid Sonar URL: " + sonarDomain);
         }
 
-        this.sonarDomain = sonarDomain;
+        this.sonarURL = sonarDomain;
         this.sonarToken = sonarToken;
     }
 

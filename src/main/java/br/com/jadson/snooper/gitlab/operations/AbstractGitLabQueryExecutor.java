@@ -13,20 +13,13 @@ abstract class AbstractGitLabQueryExecutor {
      *
      * Gitlab is not like GitHub where all projects has a unique domain.
      */
-    protected String gitlabDomain = "gitlab.com";
+    protected String gitlabURL = "https://gitlab.com";
 
     protected String gitlabToken = "";
     protected int pageSize = 10;
     protected String queryParameters;
     protected boolean testEnvironment = false;
 
-
-    protected boolean useHttps = true;
-
-
-    public void setUseHttps(boolean useHttps) {
-        this.useHttps = useHttps;
-    }
 
     /**
      * Return the Gitlab URL to specific gitlab instance.
@@ -37,7 +30,7 @@ abstract class AbstractGitLabQueryExecutor {
      * @return
      */
     public final String getGitLabAPIURL() {
-        return (useHttps ? "https://" : "http://" )+gitlabDomain+"/api/v4/projects/";
+        return gitlabURL +"/api/v4/projects/";
     }
 
     public void setPageSize(int pageSize) {
@@ -107,8 +100,8 @@ abstract class AbstractGitLabQueryExecutor {
         return this;
     }
 
-    public AbstractGitLabQueryExecutor setGitlabDomain(String gitlabDomain) {
-        this.gitlabDomain = gitlabDomain;
+    public AbstractGitLabQueryExecutor setGitlabURL(String gitlabURL) {
+        this.gitlabURL = gitlabURL;
         return this;
     }
 

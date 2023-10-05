@@ -28,7 +28,7 @@ public class GitLabMergeRequestQueryExecutor extends AbstractGitLabQueryExecutor
             throw new RuntimeException("Invalid GitLab URL: " + gitlabDomain);
         }
 
-        this.gitlabDomain = gitlabDomain;
+        this.gitlabURL = gitlabDomain;
         this.gitlabToken = gitlabToken;
     }
 

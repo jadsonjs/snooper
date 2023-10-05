@@ -41,17 +41,7 @@ abstract class AbstractSonarCloudQueryExecutor {
     /**
      * We can consult sonar in different instances, in the cloud or local, so this need to be configured.
      */
-    protected String sonarDomain = "sonarcloud.io";
-
-    /**
-     * Return the Sonar  URL to specific gitlab instance.
-     *
-     * @return
-     */
-    public final String getSonarAPIURL() {
-        return (useHttps ? "https://" : "http://" )+sonarDomain+"/api";
-    }
-
+    protected String sonarURL = "https://sonarcloud.io";
 
 
     protected String sonarToken = "";
@@ -63,8 +53,6 @@ abstract class AbstractSonarCloudQueryExecutor {
     protected boolean testEnvironment = false;
 
 
-    protected boolean useHttps = true;
-
     /**
      * it's not possible to browse more than 10.000 issues. We need to refine your search.
      * https://community.sonarsource.com/t/cannot-get-more-than-10000-results-through-web-api/3662/2
@@ -74,10 +62,6 @@ abstract class AbstractSonarCloudQueryExecutor {
 
     public void setTestEnvironment(boolean testEnvironment) {
         this.testEnvironment = testEnvironment;
-    }
-
-    public void setUseHttps(boolean useHttps) {
-        this.useHttps = useHttps;
     }
 
 
@@ -110,9 +94,18 @@ abstract class AbstractSonarCloudQueryExecutor {
         return headers;
     }
 
-    public AbstractSonarCloudQueryExecutor setSonarDomain(String sonarDomain) {
-        this.sonarDomain = sonarDomain;
+    public AbstractSonarCloudQueryExecutor setSonarURL(String sonarURL) {
+        this.sonarURL = sonarURL;
         return this;
+    }
+
+    /**
+     * Return the Sonar  URL to specific gitlab instance.
+     *
+     * @return
+     */
+    public final String getSonarAPIURL() {
+        return sonarURL +"/api";
     }
 
 

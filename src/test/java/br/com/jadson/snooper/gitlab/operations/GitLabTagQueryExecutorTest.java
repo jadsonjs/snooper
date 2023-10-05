@@ -26,6 +26,6 @@ class GitLabTagQueryExecutorTest {
         List<GitLabTagInfo> tags = executor.tags("jadsonjs/holter-ci");
 
         Assertions.assertTrue(tags.size() > 0);
-        Assertions.assertEquals("0.2", tags.get(0).name);
+        Assertions.assertEquals("0.10", tags.get(0).name);
     }
 }

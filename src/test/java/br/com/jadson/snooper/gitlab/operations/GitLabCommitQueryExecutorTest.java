@@ -21,7 +21,7 @@ class GitLabCommitQueryExecutorTest {
         GitLabCommitQueryExecutor commitExecutor = new GitLabCommitQueryExecutor();
         commitExecutor.setQueryParameters(new String[]{"since=2022-05-18T22:26:45Z", "until=2023-06-01T22:26:45Z"});
         commitExecutor.setPageSize(100);
-        commitExecutor.setGitlabDomain("gitlab.com"); // default value, but we can change for gitlab private repositories
+        commitExecutor.setGitlabURL("https://gitlab.com"); // default value, but we can change for gitlab private repositories
         commitExecutor.setGitlabToken(token);
         commitExecutor.setTestEnvironment(true);
         List<GitLabCommitInfo> commitsInfo = commitExecutor.getCommits("jadsonjs/holter-ci");

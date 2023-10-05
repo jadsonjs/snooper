@@ -26,7 +26,7 @@ class GitLabReleaseQueryExecutorTest {
         List<GitLabReleaseInfo> releases = executor.releases("jadsonjs/holter-ci");
 
         Assertions.assertTrue(releases.size() > 0);
-        Assertions.assertEquals("0.2", releases.get(0).name);
+        Assertions.assertEquals("0.10", releases.get(0).name);
     }
 
 }

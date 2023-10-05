@@ -31,7 +31,6 @@ package br.com.jadson.snooper.sonarcloud.operations;
 
 import br.com.jadson.snooper.sonarcloud.data.metric.SonarMetricInfo;
 import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
@@ -59,7 +58,7 @@ public class SonarMetricsQueryExecutor extends AbstractSonarCloudQueryExecutor {
             throw new RuntimeException("Invalid GitLab URL: " + sonarDomain);
         }
 
-        this.sonarDomain = sonarDomain;
+        this.sonarURL = sonarDomain;
         this.sonarToken = sonarToken;
     }
 

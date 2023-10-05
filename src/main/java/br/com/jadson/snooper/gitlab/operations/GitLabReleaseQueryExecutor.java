@@ -1,8 +1,6 @@
 package br.com.jadson.snooper.gitlab.operations;
 
-import br.com.jadson.snooper.gitlab.data.issue.GitLabIssueInfo;
 import br.com.jadson.snooper.gitlab.data.release.GitLabReleaseInfo;
-import br.com.jadson.snooper.gitlab.data.tag.GitLabTagInfo;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
@@ -30,7 +28,7 @@ public class GitLabReleaseQueryExecutor extends AbstractGitLabQueryExecutor{
             throw new RuntimeException("Invalid GitLab URL: " + gitlabDomain);
         }
 
-        this.gitlabDomain = gitlabDomain;
+        this.gitlabURL = gitlabDomain;
         this.gitlabToken = gitlabToken;
     }
 

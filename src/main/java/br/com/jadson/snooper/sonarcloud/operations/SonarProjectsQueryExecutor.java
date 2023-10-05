@@ -69,7 +69,7 @@ public class SonarProjectsQueryExecutor extends AbstractSonarCloudQueryExecutor 
             throw new RuntimeException("Invalid GitLab URL: " + sonarDomain);
         }
 
-        this.sonarDomain = sonarDomain;
+        this.sonarURL = sonarDomain;
         this.sonarToken = sonarToken;
     }
 
