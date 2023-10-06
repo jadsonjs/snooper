@@ -83,23 +83,23 @@ public class GitLabMergeRequestQueryExecutor extends AbstractGitLabQueryExecutor
      */
     public List<GitLabMergeRequestInfo> mergeRequestsInPeriod(String repoFullName, LocalDateTime start, LocalDateTime end) {
 
-        List<GitLabMergeRequestInfo> issues = new ArrayList();
+        List<GitLabMergeRequestInfo> mergeRequests = new ArrayList();
 
         List<GitLabMergeRequestInfo> allMergesRequests = mergeRequests(repoFullName);
 
         DateUtils dateUtils = new DateUtils();
 
-        for (GitLabMergeRequestInfo issue : allMergesRequests) {
+        for (GitLabMergeRequestInfo merge : allMergesRequests) {
 
-            if (issue.created_at != null) {
-                LocalDateTime startIssue = issue.created_at.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+            if (merge.created_at != null) {
+                LocalDateTime startIssue = merge.created_at.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
                 if (dateUtils.isBetweenDates(startIssue, start, end)) {
-                    issues.add(issue);
+                    mergeRequests.add(merge);
                 }
             }
         }
 
-        return issues;
+        return mergeRequests;
     }
 
     /**
