@@ -31,6 +31,8 @@ package br.com.jadson.snooper.sonarcloud.operations;
 
 import org.springframework.http.HttpHeaders;
 
+import java.util.Base64;
+
 /**
  * Information to connect to SonarCloud API.
  *
@@ -87,8 +89,10 @@ abstract class AbstractSonarCloudQueryExecutor {
         headers.set("Accept", "application/json");
         if (this.sonarToken != null && ! this.sonarToken.isEmpty() ) {
             // -> preferences -> Access Tokens
-            // Authorization: Bearer <your_access_token>
-            headers.set("Authorization", "Bearer "+this.sonarToken);
+            // Authorization: Bearer <your_access_token>  401 unauthorized
+            // headers.set("Authorization", "Bearer "+this.sonarToken);
+            // Authorization: Basic username:password  (token = user name,  password blank)
+            headers.set("Authorization", "Basic "+ Base64.getEncoder().encodeToString( (this.sonarToken+":").getBytes()) );
         }
 
         return headers;

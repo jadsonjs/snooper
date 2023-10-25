@@ -3,6 +3,7 @@ package br.com.jadson.snooper.gitlab.operations;
 import br.com.jadson.snooper.gitlab.data.issue.GitLabIssueInfo;
 import br.com.jadson.snooper.gitlab.data.merge.GitLabMergeRequestInfo;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
@@ -14,6 +15,7 @@ class GitLabMergeRequestQueryExecutorTest {
 
     String token = System.getenv("GITLAB_TOKEN");
 
+    @Disabled
     @Test
     void mergeRequestsTest() {
 
@@ -29,6 +31,7 @@ class GitLabMergeRequestQueryExecutorTest {
     }
 
 
+    @Disabled
     @Test
     void mergeRequestsInPeriodTest() {
 

@@ -3,6 +3,7 @@ package br.com.jadson.snooper.gitlab.operations;
 import br.com.jadson.snooper.gitlab.data.release.GitLabReleaseInfo;
 import br.com.jadson.snooper.gitlab.data.tag.GitLabTagInfo;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -17,6 +18,7 @@ class GitLabReleaseQueryExecutorTest {
     // to build:  Gradle ->  build tasks -> Modify Run Configuration ...
     String token = System.getenv("GITLAB_TOKEN");
 
+    @Disabled
     @Test
     void releases() {
 

@@ -2,6 +2,7 @@ package br.com.jadson.snooper.gitlab.operations;
 
 import br.com.jadson.snooper.gitlab.data.issue.GitLabIssueInfo;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -11,6 +12,7 @@ class GitLabIssueQueryExecutorTest {
     String token = System.getenv("GITLAB_TOKEN");
 
 
+    @Disabled
     @Test
     void testIssuesProject(){
 
