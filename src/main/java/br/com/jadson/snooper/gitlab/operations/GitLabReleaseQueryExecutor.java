@@ -55,6 +55,9 @@ public class GitLabReleaseQueryExecutor extends AbstractGitLabQueryExecutor{
 
         System.out.println("Getting Releases Info: " + query);
         RestTemplate restTemplate = new RestTemplate();
+
+        checkDisableSslVerification();
+
         HttpEntity entity = new HttpEntity(this.getDefaultHeaders());
         result = restTemplate.exchange(uri, HttpMethod.GET, entity, GitLabReleaseInfo[].class);
         all.addAll(Arrays.asList((GitLabReleaseInfo[])result.getBody()));

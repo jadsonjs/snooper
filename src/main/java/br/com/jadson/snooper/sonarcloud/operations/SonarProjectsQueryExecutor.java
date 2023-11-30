@@ -125,6 +125,8 @@ public class SonarProjectsQueryExecutor extends AbstractSonarCloudQueryExecutor 
 
             RestTemplate restTemplate = new RestTemplate();
 
+            checkDisableSslVerification();
+
             HttpEntity entity = new HttpEntity<>(this.getDefaultHeaders());
 
             result = restTemplate.exchange( query, HttpMethod.GET, entity, SonarProjectSearchRoot.class);
@@ -171,6 +173,8 @@ public class SonarProjectsQueryExecutor extends AbstractSonarCloudQueryExecutor 
 
             RestTemplate restTemplate = new RestTemplate();
 
+            checkDisableSslVerification();
+
             HttpEntity entity = new HttpEntity<>(this.getDefaultHeaders());
 
             result = restTemplate.exchange( query, HttpMethod.GET, entity, SonarProjectRoot.class);
@@ -209,6 +213,8 @@ public class SonarProjectsQueryExecutor extends AbstractSonarCloudQueryExecutor 
 
         RestTemplate restTemplate = new RestTemplate();
 
+        checkDisableSslVerification();
+
         HttpEntity entity = new HttpEntity<>(this.getDefaultHeaders());
 
         result = restTemplate.exchange( query, HttpMethod.GET, entity, ProjectMeasuresRoot.class);
@@ -246,6 +252,8 @@ public class SonarProjectsQueryExecutor extends AbstractSonarCloudQueryExecutor 
             String query = getSonarAPIURL()  + "/project_analyses/search" + parameters;
 
             RestTemplate restTemplate = new RestTemplate();
+
+            checkDisableSslVerification();
 
             HttpEntity entity = new HttpEntity<>(this.getDefaultHeaders());
 
@@ -286,6 +294,8 @@ public class SonarProjectsQueryExecutor extends AbstractSonarCloudQueryExecutor 
 
         RestTemplate restTemplate = new RestTemplate();
 
+        checkDisableSslVerification();
+
         HttpEntity entity = new HttpEntity<>(this.getDefaultHeaders());
 
         result = restTemplate.exchange( query, HttpMethod.GET, entity, SonarAnalysesRoot.class);
@@ -310,6 +320,8 @@ public class SonarProjectsQueryExecutor extends AbstractSonarCloudQueryExecutor 
         String query = getSonarAPIURL()  + "/project_links/search" + parameters;
 
         RestTemplate restTemplate = new RestTemplate();
+
+        checkDisableSslVerification();
 
         HttpEntity entity = new HttpEntity<>(this.getDefaultHeaders());
 

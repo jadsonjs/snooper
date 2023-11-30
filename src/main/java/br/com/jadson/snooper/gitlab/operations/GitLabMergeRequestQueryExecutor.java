@@ -65,6 +65,9 @@ public class GitLabMergeRequestQueryExecutor extends AbstractGitLabQueryExecutor
 
             System.out.println("Getting Next Merge Info: " + query);
             RestTemplate restTemplate = new RestTemplate();
+
+            checkDisableSslVerification();
+
             HttpEntity entity = new HttpEntity(this.getDefaultHeaders());
             result = restTemplate.exchange(uri, HttpMethod.GET, entity, GitLabMergeRequestInfo[].class);
             allMerge.addAll(Arrays.asList((GitLabMergeRequestInfo[])result.getBody()));
@@ -137,6 +140,9 @@ public class GitLabMergeRequestQueryExecutor extends AbstractGitLabQueryExecutor
 
             System.out.println("Getting Next Merge Info: " + query);
             RestTemplate restTemplate = new RestTemplate();
+
+            checkDisableSslVerification();
+
             HttpEntity entity = new HttpEntity(this.getDefaultHeaders());
             result = restTemplate.exchange(uri, HttpMethod.GET, entity, GitLabMergeRequestInfo[].class);
             allMerges.addAll(Arrays.asList((GitLabMergeRequestInfo[])result.getBody()));

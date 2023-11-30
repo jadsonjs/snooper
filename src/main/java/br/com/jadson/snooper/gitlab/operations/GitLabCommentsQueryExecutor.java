@@ -64,6 +64,9 @@ public class GitLabCommentsQueryExecutor extends AbstractGitLabQueryExecutor {
 
             System.out.println("Getting Next Comment of Merge Request: " + query);
             RestTemplate restTemplate = new RestTemplate();
+
+            checkDisableSslVerification();
+
             HttpEntity entity = new HttpEntity(this.getDefaultHeaders());
             result = restTemplate.exchange(uri, HttpMethod.GET, entity, GitLabDiscussionInfo[].class);
             allPull.addAll(Arrays.asList((GitLabDiscussionInfo[])result.getBody()));
@@ -108,6 +111,9 @@ public class GitLabCommentsQueryExecutor extends AbstractGitLabQueryExecutor {
 
             System.out.println("Getting Next Comment of Merge Request: " + query);
             RestTemplate restTemplate = new RestTemplate();
+
+            checkDisableSslVerification();
+
             HttpEntity entity = new HttpEntity(this.getDefaultHeaders());
             result = restTemplate.exchange(uri, HttpMethod.GET, entity, GitLabDiscussionInfo[].class);
             allPull.addAll(Arrays.asList((GitLabDiscussionInfo[])result.getBody()));

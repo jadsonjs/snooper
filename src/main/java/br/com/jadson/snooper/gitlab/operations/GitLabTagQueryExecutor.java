@@ -56,6 +56,9 @@ public class GitLabTagQueryExecutor extends AbstractGitLabQueryExecutor {
 
         System.out.println("Getting Tags Info: " + query);
         RestTemplate restTemplate = new RestTemplate();
+
+        checkDisableSslVerification();
+
         HttpEntity entity = new HttpEntity(this.getDefaultHeaders());
         result = restTemplate.exchange(uri, HttpMethod.GET, entity, GitLabTagInfo[].class);
         all.addAll(Arrays.asList((GitLabTagInfo[])result.getBody()));

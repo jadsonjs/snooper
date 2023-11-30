@@ -93,6 +93,8 @@ public class SonarMetricsQueryExecutor extends AbstractSonarCloudQueryExecutor {
 
             RestTemplate restTemplate = new RestTemplate();
 
+            checkDisableSslVerification();
+
             HttpEntity entity = new HttpEntity<>(this.getDefaultHeaders());
 
             result = restTemplate.exchange( query, HttpMethod.GET, entity, SonarMetricInfo[].class);

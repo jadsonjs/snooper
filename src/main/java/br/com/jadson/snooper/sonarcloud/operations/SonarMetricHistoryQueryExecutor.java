@@ -141,6 +141,8 @@ public class SonarMetricHistoryQueryExecutor extends AbstractSonarCloudQueryExec
 
             RestTemplate restTemplate = new RestTemplate();
 
+            checkDisableSslVerification();
+
             HttpEntity entity = new HttpEntity<>(this.getDefaultHeaders());
 
             result = restTemplate.exchange( uri, HttpMethod.GET, entity, SonarMetricHistoryRoot.class);

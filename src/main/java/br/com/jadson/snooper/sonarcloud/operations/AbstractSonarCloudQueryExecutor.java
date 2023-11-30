@@ -29,8 +29,15 @@
  */
 package br.com.jadson.snooper.sonarcloud.operations;
 
+import br.com.jadson.snooper.utils.ConnectionUtils;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.client.SimpleClientHttpRequestFactory;
+import org.springframework.web.client.RestTemplate;
 
+import javax.net.ssl.*;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
+import java.security.cert.X509Certificate;
 import java.util.Base64;
 
 /**
@@ -53,6 +60,12 @@ abstract class AbstractSonarCloudQueryExecutor {
 
     /** if is executing a test, or ir real query. */
     protected boolean testEnvironment = false;
+
+
+    /**
+     * Ignore invalid SSL certificates to specific scenarios
+     */
+    protected boolean disableSslVerification = false;
 
 
     /**
@@ -98,9 +111,12 @@ abstract class AbstractSonarCloudQueryExecutor {
         return headers;
     }
 
-    public AbstractSonarCloudQueryExecutor setSonarURL(String sonarURL) {
+    public void setSonarURL(String sonarURL) {
         this.sonarURL = sonarURL;
-        return this;
+    }
+
+    public void setDisableSslVerification(boolean disableSslVerification) {
+        this.disableSslVerification = disableSslVerification;
     }
 
     /**
@@ -122,5 +138,20 @@ abstract class AbstractSonarCloudQueryExecutor {
 
         repoFullName = repoFullName.replace("/", "%2F").replace(":", "%3A");
         return repoFullName;
+    }
+
+    /**
+     * Check if should disalbbe ssl verification
+     */
+    protected void checkDisableSslVerification() {
+        if(disableSslVerification) {
+            try {
+                new ConnectionUtils().disableSslVerification();
+            } catch (NoSuchAlgorithmException e) {
+                throw new RuntimeException(e);
+            } catch (KeyManagementException e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 }

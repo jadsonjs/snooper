@@ -68,6 +68,9 @@ public class GitlabPipelineQueryExecutor extends AbstractGitLabQueryExecutor {
 
             System.out.println("Getting Next Pipeline: " + query);
             RestTemplate restTemplate = new RestTemplate();
+
+            checkDisableSslVerification();
+
             HttpEntity entity = new HttpEntity(this.getDefaultHeaders());
             result = restTemplate.exchange(uri, HttpMethod.GET, entity, GitLabPipelineInfo[].class);
             allPipelines.addAll(Arrays.asList((GitLabPipelineInfo[])result.getBody()));
@@ -102,6 +105,9 @@ public class GitlabPipelineQueryExecutor extends AbstractGitLabQueryExecutor {
 
         System.out.println("Getting Pipeline: " + query);
         RestTemplate restTemplate = new RestTemplate();
+
+        checkDisableSslVerification();
+
         HttpEntity entity = new HttpEntity(this.getDefaultHeaders());
         result = restTemplate.exchange(uri, HttpMethod.GET, entity, GitLabPipelineInfo.class);
 

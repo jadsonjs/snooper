@@ -63,6 +63,9 @@ public class GitLabIssueQueryExecutor extends AbstractGitLabQueryExecutor {
 
             System.out.println("Getting Next Issues Info: " + query);
             RestTemplate restTemplate = new RestTemplate();
+
+            checkDisableSslVerification();
+
             HttpEntity entity = new HttpEntity(this.getDefaultHeaders());
             result = restTemplate.exchange(uri, HttpMethod.GET, entity, GitLabIssueInfo[].class);
             all.addAll(Arrays.asList((GitLabIssueInfo[])result.getBody()));

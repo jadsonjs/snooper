@@ -18,16 +18,21 @@ public class GitLabCommitQueryExecutor extends AbstractGitLabQueryExecutor {
 
     }
 
-    public GitLabCommitQueryExecutor(String gitlabDomain, String gitlabToken) {
+    public GitLabCommitQueryExecutor(String gitlabURL, String gitlabToken) {
+        this(gitlabURL, gitlabToken, false);
+    }
+
+    public GitLabCommitQueryExecutor(String gitlabURL, String gitlabToken, boolean disableSslVerification) {
         if (gitlabToken == null || gitlabToken.trim().equals("") ) {
             throw new RuntimeException("Invalid GitLab Token: " + gitlabToken);
         }
-        if (gitlabDomain == null || gitlabDomain.trim().equals("") ) {
-            throw new RuntimeException("Invalid GitLab URL: " + gitlabDomain);
+        if (gitlabURL == null || gitlabURL.trim().equals("") ) {
+            throw new RuntimeException("Invalid GitLab URL: " + gitlabURL);
         }
 
-        this.gitlabURL = gitlabDomain;
+        this.gitlabURL = gitlabURL;
         this.gitlabToken = gitlabToken;
+        this.disableSslVerification = disableSslVerification;
     }
 
     /**
@@ -61,6 +66,10 @@ public class GitLabCommitQueryExecutor extends AbstractGitLabQueryExecutor {
 
             System.out.println("Getting Next Commit: " + query);
             RestTemplate restTemplate = new RestTemplate();
+
+            checkDisableSslVerification();
+
+
             HttpEntity entity = new HttpEntity(this.getDefaultHeaders());
             result = restTemplate.exchange(uri, HttpMethod.GET, entity, GitLabCommitInfo[].class);
             allPull.addAll(Arrays.asList((GitLabCommitInfo[])result.getBody()));

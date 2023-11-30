@@ -1,6 +1,14 @@
 package br.com.jadson.snooper.gitlab.operations;
 
+import br.com.jadson.snooper.utils.ConnectionUtils;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.client.SimpleClientHttpRequestFactory;
+import org.springframework.web.client.RestTemplate;
+
+import javax.net.ssl.*;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
+import java.security.cert.X509Certificate;
 
 /**
  * Common functions to execute queries on gitlab using gitlab API https://docs.gitlab.com/ee/api/rest/
@@ -19,6 +27,11 @@ abstract class AbstractGitLabQueryExecutor {
     protected int pageSize = 10;
     protected String queryParameters;
     protected boolean testEnvironment = false;
+
+    /**
+     * Ignore invalid SSL certificates to specific scenarios
+     */
+    protected boolean disableSslVerification = false;
 
 
     /**
@@ -95,23 +108,40 @@ abstract class AbstractGitLabQueryExecutor {
     }
 
 
-    public AbstractGitLabQueryExecutor setGitlabToken(String gitlabToken) {
+    public void setGitlabToken(String gitlabToken) {
         this.gitlabToken = gitlabToken;
-        return this;
     }
 
-    public AbstractGitLabQueryExecutor setGitlabURL(String gitlabURL) {
+    public void setGitlabURL(String gitlabURL) {
         this.gitlabURL = gitlabURL;
-        return this;
     }
 
-    public AbstractGitLabQueryExecutor setTestEnvironment(boolean testEnvironment) {
+    public void setTestEnvironment(boolean testEnvironment) {
         this.testEnvironment = testEnvironment;
-        return this;
+    }
+
+    public void setDisableSslVerification(boolean disableSslVerification) {
+        this.disableSslVerification = disableSslVerification;
     }
 
     public String getQueryParameters() {
         return this.queryParameters;
+    }
+
+
+    /**
+     * Check if should disalbbe ssl verification
+     */
+    protected void checkDisableSslVerification() {
+        if(disableSslVerification) {
+            try {
+                new ConnectionUtils().disableSslVerification();
+            } catch (NoSuchAlgorithmException e) {
+                throw new RuntimeException(e);
+            } catch (KeyManagementException e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 
 
