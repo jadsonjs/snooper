@@ -29,8 +29,10 @@
  */
 package br.com.jadson.snooper.github.data.commit;
 
+import br.com.jadson.snooper.github.data.stats.GitHubCommitStatsInfo;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -50,5 +52,7 @@ public class GitHubCommitInfo {
     public Author author;
     public Committer committer;
     public List<Parent> parents;
+    public List<FileChanged> files;
 
+    public GitHubCommitInfo() {}
 }
