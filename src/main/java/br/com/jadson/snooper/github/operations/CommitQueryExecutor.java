@@ -34,6 +34,7 @@ import br.com.jadson.snooper.github.data.association.PullRequestNodeInfo;
 import br.com.jadson.snooper.github.data.association.graphql.AssociatedPullRequestsEdge;
 import br.com.jadson.snooper.github.data.association.graphql.CommitNode;
 import br.com.jadson.snooper.github.data.association.graphql.ResultGraphQLRepository;
+import br.com.jadson.snooper.github.data.commit.FileChanged;
 import br.com.jadson.snooper.github.data.commit.GitHubCommitInfo;
 import br.com.jadson.snooper.github.data.stats.CommitStats;
 import br.com.jadson.snooper.github.data.stats.FileStats;
@@ -388,6 +389,29 @@ public class CommitQueryExecutor extends AbstractGitHubQueryExecutor {
         }
 
         return allCommits;
+    }
+
+    public List<FileChanged> getCommitFiles(String repoFullName, GitHubCommitInfo commit){
+        validateRepoName(repoFullName);
+        // IMPORTANTE state=all for bring all PR
+        String parameters = "";
+        ResponseEntity<GitHubCommitInfo> result;
+
+        String query = GIT_HUB_API_URL +"/repos/"+repoFullName+"/commits/"+commit.sha;
+
+        System.out.println("Getting files for commit");
+
+        RestTemplate restTemplate = new RestTemplate();
+
+        HttpEntity entity = new HttpEntity(getDefaultHeaders());
+
+        result = restTemplate.exchange( query, HttpMethod.GET, entity, GitHubCommitInfo.class);
+
+        if (result.getBody() != null && result.getBody().files != null) {
+            return result.getBody().files;
+        }
+
+        return new ArrayList<>();
     }
 
     public FileStats getFileStats(String projectFullName, String filePath, LocalDateTime sinceDate, LocalDateTime untilDate){
