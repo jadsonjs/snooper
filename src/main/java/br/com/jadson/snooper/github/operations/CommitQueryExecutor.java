@@ -35,8 +35,7 @@ import br.com.jadson.snooper.github.data.association.graphql.AssociatedPullReque
 import br.com.jadson.snooper.github.data.association.graphql.CommitNode;
 import br.com.jadson.snooper.github.data.association.graphql.ResultGraphQLRepository;
 import br.com.jadson.snooper.github.data.commit.FileChanged;
-import br.com.jadson.snooper.github.data.commit.GitHubCommitInfo;
-import br.com.jadson.snooper.github.data.stats.CommitStats;
+import br.com.jadson.snooper.github.data.commit.CommitInfo;
 import br.com.jadson.snooper.github.data.stats.FileStats;
 import br.com.jadson.snooper.github.data.stats.GitHubCommitStatsInfo;
 import br.com.jadson.snooper.github.data.stats.graphql.CommitStatsNode;
@@ -50,7 +49,6 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
@@ -72,7 +70,7 @@ public class CommitQueryExecutor extends AbstractGitHubQueryExecutor {
      * @param repoFullName
      * @return
      */
-    public List<GitHubCommitInfo> getCommits(String repoFullName) {
+    public List<CommitInfo> getCommits(String repoFullName) {
 
         validateRepoName(repoFullName);
 
@@ -81,9 +79,9 @@ public class CommitQueryExecutor extends AbstractGitHubQueryExecutor {
         // IMPORTANTE state=all for bring all PR
         String parameters = "";
 
-        List<GitHubCommitInfo> allPull = new ArrayList<>();
+        List<CommitInfo> allPull = new ArrayList<>();
 
-        ResponseEntity<GitHubCommitInfo[]> result;
+        ResponseEntity<CommitInfo[]> result;
 
         do {
 
@@ -100,7 +98,7 @@ public class CommitQueryExecutor extends AbstractGitHubQueryExecutor {
 
             HttpEntity entity = new HttpEntity(getDefaultHeaders());
 
-            result = restTemplate.exchange( query, HttpMethod.GET, entity, GitHubCommitInfo[].class);
+            result = restTemplate.exchange( query, HttpMethod.GET, entity, CommitInfo[].class);
 
             allPull.addAll(  Arrays.asList(result.getBody()) );
 
@@ -126,7 +124,7 @@ public class CommitQueryExecutor extends AbstractGitHubQueryExecutor {
      * @param ref a branch or a tag name
      * @return all commits form a branch or tag
      */
-    public GitHubCommitInfo getCommitsOfReference(String repoFullName, String ref) {
+    public CommitInfo getCommitsOfReference(String repoFullName, String ref) {
 
         validateRepoName(repoFullName);
 
@@ -134,9 +132,9 @@ public class CommitQueryExecutor extends AbstractGitHubQueryExecutor {
 
         String parameters = "";
 
-        GitHubCommitInfo commitInfo = null;
+        CommitInfo commitInfo = null;
 
-        ResponseEntity<GitHubCommitInfo> result;
+        ResponseEntity<CommitInfo> result;
 
        // do {
 
@@ -153,7 +151,7 @@ public class CommitQueryExecutor extends AbstractGitHubQueryExecutor {
 
             HttpEntity entity = new HttpEntity(getDefaultHeaders());
 
-            result = restTemplate.exchange( query, HttpMethod.GET, entity, GitHubCommitInfo.class);
+            result = restTemplate.exchange( query, HttpMethod.GET, entity, CommitInfo.class);
 
             commitInfo = result.getBody();
 
@@ -172,7 +170,7 @@ public class CommitQueryExecutor extends AbstractGitHubQueryExecutor {
      * @param repoFullName
      * @return
      */
-    public List<GitHubCommitInfo> commitsOfPullRequest(String repoFullName, long prNumber) {
+    public List<CommitInfo> commitsOfPullRequest(String repoFullName, long prNumber) {
 
         validateRepoName(repoFullName);
 
@@ -181,9 +179,9 @@ public class CommitQueryExecutor extends AbstractGitHubQueryExecutor {
         // IMPORTANTE state=all for bring all PR
         String parameters = "";
 
-        List<GitHubCommitInfo> allPull = new ArrayList<>();
+        List<CommitInfo> allPull = new ArrayList<>();
 
-        ResponseEntity<GitHubCommitInfo[]> result;
+        ResponseEntity<CommitInfo[]> result;
 
         do {
 
@@ -200,7 +198,7 @@ public class CommitQueryExecutor extends AbstractGitHubQueryExecutor {
 
             HttpEntity entity = new HttpEntity(getDefaultHeaders());
 
-            result = restTemplate.exchange( query, HttpMethod.GET, entity, GitHubCommitInfo[].class);
+            result = restTemplate.exchange( query, HttpMethod.GET, entity, CommitInfo[].class);
 
             allPull.addAll(  Arrays.asList(result.getBody()) );
 
@@ -391,11 +389,11 @@ public class CommitQueryExecutor extends AbstractGitHubQueryExecutor {
         return allCommits;
     }
 
-    public List<FileChanged> getCommitFiles(String repoFullName, GitHubCommitInfo commit){
+    public List<FileChanged> getCommitFiles(String repoFullName, CommitInfo commit){
         validateRepoName(repoFullName);
         // IMPORTANTE state=all for bring all PR
         String parameters = "";
-        ResponseEntity<GitHubCommitInfo> result;
+        ResponseEntity<CommitInfo> result;
 
         String query = GIT_HUB_API_URL +"/repos/"+repoFullName+"/commits/"+commit.sha;
 
@@ -405,7 +403,7 @@ public class CommitQueryExecutor extends AbstractGitHubQueryExecutor {
 
         HttpEntity entity = new HttpEntity(getDefaultHeaders());
 
-        result = restTemplate.exchange( query, HttpMethod.GET, entity, GitHubCommitInfo.class);
+        result = restTemplate.exchange( query, HttpMethod.GET, entity, CommitInfo.class);
 
         if (result.getBody() != null && result.getBody().files != null) {
             return result.getBody().files;

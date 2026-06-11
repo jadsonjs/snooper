@@ -1,7 +1,7 @@
 package br.com.jadson.snooper.github.operations;
 
 import br.com.jadson.snooper.github.data.association.AssociationCommitPullRequestInfo;
-import br.com.jadson.snooper.github.data.commit.GitHubCommitInfo;
+import br.com.jadson.snooper.github.data.commit.CommitInfo;
 import br.com.jadson.snooper.github.data.stats.GitHubCommitStatsInfo;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -28,7 +28,7 @@ class CommitQueryExecutorTest {
         commitExecutor.setPageSize(100);
         commitExecutor.setGithubToken(token);
         commitExecutor.setTestEnvironment(true);
-        List<GitHubCommitInfo> commitsInfo = commitExecutor.getCommits("vuejs/vue-router");
+        List<CommitInfo> commitsInfo = commitExecutor.getCommits("vuejs/vue-router");
 
         Assertions.assertTrue(commitsInfo.size() == 10);
         Assertions.assertEquals("677f3c1f714fb61cc495345e535409b1cbb90429", commitsInfo.get(0).sha);
@@ -43,7 +43,7 @@ class CommitQueryExecutorTest {
         commitExecutor.setPageSize(1);
         commitExecutor.setGithubToken(token);
         commitExecutor.setTestEnvironment(true);
-        GitHubCommitInfo commitsInfo = commitExecutor.getCommitsOfReference("traPtitech/traQ/", "master");
+        CommitInfo commitsInfo = commitExecutor.getCommitsOfReference("traPtitech/traQ/", "master");
 
         // Assertions.assertTrue(commitsInfo.size() == 1);
         Assertions.assertNotNull(commitsInfo.sha);
@@ -60,7 +60,7 @@ class CommitQueryExecutorTest {
         CommitQueryExecutor commitExecutor = new CommitQueryExecutor();
         commitExecutor.setPageSize(100);
         commitExecutor.setGithubToken(token);
-        List<GitHubCommitInfo> commitsInfo = commitExecutor.commitsOfPullRequest("octocat/Hello-World",796);
+        List<CommitInfo> commitsInfo = commitExecutor.commitsOfPullRequest("octocat/Hello-World",796);
 
         Assertions.assertTrue(commitsInfo.size() > 0);
         Assertions.assertEquals("5e100cfdca24f3fb781c72348c7c63b418e4246d", commitsInfo.get(0).sha);
