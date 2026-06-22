@@ -39,7 +39,7 @@ import java.util.List;
  * Jadson Santos - jadsonjs@gmail.com
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class CommitInfo {
+public class GitHubCommitInfo {
 
     public String sha;
     public String node_id;
@@ -50,7 +50,7 @@ public class CommitInfo {
     public Author author;
     public Committer committer;
     public List<Parent> parents;
-    public List<FileChanged> files;
+    public List<GitHubFileChanged> files;
 
-    public CommitInfo() {}
+    public GitHubCommitInfo() {}
 }
