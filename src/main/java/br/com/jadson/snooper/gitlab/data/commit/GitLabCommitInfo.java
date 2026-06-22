@@ -20,7 +20,7 @@ public class GitLabCommitInfo {
     public String message;
     public List<String> parent_ids;
     public String web_url;
-    public CommitStats stats;
+    public GitLabCommitStats stats;
 
     public GitLabCommitInfo() {
     }

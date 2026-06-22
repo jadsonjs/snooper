@@ -3,8 +3,13 @@ package br.com.jadson.snooper.gitlab.data.commit;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+/**
+ * Information about the diff of a file changed in a GitLab commit.
+ *
+ * Luisa Ferreira - luisaferreirass08@gmail.com
+ */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class CommitDiff {
+public class GitLabCommitDiff {
     @JsonProperty("old_path")
     public String oldPath;
 
