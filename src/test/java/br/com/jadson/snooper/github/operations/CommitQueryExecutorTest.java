@@ -1,7 +1,7 @@
 package br.com.jadson.snooper.github.operations;
 
 import br.com.jadson.snooper.github.data.association.AssociationCommitPullRequestInfo;
-import br.com.jadson.snooper.github.data.commit.CommitInfo;
+import br.com.jadson.snooper.github.data.commit.GitHubCommitInfo;
 import br.com.jadson.snooper.github.data.stats.GitHubCommitStatsInfo;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -28,7 +28,7 @@ class CommitQueryExecutorTest {
         commitExecutor.setPageSize(100);
         commitExecutor.setGithubToken(token);
         commitExecutor.setTestEnvironment(true);
-        List<CommitInfo> commitsInfo = commitExecutor.getCommits("vuejs/vue-router");
+        List<GitHubCommitInfo> commitsInfo = commitExecutor.getCommits("vuejs/vue-router");
 
         Assertions.assertTrue(commitsInfo.size() == 10);
         Assertions.assertEquals("677f3c1f714fb61cc495345e535409b1cbb90429", commitsInfo.get(0).sha);
@@ -43,7 +43,7 @@ class CommitQueryExecutorTest {
         commitExecutor.setPageSize(1);
         commitExecutor.setGithubToken(token);
         commitExecutor.setTestEnvironment(true);
-        CommitInfo commitsInfo = commitExecutor.getCommitsOfReference("traPtitech/traQ/", "master");
+        GitHubCommitInfo commitsInfo = commitExecutor.getCommitsOfReference("traPtitech/traQ/", "master");
 
         // Assertions.assertTrue(commitsInfo.size() == 1);
         Assertions.assertNotNull(commitsInfo.sha);
@@ -60,7 +60,7 @@ class CommitQueryExecutorTest {
         CommitQueryExecutor commitExecutor = new CommitQueryExecutor();
         commitExecutor.setPageSize(100);
         commitExecutor.setGithubToken(token);
-        List<CommitInfo> commitsInfo = commitExecutor.commitsOfPullRequest("octocat/Hello-World",796);
+        List<GitHubCommitInfo> commitsInfo = commitExecutor.commitsOfPullRequest("octocat/Hello-World",796);
 
         Assertions.assertTrue(commitsInfo.size() > 0);
         Assertions.assertEquals("5e100cfdca24f3fb781c72348c7c63b418e4246d", commitsInfo.get(0).sha);
@@ -105,8 +105,8 @@ class CommitQueryExecutorTest {
         Assertions.assertEquals(3, commitStatsInfos.size());
 
         Assertions.assertEquals("7fd1a60b01f91b314f59955a4e4d4e80d8edf11d",  commitStatsInfos.get(0).sha);
-        Assertions.assertEquals(1,  commitStatsInfos.get(0).commitStats.additions);
-        Assertions.assertEquals(1, commitStatsInfos.get(1).commitStats.additions);
-        Assertions.assertEquals(1, commitStatsInfos.get(1).commitStats.deletions);
+        Assertions.assertEquals(1,  commitStatsInfos.get(0).gitHubCommitStats.additions);
+        Assertions.assertEquals(1, commitStatsInfos.get(1).gitHubCommitStats.additions);
+        Assertions.assertEquals(1, commitStatsInfos.get(1).gitHubCommitStats.deletions);
     }
 }
