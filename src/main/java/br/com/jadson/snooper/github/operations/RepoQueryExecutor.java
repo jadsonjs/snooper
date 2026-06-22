@@ -30,10 +30,13 @@
 package br.com.jadson.snooper.github.operations;
 
 import br.com.jadson.snooper.github.data.repo.GitHubRepoInfo;
+import br.com.jadson.snooper.github.data.repo.GitHubTreeInfo;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
+
+import java.util.List;
 
 /**
  * Return information about repository of github
@@ -79,6 +82,27 @@ public class RepoQueryExecutor extends AbstractGitHubQueryExecutor{
 
         result = restTemplate.exchange( query, HttpMethod.GET, entity, GitHubRepoInfo.class);
 
+        return result.getBody();
+    }
+
+    /**
+     * Return all files and directories from a GitHub repository tree.
+     *
+     * This method uses the REST API of GitHub.
+     *
+     * @param repoFullName
+     * @param branch
+     * @return
+     */
+    public GitHubTreeInfo getAllFiles(String repoFullName, String branch){
+        ResponseEntity<GitHubTreeInfo> result;
+        String url = GIT_HUB_API_URL +
+                "/repos/" + repoFullName + "/git/trees/" + branch + "?recursive=1";
+        RestTemplate restTemplate = new RestTemplate();
+
+        HttpEntity entity = new HttpEntity(getDefaultHeaders());
+
+        result = restTemplate.exchange(url, HttpMethod.GET, entity, GitHubTreeInfo.class);
         return result.getBody();
     }
 

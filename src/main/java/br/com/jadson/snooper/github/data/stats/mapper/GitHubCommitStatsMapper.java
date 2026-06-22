@@ -1,15 +1,21 @@
 package br.com.jadson.snooper.github.data.stats.mapper;
 
-import br.com.jadson.snooper.github.data.stats.CommitStats;
+import br.com.jadson.snooper.github.data.stats.GitHubCommitStats;
 import br.com.jadson.snooper.github.data.stats.GitHubCommitStatsInfo;
 import br.com.jadson.snooper.github.data.stats.graphql.CommitStatsNode;
 
+/**
+ * Mapper responsible for converting GitHub GraphQL commit statistics
+ * into internal commit statistics information.
+ *
+ * Yuri Filgueira - yurimedeiros141@gmail.com
+ */
 public class GitHubCommitStatsMapper {
 
     public static GitHubCommitStatsInfo mapToCommitStatsInfo(CommitStatsNode node) {
 
         GitHubCommitStatsInfo commitStatsInfo = new GitHubCommitStatsInfo();
-        CommitStats commitStats = new CommitStats();
+        GitHubCommitStats gitHubCommitStats = new GitHubCommitStats();
 
         commitStatsInfo.sha = node.oid;
         commitStatsInfo.nodeId = node.id;
@@ -17,11 +23,11 @@ public class GitHubCommitStatsMapper {
         commitStatsInfo.commentCount = node.comments.totalCount;
         commitStatsInfo.message = node.message;
 
-        commitStats.additions = node.additions;
-        commitStats.deletions = node.deletions;
-        commitStats.total = (node.additions + node.deletions);
+        gitHubCommitStats.additions = node.additions;
+        gitHubCommitStats.deletions = node.deletions;
+        gitHubCommitStats.total = (node.additions + node.deletions);
 
-        commitStatsInfo.commitStats = commitStats;
+        commitStatsInfo.gitHubCommitStats = gitHubCommitStats;
         commitStatsInfo.changedFiles = node.changedFiles;
 
         if (node.author != null) {

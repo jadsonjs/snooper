@@ -1,7 +1,8 @@
 package br.com.jadson.snooper.gitlab.operations;
 
-import br.com.jadson.snooper.github.data.commit.GitHubCommitInfo;
+import br.com.jadson.snooper.gitlab.data.commit.GitLabCommitDiff;
 import br.com.jadson.snooper.gitlab.data.commit.GitLabCommitInfo;
+import br.com.jadson.snooper.gitlab.data.commit.GitLabFileChanged;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
@@ -80,4 +81,106 @@ public class GitLabCommitQueryExecutor extends AbstractGitLabQueryExecutor {
         return allPull;
     }
 
-}
+    /**
+     * Return the files changed in a specific GitLab commit.
+     *
+     * This method uses the REST API of GitLab.
+     *
+     * @param repoFullName
+     * @param commit
+     * @return
+     */
+    public List<GitLabFileChanged> getCommitsFiles(String repoFullName, GitLabCommitInfo commit){
+        validateRepoName(repoFullName);
+
+        ResponseEntity<GitLabCommitDiff[]> result;
+
+        String query = getGitLabAPIURL()
+                + encodeProjectName(repoFullName)
+                + "/repository/commits/"
+                + commit.id
+                + "/diff";
+
+        System.out.println(query);
+
+        System.out.println("Getting files for GitLab commit");
+
+        URI uri = null;
+        try {
+            uri = new URI(query);
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
+
+        checkDisableSslVerification();
+
+
+        RestTemplate restTemplate = new RestTemplate();
+        HttpEntity entity = new HttpEntity(this.getDefaultHeaders());
+        result = restTemplate.exchange(uri, HttpMethod.GET, entity, GitLabCommitDiff[].class);
+
+
+
+        if (result.getBody() == null) {
+            return new ArrayList<>();
+        }
+
+        List<GitLabFileChanged> files = new ArrayList<>();
+
+        for (GitLabCommitDiff diff : result.getBody()) {
+            GitLabFileChanged file = new GitLabFileChanged();
+
+            file.filename = diff.newPath != null ? diff.newPath : diff.oldPath;
+            file.additions = countAdditions(diff.diff);
+            file.deletions = countDeletions(diff.diff);
+
+            files.add(file);
+        }
+
+        return files;
+    }
+
+    /**
+     * Count the number of added lines in a diff.
+     *
+     * @param diff
+     * @return
+     */
+    private int countAdditions(String diff){
+        if (diff == null || diff.isEmpty()) {
+            return 0;
+        }
+
+        int additions = 0;
+
+        for (String line : diff.split("\n")) {
+            if (line.startsWith("+") && !line.startsWith("+++")) {
+                additions++;
+            }
+        }
+
+        return additions;
+    }
+
+    /**
+     * Count the number of deleted lines in a diff.
+     *
+     * @param diff
+     * @return
+     */
+    private int countDeletions(String diff) {
+        if (diff == null || diff.isEmpty()) {
+            return 0;
+        }
+
+        int deletions = 0;
+
+        for (String line : diff.split("\n")) {
+            if (line.startsWith("-") && !line.startsWith("---")) {
+                deletions++;
+            }
+        }
+
+        return deletions;
+    }
+    }

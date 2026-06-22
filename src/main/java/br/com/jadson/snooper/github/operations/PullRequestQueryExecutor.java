@@ -25,7 +25,6 @@
  */
 package br.com.jadson.snooper.github.operations;
 
-import br.com.jadson.snooper.github.data.commit.GitHubCommitInfo;
 import br.com.jadson.snooper.github.data.pull.GitHubPullRequestInfo;
 import br.com.jadson.snooper.github.data.pull.GitHubQTDPullRequestInfo;
 import br.com.jadson.snooper.utils.DateUtils;

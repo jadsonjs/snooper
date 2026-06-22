@@ -34,8 +34,9 @@ import br.com.jadson.snooper.github.data.association.PullRequestNodeInfo;
 import br.com.jadson.snooper.github.data.association.graphql.AssociatedPullRequestsEdge;
 import br.com.jadson.snooper.github.data.association.graphql.CommitNode;
 import br.com.jadson.snooper.github.data.association.graphql.ResultGraphQLRepository;
+import br.com.jadson.snooper.github.data.commit.GitHubFileChanged;
 import br.com.jadson.snooper.github.data.commit.GitHubCommitInfo;
-import br.com.jadson.snooper.github.data.stats.CommitStats;
+import br.com.jadson.snooper.github.data.stats.GitHubFileStats;
 import br.com.jadson.snooper.github.data.stats.GitHubCommitStatsInfo;
 import br.com.jadson.snooper.github.data.stats.graphql.CommitStatsNode;
 import br.com.jadson.snooper.github.data.stats.graphql.GraphQLCommitResponse;
@@ -48,7 +49,6 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
@@ -132,7 +132,7 @@ public class CommitQueryExecutor extends AbstractGitHubQueryExecutor {
 
         String parameters = "";
 
-        GitHubCommitInfo commitInfo = null;
+        GitHubCommitInfo gitHubCommitInfo = null;
 
         ResponseEntity<GitHubCommitInfo> result;
 
@@ -153,14 +153,14 @@ public class CommitQueryExecutor extends AbstractGitHubQueryExecutor {
 
             result = restTemplate.exchange( query, HttpMethod.GET, entity, GitHubCommitInfo.class);
 
-            commitInfo = result.getBody();
+            gitHubCommitInfo = result.getBody();
 
             page++;
 
 
       //  }while ( result != null && result.getBody() != null   && !testEnvironment);
 
-        return commitInfo;
+        return gitHubCommitInfo;
     }
 
 
@@ -318,6 +318,16 @@ public class CommitQueryExecutor extends AbstractGitHubQueryExecutor {
         return results;
     }
 
+    /**
+     * Return the history of commits of a GitHub project with their change statistics.
+     *
+     * This method uses the API V4 of GitHub with GraphQL.
+     *
+     * @param projectFullName
+     * @param sinceDate
+     * @param untilDate
+     * @return
+     */
     public List<GitHubCommitStatsInfo> getCommitsWithStats(String projectFullName, LocalDateTime sinceDate, LocalDateTime untilDate) {
         validateRepoName(projectFullName);
 
@@ -389,8 +399,95 @@ public class CommitQueryExecutor extends AbstractGitHubQueryExecutor {
         return allCommits;
     }
 
+    /**
+     * Return the list of files changed in a specific GitHub commit.
+     *
+     * This method uses the REST API of GitHub.
+     *
+     * @param repoFullName
+     * @param commit
+     * @return
+     */
+    public List<GitHubFileChanged> getCommitFiles(String repoFullName, GitHubCommitInfo commit){
+        validateRepoName(repoFullName);
+        // IMPORTANTE state=all for bring all PR
+        String parameters = "";
+        ResponseEntity<GitHubCommitInfo> result;
+
+        String query = GIT_HUB_API_URL +"/repos/"+repoFullName+"/commits/"+commit.sha;
+
+        System.out.println("Getting files for commit");
+
+        RestTemplate restTemplate = new RestTemplate();
+
+        HttpEntity entity = new HttpEntity(getDefaultHeaders());
+
+        result = restTemplate.exchange( query, HttpMethod.GET, entity, GitHubCommitInfo.class);
+
+        if (result.getBody() != null && result.getBody().files != null) {
+            return result.getBody().files;
+        }
+
+        return new ArrayList<>();
+    }
+
+    /**
+     * Return the change statistics of a specific file in a GitHub repository.
+     *
+     * This method uses the API V4 of GitHub with GraphQL.
+     *
+     * @param projectFullName
+     * @param filePath
+     * @param sinceDate
+     * @param untilDate
+     * @return
+     */
+    public GitHubFileStats getFileStats(String projectFullName, String filePath, LocalDateTime sinceDate, LocalDateTime untilDate){
+        validateRepoName(projectFullName);
+
+        String[] repoParts = projectFullName.split("/");
+        String owner = repoParts[0];
+        String repo = repoParts[1];
+
+        String since = sinceDate.toLocalDate().atStartOfDay().atOffset(ZoneOffset.UTC).format(DateTimeFormatter.ISO_INSTANT);
+        String until = untilDate.plusDays(1).toLocalDate().atStartOfDay().atOffset(ZoneOffset.UTC).format(DateTimeFormatter.ISO_INSTANT);
+
+        System.out.println("Executing getFileStats for " + filePath + " from " + since + " to " + until);
+
+        String query = String.format(
+                "repository(owner: \\\"%s\\\", name: \\\"%s\\\") { " +
+                        "  defaultBranchRef { " +
+                        "    target { " +
+                        "      ... on Commit { " +
+                        "        history(path: \\\"%s\\\", since: \\\"%s\\\", until: \\\"%s\\\") { " +
+                        "          totalCount " +
+                        "        } " +
+                        "      } " +
+                        "    } " +
+                        "  } " +
+                        "} ",
+                owner, repo, filePath, since, until
+        );
+
+        GraphQLCommitResponse queryResult = executeCommitStatsQuery(query);
+
+        GitHubFileStats gitHubFileStats = new GitHubFileStats();
+        gitHubFileStats.churn = queryResult.data.repository.defaultBranchRef.target.history.totalCount;
+        gitHubFileStats.path = filePath;
+
+        return gitHubFileStats;
+
+    }
 
 
+    /**
+     * Execute a GraphQL query to retrieve commit statistics from GitHub.
+     *
+     * This method uses the API V4 of GitHub with GraphQL.
+     *
+     * @param query
+     * @return
+     */
     private ResultGraphQLRepository executeQueryAssociatedPR(String query)  {
 
         RestTemplate restTemplate = new RestTemplate();

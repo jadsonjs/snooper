@@ -105,8 +105,8 @@ class CommitQueryExecutorTest {
         Assertions.assertEquals(3, commitStatsInfos.size());
 
         Assertions.assertEquals("7fd1a60b01f91b314f59955a4e4d4e80d8edf11d",  commitStatsInfos.get(0).sha);
-        Assertions.assertEquals(1,  commitStatsInfos.get(0).commitStats.additions);
-        Assertions.assertEquals(1, commitStatsInfos.get(1).commitStats.additions);
-        Assertions.assertEquals(1, commitStatsInfos.get(1).commitStats.deletions);
+        Assertions.assertEquals(1,  commitStatsInfos.get(0).gitHubCommitStats.additions);
+        Assertions.assertEquals(1, commitStatsInfos.get(1).gitHubCommitStats.additions);
+        Assertions.assertEquals(1, commitStatsInfos.get(1).gitHubCommitStats.deletions);
     }
 }
