@@ -1,8 +1,8 @@
 package br.com.jadson.snooper.gitlab.operations;
 
-import br.com.jadson.snooper.gitlab.data.commit.CommitDiff;
+import br.com.jadson.snooper.gitlab.data.commit.GitLabCommitDiff;
 import br.com.jadson.snooper.gitlab.data.commit.GitLabCommitInfo;
-import br.com.jadson.snooper.gitlab.data.commit.FileChanged;
+import br.com.jadson.snooper.gitlab.data.commit.GitLabFileChanged;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
@@ -81,10 +81,19 @@ public class GitLabCommitQueryExecutor extends AbstractGitLabQueryExecutor {
         return allPull;
     }
 
-    public List<FileChanged> getCommitsFiles(String repoFullName, GitLabCommitInfo commit){
+    /**
+     * Return the files changed in a specific GitLab commit.
+     *
+     * This method uses the REST API of GitLab.
+     *
+     * @param repoFullName
+     * @param commit
+     * @return
+     */
+    public List<GitLabFileChanged> getCommitsFiles(String repoFullName, GitLabCommitInfo commit){
         validateRepoName(repoFullName);
 
-        ResponseEntity<CommitDiff[]> result;
+        ResponseEntity<GitLabCommitDiff[]> result;
 
         String query = getGitLabAPIURL()
                 + encodeProjectName(repoFullName)
@@ -108,7 +117,7 @@ public class GitLabCommitQueryExecutor extends AbstractGitLabQueryExecutor {
 
         RestTemplate restTemplate = new RestTemplate();
         HttpEntity entity = new HttpEntity(this.getDefaultHeaders());
-        result = restTemplate.exchange(uri, HttpMethod.GET, entity, CommitDiff[].class);
+        result = restTemplate.exchange(uri, HttpMethod.GET, entity, GitLabCommitDiff[].class);
 
 
 
@@ -116,10 +125,10 @@ public class GitLabCommitQueryExecutor extends AbstractGitLabQueryExecutor {
             return new ArrayList<>();
         }
 
-        List<FileChanged> files = new ArrayList<>();
+        List<GitLabFileChanged> files = new ArrayList<>();
 
-        for (CommitDiff diff : result.getBody()) {
-            FileChanged file = new FileChanged();
+        for (GitLabCommitDiff diff : result.getBody()) {
+            GitLabFileChanged file = new GitLabFileChanged();
 
             file.filename = diff.newPath != null ? diff.newPath : diff.oldPath;
             file.additions = countAdditions(diff.diff);
@@ -131,6 +140,12 @@ public class GitLabCommitQueryExecutor extends AbstractGitLabQueryExecutor {
         return files;
     }
 
+    /**
+     * Count the number of added lines in a diff.
+     *
+     * @param diff
+     * @return
+     */
     private int countAdditions(String diff){
         if (diff == null || diff.isEmpty()) {
             return 0;
@@ -147,6 +162,12 @@ public class GitLabCommitQueryExecutor extends AbstractGitLabQueryExecutor {
         return additions;
     }
 
+    /**
+     * Count the number of deleted lines in a diff.
+     *
+     * @param diff
+     * @return
+     */
     private int countDeletions(String diff) {
         if (diff == null || diff.isEmpty()) {
             return 0;

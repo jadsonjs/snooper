@@ -13,15 +13,35 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * Performs queries in GitLab repositories.
+ *
+ * This class retrieves repository data from GitLab, such as files and directories
+ * from the repository tree.
+ */
 public class GitLabRepoQueryExecutor extends AbstractGitLabQueryExecutor {
 
     public GitLabRepoQueryExecutor() {
 
     }
 
+    /**
+     * Creates a GitLab repository query executor.
+     *
+     * @param gitlabURL
+     * @param gitlabToken
+     */
     public GitLabRepoQueryExecutor(String gitlabURL, String gitlabToken) {
         this(gitlabURL, gitlabToken, false);
     }
+
+    /**
+     * Creates a GitLab repository query executor with SSL verification configuration.
+     *
+     * @param gitlabURL
+     * @param gitlabToken
+     * @param disableSslVerification
+     */
 
     public GitLabRepoQueryExecutor(String gitlabURL, String gitlabToken, boolean disableSslVerification) {
         if (gitlabToken == null || gitlabToken.trim().equals("") ) {
@@ -36,6 +56,14 @@ public class GitLabRepoQueryExecutor extends AbstractGitLabQueryExecutor {
         this.disableSslVerification = disableSslVerification;
     }
 
+    /**
+     * Return all files and directories from a GitLab repository tree.
+     *
+     * This method uses the REST API of GitLab.
+     *
+     * @param repoFullName
+     * @return
+     */
     public List<GitLabTreeItem> getAllFiles(String repoFullName) {
         int page = 1;
         String parameters = "";
