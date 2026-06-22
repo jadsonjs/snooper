@@ -34,9 +34,9 @@ import br.com.jadson.snooper.github.data.association.PullRequestNodeInfo;
 import br.com.jadson.snooper.github.data.association.graphql.AssociatedPullRequestsEdge;
 import br.com.jadson.snooper.github.data.association.graphql.CommitNode;
 import br.com.jadson.snooper.github.data.association.graphql.ResultGraphQLRepository;
-import br.com.jadson.snooper.github.data.commit.FileChanged;
-import br.com.jadson.snooper.github.data.commit.CommitInfo;
-import br.com.jadson.snooper.github.data.stats.FileStats;
+import br.com.jadson.snooper.github.data.commit.GitHubFileChanged;
+import br.com.jadson.snooper.github.data.commit.GitHubCommitInfo;
+import br.com.jadson.snooper.github.data.stats.GitHubFileStats;
 import br.com.jadson.snooper.github.data.stats.GitHubCommitStatsInfo;
 import br.com.jadson.snooper.github.data.stats.graphql.CommitStatsNode;
 import br.com.jadson.snooper.github.data.stats.graphql.GraphQLCommitResponse;
@@ -70,7 +70,7 @@ public class CommitQueryExecutor extends AbstractGitHubQueryExecutor {
      * @param repoFullName
      * @return
      */
-    public List<CommitInfo> getCommits(String repoFullName) {
+    public List<GitHubCommitInfo> getCommits(String repoFullName) {
 
         validateRepoName(repoFullName);
 
@@ -79,9 +79,9 @@ public class CommitQueryExecutor extends AbstractGitHubQueryExecutor {
         // IMPORTANTE state=all for bring all PR
         String parameters = "";
 
-        List<CommitInfo> allPull = new ArrayList<>();
+        List<GitHubCommitInfo> allPull = new ArrayList<>();
 
-        ResponseEntity<CommitInfo[]> result;
+        ResponseEntity<GitHubCommitInfo[]> result;
 
         do {
 
@@ -98,7 +98,7 @@ public class CommitQueryExecutor extends AbstractGitHubQueryExecutor {
 
             HttpEntity entity = new HttpEntity(getDefaultHeaders());
 
-            result = restTemplate.exchange( query, HttpMethod.GET, entity, CommitInfo[].class);
+            result = restTemplate.exchange( query, HttpMethod.GET, entity, GitHubCommitInfo[].class);
 
             allPull.addAll(  Arrays.asList(result.getBody()) );
 
@@ -124,7 +124,7 @@ public class CommitQueryExecutor extends AbstractGitHubQueryExecutor {
      * @param ref a branch or a tag name
      * @return all commits form a branch or tag
      */
-    public CommitInfo getCommitsOfReference(String repoFullName, String ref) {
+    public GitHubCommitInfo getCommitsOfReference(String repoFullName, String ref) {
 
         validateRepoName(repoFullName);
 
@@ -132,9 +132,9 @@ public class CommitQueryExecutor extends AbstractGitHubQueryExecutor {
 
         String parameters = "";
 
-        CommitInfo commitInfo = null;
+        GitHubCommitInfo gitHubCommitInfo = null;
 
-        ResponseEntity<CommitInfo> result;
+        ResponseEntity<GitHubCommitInfo> result;
 
        // do {
 
@@ -151,16 +151,16 @@ public class CommitQueryExecutor extends AbstractGitHubQueryExecutor {
 
             HttpEntity entity = new HttpEntity(getDefaultHeaders());
 
-            result = restTemplate.exchange( query, HttpMethod.GET, entity, CommitInfo.class);
+            result = restTemplate.exchange( query, HttpMethod.GET, entity, GitHubCommitInfo.class);
 
-            commitInfo = result.getBody();
+            gitHubCommitInfo = result.getBody();
 
             page++;
 
 
       //  }while ( result != null && result.getBody() != null   && !testEnvironment);
 
-        return commitInfo;
+        return gitHubCommitInfo;
     }
 
 
@@ -170,7 +170,7 @@ public class CommitQueryExecutor extends AbstractGitHubQueryExecutor {
      * @param repoFullName
      * @return
      */
-    public List<CommitInfo> commitsOfPullRequest(String repoFullName, long prNumber) {
+    public List<GitHubCommitInfo> commitsOfPullRequest(String repoFullName, long prNumber) {
 
         validateRepoName(repoFullName);
 
@@ -179,9 +179,9 @@ public class CommitQueryExecutor extends AbstractGitHubQueryExecutor {
         // IMPORTANTE state=all for bring all PR
         String parameters = "";
 
-        List<CommitInfo> allPull = new ArrayList<>();
+        List<GitHubCommitInfo> allPull = new ArrayList<>();
 
-        ResponseEntity<CommitInfo[]> result;
+        ResponseEntity<GitHubCommitInfo[]> result;
 
         do {
 
@@ -198,7 +198,7 @@ public class CommitQueryExecutor extends AbstractGitHubQueryExecutor {
 
             HttpEntity entity = new HttpEntity(getDefaultHeaders());
 
-            result = restTemplate.exchange( query, HttpMethod.GET, entity, CommitInfo[].class);
+            result = restTemplate.exchange( query, HttpMethod.GET, entity, GitHubCommitInfo[].class);
 
             allPull.addAll(  Arrays.asList(result.getBody()) );
 
@@ -318,6 +318,16 @@ public class CommitQueryExecutor extends AbstractGitHubQueryExecutor {
         return results;
     }
 
+    /**
+     * Return the history of commits of a GitHub project with their change statistics.
+     *
+     * This method uses the API V4 of GitHub with GraphQL.
+     *
+     * @param projectFullName
+     * @param sinceDate
+     * @param untilDate
+     * @return
+     */
     public List<GitHubCommitStatsInfo> getCommitsWithStats(String projectFullName, LocalDateTime sinceDate, LocalDateTime untilDate) {
         validateRepoName(projectFullName);
 
@@ -389,11 +399,20 @@ public class CommitQueryExecutor extends AbstractGitHubQueryExecutor {
         return allCommits;
     }
 
-    public List<FileChanged> getCommitFiles(String repoFullName, CommitInfo commit){
+    /**
+     * Return the list of files changed in a specific GitHub commit.
+     *
+     * This method uses the REST API of GitHub.
+     *
+     * @param repoFullName
+     * @param commit
+     * @return
+     */
+    public List<GitHubFileChanged> getCommitFiles(String repoFullName, GitHubCommitInfo commit){
         validateRepoName(repoFullName);
         // IMPORTANTE state=all for bring all PR
         String parameters = "";
-        ResponseEntity<CommitInfo> result;
+        ResponseEntity<GitHubCommitInfo> result;
 
         String query = GIT_HUB_API_URL +"/repos/"+repoFullName+"/commits/"+commit.sha;
 
@@ -403,7 +422,7 @@ public class CommitQueryExecutor extends AbstractGitHubQueryExecutor {
 
         HttpEntity entity = new HttpEntity(getDefaultHeaders());
 
-        result = restTemplate.exchange( query, HttpMethod.GET, entity, CommitInfo.class);
+        result = restTemplate.exchange( query, HttpMethod.GET, entity, GitHubCommitInfo.class);
 
         if (result.getBody() != null && result.getBody().files != null) {
             return result.getBody().files;
@@ -412,7 +431,18 @@ public class CommitQueryExecutor extends AbstractGitHubQueryExecutor {
         return new ArrayList<>();
     }
 
-    public FileStats getFileStats(String projectFullName, String filePath, LocalDateTime sinceDate, LocalDateTime untilDate){
+    /**
+     * Return the change statistics of a specific file in a GitHub repository.
+     *
+     * This method uses the API V4 of GitHub with GraphQL.
+     *
+     * @param projectFullName
+     * @param filePath
+     * @param sinceDate
+     * @param untilDate
+     * @return
+     */
+    public GitHubFileStats getFileStats(String projectFullName, String filePath, LocalDateTime sinceDate, LocalDateTime untilDate){
         validateRepoName(projectFullName);
 
         String[] repoParts = projectFullName.split("/");
@@ -441,16 +471,23 @@ public class CommitQueryExecutor extends AbstractGitHubQueryExecutor {
 
         GraphQLCommitResponse queryResult = executeCommitStatsQuery(query);
 
-        FileStats fileStats = new FileStats();
-        fileStats.churn = queryResult.data.repository.defaultBranchRef.target.history.totalCount;
-        fileStats.path = filePath;
+        GitHubFileStats gitHubFileStats = new GitHubFileStats();
+        gitHubFileStats.churn = queryResult.data.repository.defaultBranchRef.target.history.totalCount;
+        gitHubFileStats.path = filePath;
 
-        return fileStats;
+        return gitHubFileStats;
 
     }
 
 
-
+    /**
+     * Execute a GraphQL query to retrieve commit statistics from GitHub.
+     *
+     * This method uses the API V4 of GitHub with GraphQL.
+     *
+     * @param query
+     * @return
+     */
     private ResultGraphQLRepository executeQueryAssociatedPR(String query)  {
 
         RestTemplate restTemplate = new RestTemplate();

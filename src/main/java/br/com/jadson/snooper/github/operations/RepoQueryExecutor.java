@@ -85,6 +85,15 @@ public class RepoQueryExecutor extends AbstractGitHubQueryExecutor{
         return result.getBody();
     }
 
+    /**
+     * Return all files and directories from a GitHub repository tree.
+     *
+     * This method uses the REST API of GitHub.
+     *
+     * @param repoFullName
+     * @param branch
+     * @return
+     */
     public GitHubTreeInfo getAllFiles(String repoFullName, String branch){
         ResponseEntity<GitHubTreeInfo> result;
         String url = GIT_HUB_API_URL +
